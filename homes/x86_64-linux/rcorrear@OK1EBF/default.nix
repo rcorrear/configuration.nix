@@ -38,10 +38,14 @@ let
         ];
     });
 
-  host-independent = import ../../all-platforms/rcorrear;
+  base = import ../../all-platforms/base;
+  rcorrear = import ../../all-platforms/rcorrear;
 in
 {
-  imports = [ host-independent ];
+  imports = [
+    base
+    rcorrear
+  ];
 
   config = {
     home = {
@@ -73,10 +77,6 @@ in
             set -Ux fish_tmux_config $HOME/.config/tmux/tmux.conf
           '';
         };
-      };
-
-      keyboard = {
-        options = [ "caps:escape" ];
       };
 
       packages = [
@@ -123,6 +123,7 @@ in
         p.gwe
         p.jdk21
         p.jetbrains.idea-community
+        p.jujutsu
         p.keybase-gui
         p.lutris
         p.maestral
@@ -201,6 +202,7 @@ in
           prettybat
         ];
       };
+
       bottom = {
         enable = true;
         settings = {
@@ -214,6 +216,14 @@ in
           };
         };
       };
+
+      direnv = {
+        enable = true;
+        nix-direnv = {
+          enable = true;
+        };
+      };
+
       emacs = {
         enable = true;
         extraPackages = epkgs: [
@@ -223,6 +233,7 @@ in
         ];
         package = pkgs.emacs29;
       };
+
       foot = {
         enable = true;
         server.enable = true;
@@ -243,19 +254,24 @@ in
           };
         };
       };
+
       git.difftastic.enable = true;
+
       go = {
         enable = true;
         goPath = "${config.home.homeDirectory}/Projects/go";
       };
+
       obs-studio = {
         enable = true;
         plugins = with pkgs.obs-studio-plugins; [ obs-pipewire-audio-capture ];
       };
+
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
       };
+
       tmux = {
         mouse = true;
         plugins = with pkgs; [
