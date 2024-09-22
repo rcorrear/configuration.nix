@@ -291,12 +291,14 @@ in
 
     services = {
       easyeffects.enable = true;
+
       emacs = {
         client.enable = true;
         defaultEditor = true;
         enable = true;
         startWithUserSession = true;
       };
+
       kbfs = {
         enable = true;
         mountPoint = "Keybase";

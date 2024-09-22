@@ -72,23 +72,42 @@ in
 
     # List services that you want to enable:
     services = {
+      avahi = {
+        enable = true;
+        nssmdns4 = true;
+        nssmdns6 = true;
+        publish = {
+          enable = true;
+          addresses = true;
+          domain = true;
+          hinfo = true;
+          userServices = true;
+          workstation = true;
+        };
+      };
+
       gnome = {
         games.enable = true;
       };
+
       hardware.openrgb = {
         enable = true;
         motherboard = "amd";
       };
+
       locate = {
         enable = true;
         localuser = null;
         package = pkgs.plocate;
       };
+
       mullvad-vpn.enable = false;
+
       ollama = {
         enable = true;
         acceleration = "cuda";
       };
+
       openssh = {
         enable = true;
         openFirewall = true;
@@ -96,18 +115,22 @@ in
           X11Forwarding = true;
         };
       };
+
       pcscd.enable = true;
+
       pipewire = {
         enable = true;
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
       };
+
       printing = {
         enable = true; # Enable CUPS to print documents.
         drivers = with pkgs; [ hplip ];
         openFirewall = true;
       };
+
       system76-scheduler = {
         enable = true;
         settings.processScheduler = {
@@ -116,12 +139,14 @@ in
           pipewireBoost.enable = true;
         };
       };
+
       tailscale = {
         enable = true;
         extraUpFlags = [ "--accept-routes" ];
         openFirewall = true;
         useRoutingFeatures = "client";
       };
+
       xserver = {
         enable = true; # Enable the X11 windowing system.
         desktopManager.gnome.enable = true; # Enable the GNOME Desktop Environment.
@@ -136,6 +161,7 @@ in
         videoDrivers = [ "nvidia" ];
         # windowManager = {stumpwm.enable = true;};
       };
+
       zfs = {
         autoScrub.enable = true;
         autoSnapshot.enable = true;
@@ -167,6 +193,7 @@ in
           in
           [ env ];
       };
+
       tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
     };
 
