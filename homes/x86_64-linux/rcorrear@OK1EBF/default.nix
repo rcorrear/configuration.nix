@@ -115,6 +115,7 @@ in
         p.firefox
         (p.flix.override { jre = pkgs.temurin-jre-bin-21; })
         p.font-awesome
+        p.fractal
         p.gitless
         p.gamescope
         p.gnome.gnome-terminal
