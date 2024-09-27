@@ -116,22 +116,28 @@
 
   hardware = {
     cpu.amd.updateMicrocode = lib.mkDefault config.hardware.enableRedistributableFirmware;
+
     keyboard.uhk.enable = true;
+
     nvidia = {
       modesetting.enable = true;
+      open = true;
       powerManagement.enable = true;
     };
-    opengl = {
+
+    graphics = {
       enable = true;
-      driSupport = true;
-      driSupport32Bit = true;
+      enable32Bit = true;
     };
+
     pulseaudio.enable = false;
+
     sane = {
       enable = true;
       extraBackends = [ pkgs.hplipWithPlugin ];
       openFirewall = true;
     };
+
     sensor = {
       hddtemp = {
         enable = true;

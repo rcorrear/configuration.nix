@@ -91,13 +91,9 @@ in
         p.xarcan
 
         (p.aspellWithDicts (dicts: [ dicts.en ]))
-        p.avahi
         p.beancount
         p.beancount-black
         p.beancount-language-server
-        p.beeper
-        p.bottom
-        p.bruno
         p.celluloid
         p.cider
         p.cmake
@@ -113,26 +109,26 @@ in
         p.fira-code
         p.fira-code-symbols
         p.firefox
-        (p.flix.override { jre = pkgs.temurin-jre-bin-21; })
+        (p.flix.override { jre = pkgs.jdk22; })
         p.font-awesome
         p.fractal
-        p.gitless
-        p.gamescope
-        p.gnome.gnome-terminal
-        p.gnome.gnome-tweaks
+        p.gnome-terminal
+        p.gnome-tweaks
         p.gnomeExtensions.system76-scheduler
         p.gwe
-        p.jdk21
+        p.jdk22
         p.jetbrains.idea-community
         p.jujutsu
         p.keybase-gui
         p.lutris
         p.maestral
+        p.mangohud
         p.metals
+        p.mission-center
         p.moonlight-qt
         p.mpg123
         p.mprime
-        p.mullvad-vpn
+        p.mtr-gui
         p.nfs-utils
         p.nil
         p.nix-prefetch-git
@@ -142,15 +138,10 @@ in
         p.nodejs
         p.ntfs3g
         p.nvd
-        p.ocamlPackages.merlin
-        p.ocamlPackages.ocp-indent
-        p.ocamlformat
-        p.ocamlPackages.utop
-        # p.open-webui
+        p.open-webui
         p.pciutils
         p.pipenv
         p.plexamp
-        p.psensor
         (p.nerdfonts.override {
           fonts = [
             "DroidSansMono"
@@ -160,6 +151,7 @@ in
         })
         p.shellcheck
         p.shfmt
+        p.simple-scan
         p.skypeforlinux
         p.sqlite
         p.sshpass
@@ -256,7 +248,18 @@ in
         };
       };
 
-      git.difftastic.enable = true;
+      git = {
+        difftastic.enable = true;
+        extraConfig = {
+          "gpg \"ssh\"".program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+          commit.gpgsign = true;
+          github.user = "rcorrear";
+          gpg.format = "ssh";
+          pull.ff = "only";
+          safe.directory = "${config.home.homeDirectory}/Projects/nix/flake";
+          user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKa59A0LGSduyaIk+rKKImRNoeJBTQV9pvvUNJJqg6cC";
+        };
+      };
 
       go = {
         enable = true;

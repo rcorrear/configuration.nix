@@ -13,7 +13,7 @@ in
     environment = {
       gnome.excludePackages =
         (with pkgs; [ gnome-console ])
-        ++ (with pkgs.gnome; [
+        ++ (with pkgs; [
           epiphany
           geary
           gnome-music
@@ -68,6 +68,7 @@ in
       mtr.enable = true;
       steam.enable = true;
       ssh.askPassword = "${pkgs.libsForQt5.ksshaskpass.out}/bin/ksshaskpass";
+      xwayland.enable = true;
     };
 
     # List services that you want to enable:
@@ -100,8 +101,6 @@ in
         localuser = null;
         package = pkgs.plocate;
       };
-
-      mullvad-vpn.enable = false;
 
       ollama = {
         enable = true;
@@ -171,9 +170,6 @@ in
 
     # Enable Polkit
     security.polkit.enable = true;
-
-    # Enable sound.
-    sound.enable = true;
 
     systemd = {
       services.libvirtd = {
