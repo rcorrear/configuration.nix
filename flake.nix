@@ -38,7 +38,5 @@
       src = ./.;
 
       snowfall.namespace = "rcorrear";
-
-      systems.modules.nixos = with inputs; [ inputs.lix-module.nixosModules.default ];
     };
 }

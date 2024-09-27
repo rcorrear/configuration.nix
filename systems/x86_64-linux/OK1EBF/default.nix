@@ -1,12 +1,21 @@
 # Edit this configuration file to define what should be installed on
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
-{ lib, pkgs, ... }:
+{
+  inputs,
+  lib,
+  pkgs,
+  ...
+}:
 let
   hardware = import ./hardware.nix;
 in
 {
-  imports = [ hardware ];
+  imports = [
+    hardware
+    inputs.lix-module.nixosModules.default
+  ];
+
   config = {
     # Packages installed in system profile. To search, run:
     # $ nix search wget
@@ -49,6 +58,9 @@ in
       extraOptions = ''
         experimental-features = nix-command flakes
       '';
+
+      package = pkgs.lix;
+
       settings.trusted-users = [
         "root"
         "rcorrear"
@@ -59,15 +71,22 @@ in
       _1password = {
         enable = true;
       };
+
       _1password-gui = {
         enable = true;
         polkitPolicyOwners = [ "rcorrear" ];
       };
+
       dconf.enable = true;
+
       fish.enable = true;
+
       mtr.enable = true;
+
       steam.enable = true;
+
       ssh.askPassword = "${pkgs.libsForQt5.ksshaskpass.out}/bin/ksshaskpass";
+
       xwayland.enable = true;
     };
 
@@ -84,6 +103,18 @@ in
           hinfo = true;
           userServices = true;
           workstation = true;
+        };
+      };
+
+      caddy = {
+        enable = true;
+        virtualHosts = {
+          "openwebui.ok1ebf.home.arpa".extraConfig = ''
+            reverse_proxy 127.0.0.1:8080
+          '';
+          "search.ok1ebf.home.arpa".extraConfig = ''
+            reverse_proxy 127.0.0.1:3002
+          '';
         };
       };
 
@@ -115,6 +146,35 @@ in
         };
       };
 
+      open-webui = {
+        enable = true;
+        environment = {
+          CONTENT_EXTRACTION_ENGINE = "tika";
+          DEVICE_TYPE = "cpu";
+          DOCS_DIR = "/docs";
+          ENABLE_OLLAMA_API = "True";
+          ENABLE_RAG_HYBRID_SEARCH = "True";
+          ENABLE_RAG_WEB_LOADER_SSL_VERIFICATION = "False";
+          ENABLE_RAG_WEB_SEARCH = "True";
+          OLLAMA_API_BASE_URL = "http://127.0.0.1:11434/api";
+          OLLAMA_BASE_URL = "http://127.0.0.1:11434";
+          PDF_EXTRACT_IMAGES = "True";
+          PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "true";
+          RAG_EMBEDDING_ENGINE = "ollama";
+          RAG_EMBEDDING_MODEL = "bge-m3:latest";
+          RAG_EMBEDDING_MODEL_AUTO_UPDATE = "True";
+          RAG_RERANKING_MODEL = "BAAI/bge-reranker-v2-m3";
+          RAG_RERANKING_MODEL_AUTO_UPDATE = "True";
+          RAG_WEB_SEARCH_ENGINE = "searxng";
+          RAG_WEB_SEARCH_RESULT_COUNT = "5";
+          RESET_CONFIG_ON_START = "True";
+          SEARXNG_QUERY_URL = "http://127.0.0.1:3002/search?q=<query>";
+          TIKA_SERVER_URL = "http://127.0.0.1:9998/";
+          WEBUI_AUTH = "False";
+          WEBUI_NAME = "LLM @ Home";
+        };
+      };
+
       pcscd.enable = true;
 
       pipewire = {
@@ -128,6 +188,15 @@ in
         enable = true; # Enable CUPS to print documents.
         drivers = with pkgs; [ hplip ];
         openFirewall = true;
+      };
+
+      searx = {
+        enable = true;
+        environmentFile = ./configuration/searx/env;
+        settings = {
+          server.port = 3002;
+          server.secret_key = "@SEARX_SECRET_KEY@";
+        };
       };
 
       system76-scheduler = {
@@ -144,6 +213,12 @@ in
         extraUpFlags = [ "--accept-routes" ];
         openFirewall = true;
         useRoutingFeatures = "client";
+      };
+
+      tika = {
+        enable = true;
+        package = pkgs.tika;
+        configFile = ./configuration/tika/tika-config.xml;
       };
 
       xserver = {

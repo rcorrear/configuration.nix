@@ -132,6 +132,7 @@ in
         p.nfs-utils
         p.nil
         p.nix-prefetch-git
+        p.nixd
         p.nixfmt-rfc-style
         p.nixos-generators
         p.nodePackages.bash-language-server
