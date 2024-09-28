@@ -19,8 +19,6 @@
         settings = {
           allow-import-from-derivation = lib.mkDefault true;
           auto-optimise-store = lib.mkDefault true;
-          diff-hook = "${pkgs.nvd}/bin/nvd";
-          run-diff-hook = lib.mkDefault true;
         };
       };
     }
