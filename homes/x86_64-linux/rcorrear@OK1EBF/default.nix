@@ -180,6 +180,7 @@ in
 
       sessionVariables = {
         BAT_THEME = "base16-256";
+        FLAKE = /etc/nixos;
         SSH_AUTH_SOCK = "${config.home.homeDirectory}/.1password/agent.sock";
       };
     };
