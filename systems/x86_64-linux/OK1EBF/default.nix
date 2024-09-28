@@ -27,7 +27,9 @@ in
           geary
           gnome-music
         ]);
-      systemPackages = with pkgs; [ neovim ];
+      systemPackages = with pkgs; [
+        neovim
+      ];
     };
 
     # Select internationalisation properties.
@@ -83,6 +85,13 @@ in
 
       mtr.enable = true;
 
+      nh = {
+        enable = true;
+        clean.enable = true;
+        clean.extraArgs = "--keep-since 4d --keep 3";
+        flake = "/etc/nixos";
+      };
+
       steam.enable = true;
 
       ssh.askPassword = "${pkgs.libsForQt5.ksshaskpass.out}/bin/ksshaskpass";
@@ -136,6 +145,9 @@ in
       ollama = {
         enable = true;
         acceleration = "cuda";
+        environmentVariables = {
+          CUDA_DEVICE_ORDER = "FASTEST_FIRST";
+        };
       };
 
       openssh = {
@@ -170,7 +182,7 @@ in
           RESET_CONFIG_ON_START = "True";
           SEARXNG_QUERY_URL = "http://127.0.0.1:3002/search?q=<query>";
           TIKA_SERVER_URL = "http://127.0.0.1:9998/";
-          WEBUI_AUTH = "False";
+          WEBUI_AUTH = "True";
           WEBUI_NAME = "LLM @ Home";
         };
       };
@@ -247,22 +259,28 @@ in
     security.polkit.enable = true;
 
     systemd = {
-      services.libvirtd = {
-        path =
-          let
-            env = pkgs.buildEnv {
-              name = "qemu-hook-env";
-              paths = with pkgs; [
-                bash
-                libvirt
-                kmod
-                systemd
-                ripgrep
-                sd
-              ];
-            };
-          in
-          [ env ];
+      services = {
+        libvirtd = {
+          path =
+            let
+              env = pkgs.buildEnv {
+                name = "qemu-hook-env";
+                paths = with pkgs; [
+                  bash
+                  libvirt
+                  kmod
+                  systemd
+                  ripgrep
+                  sd
+                ];
+              };
+            in
+            [ env ];
+        };
+        open-webui.requires = [
+          "tika.service"
+          "searx.service"
+        ];
       };
 
       tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];

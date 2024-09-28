@@ -114,7 +114,6 @@ in
         p.fractal
         p.gnome-terminal
         p.gnome-tweaks
-        p.gnomeExtensions.system76-scheduler
         p.gwe
         p.jdk22
         p.jetbrains.idea-community
@@ -131,6 +130,7 @@ in
         p.mtr-gui
         p.nfs-utils
         p.nil
+        p.nix-output-monitor
         p.nix-prefetch-git
         p.nixd
         p.nixfmt-rfc-style
