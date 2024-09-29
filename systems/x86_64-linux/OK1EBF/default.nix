@@ -64,7 +64,6 @@ in
       package = pkgs.lix;
 
       settings.trusted-users = [
-        "root"
         "rcorrear"
       ];
     };
