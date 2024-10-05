@@ -35,7 +35,6 @@
       inherit inputs;
 
       channels-config = {
-        # Allow unfree packages.
         allowUnfree = true;
       };
 

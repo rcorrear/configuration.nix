@@ -1,5 +1,6 @@
 {
   config,
+  namespace,
   pkgs,
   lib,
   ...
@@ -38,17 +39,19 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
-    boot.kernelParams = [ "${cfg.cpuType}_iommu=on" ];
+    boot = {
+      kernelParams = [ "${cfg.cpuType}_iommu=on" ];
 
-    # These modules are required for PCI passthrough, and must come before early modesetting stuff
-    boot.kernelModules = [
-      "vfio"
-      "vfio_iommu_type1"
-      "vfio_pci"
-      "vfio_virqfd"
-    ];
+      # These modules are required for PCI passthrough, and must come before early modesetting stuff
+      kernelModules = [
+        "vfio"
+        "vfio_iommu_type1"
+        "vfio_pci"
+        "vfio_virqfd"
+      ];
 
-    boot.extraModprobeConfig = "options vfio-pci ids=${cfg.pciIDs}";
+      extraModprobeConfig = "options vfio-pci ids=${cfg.pciIDs}";
+    };
 
     environment.systemPackages = with pkgs; [
       virtmanager

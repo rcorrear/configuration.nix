@@ -1,5 +1,4 @@
-{ ... }:
-{
+_: {
   nix = {
     settings.substituters = [ "https://nix-community.cachix.org" ];
     settings.trusted-public-keys = [

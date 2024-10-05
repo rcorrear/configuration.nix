@@ -60,58 +60,55 @@
     thin-provisioning-tools
   ];
 
-  fileSystems."/" = {
-    device = "rpool/safe/root/nixos";
-    fsType = "zfs";
-  };
+  fileSystems = {
+    "/" = {
+      device = "rpool/safe/root/nixos";
+      fsType = "zfs";
+    };
 
-  # fileSystems."/" = {
-  #   device = "/dev/disk/by-label/root";
-  #   fsType = "bcachefs";
-  # };
+    "/boot" = {
+      device = "/dev/disk/by-label/boot";
+      fsType = "vfat";
+    };
 
-  fileSystems."/boot" = {
-    device = "/dev/disk/by-label/boot";
-    fsType = "vfat";
-  };
+    "/home" = {
+      device = "rpool/safe/home";
+      fsType = "zfs";
+      options = [ "zfsutil" ];
+    };
 
-  fileSystems."/home" = {
-    device = "rpool/safe/home";
-    fsType = "zfs";
-    options = [ "zfsutil" ];
-  };
+    "/home/rcorrear/Documents" = {
+      device = "files.home.arpa:/rcorrear/Documents";
+      fsType = "nfs4";
+      options = [
+        "sec=sys"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=600"
+        "noauto"
+      ];
+    };
 
-  fileSystems."/home/rcorrear/Documents" = {
-    device = "files.home.arpa:/rcorrear/Documents";
-    fsType = "nfs4";
-    options = [
-      "sec=sys"
-      "x-systemd.automount"
-      "x-systemd.idle-timeout=600"
-      "noauto"
-    ];
-  };
+    "/home/rcorrear/Games" = {
+      device = "/dev/mapper/data-games";
+      fsType = "xfs";
+    };
 
-  fileSystems."/home/rcorrear/Games" = {
-    device = "/dev/mapper/data-games";
-    fsType = "xfs";
-  };
+    "/home/rcorrear/Projects" = {
+      device = "files.home.arpa:/rcorrear/Projects";
+      fsType = "nfs4";
+      options = [
+        "sec=sys"
+        "x-systemd.automount"
+        "x-systemd.idle-timeout=600"
+        "noauto"
+      ];
+    };
 
-  fileSystems."/home/rcorrear/Projects" = {
-    device = "files.home.arpa:/rcorrear/Projects";
-    fsType = "nfs4";
-    options = [
-      "sec=sys"
-      "x-systemd.automount"
-      "x-systemd.idle-timeout=600"
-      "noauto"
-    ];
-  };
+    "/nix/store" = {
+      device = "/nix/store";
 
-  fileSystems."/nix/store" = {
-    device = "/nix/store";
-    fsType = "none";
-    options = [ "bind" ];
+      options = [ "bind" ];
+    };
   };
 
   hardware = {

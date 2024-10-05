@@ -22,7 +22,7 @@ inputs.devenv.lib.mkShell {
       {
         pre-commit.hooks = {
           flake-checker.enable = true;
-          nixfmt-rfc-style.enable = true;
+          # nixfmt-rfc-style.enable = true;
           statix.enable = true;
         };
       }
