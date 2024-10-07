@@ -14,6 +14,7 @@ in
   imports = [
     hardware
     inputs.lix-module.nixosModules.default
+    inputs.opnix.nixosModules.default
   ];
 
   config = {
@@ -66,6 +67,35 @@ in
       settings.trusted-users = [
         "rcorrear"
       ];
+    };
+
+    opnix = {
+      # This is where you put your Service Account token in .env file format, e.g.
+      # OP_SERVICE_ACCOUNT_TOKEN="{your token here}"
+      # See: https://developer.1password.com/docs/service-accounts/use-with-1password-cli/#get-started
+      # This file should have permissions 400 (file owner read only) or 600 (file owner read-write)
+      # The systemd script will print a warning for you if it's not
+      environmentFile = "/etc/opnix.env";
+      # Set the systemd services that will use 1Password secrets; this makes them wait until
+      # secrets are deployed before attempting to start the service.
+      systemdWantedBy = [ "searx-init" ];
+      # Specify the secrets you need
+      secrets = {
+        # The 1Password Secret Reference in here (the `op://` URI)
+        # will get replaced with the actual secret at runtime
+        searx = {
+          source = ''
+            SEARX_SECRET_KEY={{ op://Infrastructure/searx/secret key }}
+          '';
+          # you can also specify the UNIX file owner, group, and mode
+          user = "searx";
+          mode = "0600";
+          # If you need to, you can even customize the path that the secret gets installed to
+          path = "/run/credentials/searx.service/env";
+          # You can also disable symlinking the secret into the installation destination
+          symlink = false;
+        };
+      };
     };
 
     programs = {
@@ -203,7 +233,7 @@ in
 
       searx = {
         enable = true;
-        environmentFile = ./configuration/searx/env;
+        environmentFile = /run/credentials/searx.service/env;
         settings = {
           server.port = 3002;
           server.secret_key = "@SEARX_SECRET_KEY@";

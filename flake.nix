@@ -17,6 +17,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
+    opnix = {
+      url = "github:mrjones2014/opnix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
 
     # The name "snowfall-lib" is required due to how Snowfall Lib processes your
