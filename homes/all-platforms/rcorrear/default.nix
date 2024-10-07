@@ -1,5 +1,12 @@
 { config, pkgs, ... }:
+let
+  base = import ../../all-platforms/base;
+in
 {
+  imports = [
+    base
+  ];
+
   config = {
     home = {
       keyboard = {

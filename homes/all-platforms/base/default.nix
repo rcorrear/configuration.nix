@@ -20,6 +20,17 @@ in
         options = [ "caps:escape" ];
       };
 
+      packages = with pkgs; [
+        any-nix-shell
+        coreutils
+        fd
+        file
+        htop
+        jq
+        ripgrep
+        tree
+      ];
+
       sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
     };
 

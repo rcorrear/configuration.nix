@@ -6,7 +6,7 @@
   config = lib.mkMerge [
     {
       documentation = {
-        dev.enable = true;
+        dev.enable = lib.mkDefault true;
         man = {
           enable = true;
           generateCaches = true;
