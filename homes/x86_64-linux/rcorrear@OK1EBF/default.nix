@@ -147,6 +147,7 @@ in
             "RobotoMono"
           ];
         })
+        p.remmina
         p.shellcheck
         p.shfmt
         p.simple-scan
@@ -157,7 +158,6 @@ in
         p.uhk-agent
         p.usbutils
         p.unison-ucm
-        p.virt-manager
         p.vorbis-tools
         p.vulkan-tools
         p.whatsapp-for-linux

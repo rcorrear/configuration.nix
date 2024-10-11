@@ -13,6 +13,18 @@ let
     types
     ;
   cfg = config.pciPassthrough;
+
+  nvidia-to-vfio = pkgs.writeShellApplication {
+    name = "nvidia-to-vfio";
+    runtimeInputs = [ pkgs.runtimeShell ];
+    text = builtins.readFile ./nvidia-to-vfio;
+  };
+
+  vfio-to-nvidia = pkgs.writeShellApplication {
+    name = "vfio-to-nvidia";
+    runtimeInputs = [ pkgs.runtimeShell ];
+    text = builtins.readFile ./vfio-to-nvidia;
+  };
 in
 {
   ###### interface
@@ -35,30 +47,64 @@ in
       type = types.listOf types.str;
       default = [ ];
     };
+
+    kvmfr = mkEnableOption "kvmfr kernel module";
   };
 
   ###### implementation
   config = mkIf cfg.enable {
     boot = {
-      kernelParams = [ "${cfg.cpuType}_iommu=on" ];
+      extraModprobeConfig = ''
+        options kvmfr static_size_mb=128
+      '';
+
+      extraModulePackages = with config.boot.kernelPackages; [
+        kvmfr
+      ];
+
+      kernelParams = [
+        "${cfg.cpuType}_iommu=on"
+        "vfio-pci.ids=${cfg.pciIDs}"
+      ];
 
       # These modules are required for PCI passthrough, and must come before early modesetting stuff
       kernelModules = [
+        "kvmfr"
         "vfio"
         "vfio_iommu_type1"
         "vfio_pci"
         "vfio_virqfd"
       ];
 
-      extraModprobeConfig = "options vfio-pci ids=${cfg.pciIDs}";
+      kernel.sysctl = {
+        "vm.nr_hugepages" = 16384;
+        "vm.hugetlb_shm_group" = config.ids.gids.kvm; # TODO: bind to kvm guid
+      };
     };
 
     environment.systemPackages = with pkgs; [
-      virtmanager
-      qemu
-      OVMF
-      pciutils
+      looking-glass-client
+      nvidia-to-vfio
+      vfio-to-nvidia
+      (pkgs.writeScriptBin "iommu-groups" ''
+        #!/usr/bin/env bash
+        shopt -s nullglob
+        for g in $(find /sys/kernel/iommu_groups/* -maxdepth 0 -type d | sort -V); do
+            echo "IOMMU Group ''${g##*/}:"
+            for d in $g/devices/*; do
+                echo -e "\t$(${pkgs.pciutils}/bin/lspci -nns ''${d##*/})"
+            done;
+        done;
+      '')
     ];
+
+    programs.virt-manager = {
+      enable = true;
+    };
+
+    services.udev.extraRules = ''
+      SUBSYSTEM=="kvmfr", OWNER="qemu-libvirtd", GROUP="kvm", MODE="0660"
+    '';
 
     virtualisation = {
       libvirtd = {
@@ -68,30 +114,18 @@ in
         qemu = {
           package = pkgs.qemu_kvm;
           ovmf.enable = true;
-          runAsRoot = true;
+          runAsRoot = false;
+          verbatimConfig = ''
+            cgroup_device_acl = [
+                "/dev/null", "/dev/full", "/dev/zero",
+                "/dev/random", "/dev/urandom", "/dev/ptmx",
+                "/dev/kvm", "/dev/kqemu", "/dev/rtc","/dev/hpet",
+                "/dev/vfio/vfio", "/dev/kvmfr0"
+            ]
+          '';
         };
       };
       spiceUSBRedirection.enable = true;
-    };
-
-    systemd = {
-      services.libvirtd = {
-        path =
-          let
-            env = pkgs.buildEnv {
-              name = "qemu-hook-env";
-              paths = with pkgs; [
-                bash
-                libvirt
-                kmod
-                systemd
-                ripgrep
-                sd
-              ];
-            };
-          in
-          [ env ];
-      };
     };
 
     users.groups.libvirtd.members = [ "root" ] ++ cfg.libvirtUsers;

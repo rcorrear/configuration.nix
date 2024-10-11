@@ -15,6 +15,7 @@
       it87
       zenpower
     ];
+
     initrd = {
       availableKernelModules = [
         "ahci"
@@ -24,9 +25,12 @@
         "usbhid"
         "xhci_pci"
       ];
+
       kernelModules = [ "dm_thin_pool" ];
+
       supportedFilesystems = [ "zfs" ];
     };
+
     kernelModules = [
       "kvm-amd"
       "it87"
@@ -35,6 +39,7 @@
       "vfio_pci"
       "vfio_virqfd"
     ];
+
     # kernelPackages = pkgs.linuxPackages_latest;
     loader = {
       grub.devices = [
@@ -42,12 +47,15 @@
         "/dev/sdb"
         "/dev/sdc"
       ];
+
       efi.canTouchEfiVariables = true;
+
       systemd-boot = {
         enable = true; # Use the systemd-boot EFI boot loader.
         consoleMode = "max";
       };
     };
+
     supportedFilesystems = [
       "xfs"
       "zfs"
@@ -118,7 +126,7 @@
 
     nvidia = {
       modesetting.enable = true;
-      open = true;
+      open = false;
       powerManagement.enable = true;
     };
 
@@ -143,12 +151,13 @@
     };
   };
 
-  # pciPassthrough = {
-  #   enable = true;
-  #   cpuType = "amd";
-  #   pciIDs = "10de:2206,10de:1aef";
-  #   libvirtUsers = ["rcorrear"];
-  # };
+  pciPassthrough = {
+    enable = true;
+    cpuType = "amd";
+    kvmfr = true;
+    libvirtUsers = [ "rcorrear" ];
+    pciIDs = "10de:2206,10de:1aef";
+  };
 
   swapDevices = [ ];
 }

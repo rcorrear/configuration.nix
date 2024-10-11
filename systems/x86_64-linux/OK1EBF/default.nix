@@ -156,6 +156,8 @@ in
         };
       };
 
+      cpupower-gui.enable = true;
+
       gnome = {
         games.enable = true;
       };
