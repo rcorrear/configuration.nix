@@ -115,7 +115,6 @@ in
         p.gwe
         p.jdk22
         p.jetbrains.idea-community
-        p.jujutsu
         p.keybase-gui
         p.lutris
         p.maestral
@@ -274,6 +273,17 @@ in
       go = {
         enable = true;
         goPath = "${config.home.homeDirectory}/Projects/go";
+      };
+
+      jujutsu = {
+        enable = true;
+        ediff = true;
+        settings = {
+          user = {
+            email = "r.correa.r@gmail.com";
+            name = "Ricardo Correa";
+          };
+        };
       };
 
       obs-studio = {
