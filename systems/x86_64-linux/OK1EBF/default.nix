@@ -233,6 +233,8 @@ in
         openFirewall = true;
       };
 
+      ratbagd.enable = true;
+
       searx = {
         enable = true;
         environmentFile = /run/credentials/searx.service/env;

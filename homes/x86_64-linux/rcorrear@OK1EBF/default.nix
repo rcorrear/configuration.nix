@@ -125,6 +125,13 @@ in
         p.mpg123
         p.mprime
         p.mtr-gui
+        (p.nerdfonts.override {
+          fonts = [
+            "DroidSansMono"
+            "FiraCode"
+            "RobotoMono"
+          ];
+        })
         p.nfs-utils
         p.nil
         p.nix-output-monitor
@@ -139,6 +146,7 @@ in
         p.open-webui
         p.pciutils
         p.pipenv
+        p.piper
         p.plexamp
         (p.nerdfonts.override {
           fonts = [
