@@ -15,6 +15,7 @@ in
     hardware
     inputs.lix-module.nixosModules.default
     inputs.opnix.nixosModules.default
+    inputs.stylix.nixosModules.stylix
   ];
 
   config = {
@@ -190,7 +191,7 @@ in
       };
 
       open-webui = {
-        enable = true;
+        enable = false;
         environment = {
           CONTENT_EXTRACTION_ENGINE = "tika";
           DEVICE_TYPE = "cpu";
@@ -290,6 +291,28 @@ in
 
     # Enable Polkit
     security.polkit.enable = true;
+
+    stylix = {
+      enable = true;
+      fonts =
+        let
+        in
+        {
+          monospace = {
+            package = pkgs.nerdfonts.override {
+              fonts = [
+                "FiraCode"
+              ];
+            };
+            name = "FiraCode Nerd Font";
+          };
+        };
+      image = pkgs.fetchurl {
+        url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";
+        sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
+      };
+      polarity = "dark";
+    };
 
     systemd = {
       services = {

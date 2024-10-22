@@ -16,6 +16,7 @@
 }:
 inputs.devenv.lib.mkShell {
   inherit inputs pkgs;
+
   modules = [
     (
       { pkgs, config, ... }:

@@ -48,26 +48,6 @@ in
   config = {
     home = {
       file = {
-        "${config.xdg.dataHome}/Xresources-themes" = {
-          source = pkgs.fetchFromGitHub {
-            owner = "janoamaral";
-            repo = "Xresources-themes";
-            rev = "fd59f8977e2b522422e153aade456aa811914abc";
-            sha256 = "11jq665iqibs9sw37fii92pyc9zld2x8ygy401dhi67i4hbp1pvi";
-          };
-        };
-        ".Xresources" = {
-          text = ''
-            #include "${config.xdg.dataHome}/Xresources-themes/base16-3024-256.Xresources"
-
-            ! Use a truetype font and size.
-            xterm*faceName: FiraCode Nerd Font Mono
-            xterm*faceSize: 14
-
-            ! Allow OSC escape sequences
-            xterm*disallowedWindowOps: 20,21,SetXprop
-          '';
-        };
         "${config.xdg.configHome}/fish/conf.d/plugin-tmux000.fish" = {
           text = ''
             set -Ux fish_tmux_autostart false
@@ -102,7 +82,6 @@ in
         p.enchant
         p.evolution
         p.exercism
-        p.factorio
         p.fava
         p.fira-code
         p.fira-code-symbols
@@ -143,7 +122,7 @@ in
         p.nodejs
         p.ntfs3g
         p.nvd
-        p.open-webui
+        # p.open-webui
         p.pciutils
         p.pipenv
         p.piper
@@ -254,9 +233,6 @@ in
           };
           main = {
             term = "xterm-256color";
-
-            font = "RobotoMono Nerd Font Mono:size=14";
-            dpi-aware = "yes";
           };
 
           mouse = {

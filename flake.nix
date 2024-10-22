@@ -30,6 +30,11 @@
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    stylix = {
+      url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   # We will handle this in the next section.
@@ -47,11 +52,11 @@
         inputs.devenv.flakeModule
       ];
 
+      snowfall.namespace = "rcorrear";
+
       # The `src` must be the root of the flake. See configuration
       # in the next section for information on how you can move your
       # Nix files to a separate directory.
       src = ./.;
-
-      snowfall.namespace = "rcorrear";
     };
 }
