@@ -316,6 +316,7 @@ in
 
     systemd = {
       services = {
+        cpupower-gui.wantedBy = lib.mkForce [ ];
         libvirtd = {
           path =
             let
