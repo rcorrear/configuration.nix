@@ -4,6 +4,10 @@
   ...
 }:
 {
+  imports = [
+    inputs.stylix.darwinModules.stylix
+  ];
+
   environment = {
     extraOutputsToInstall = [
       "doc"
@@ -45,13 +49,23 @@
     ];
   };
 
-  security.pam.enableSudoTouchIdAuth = true;
+  security.pam.services.sudo_local.touchIdAuth = true;
+
+  stylix = {
+    enable = true;
+    base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
+    fonts.monospace = {
+      name = "CaskaydiaCove Nerd Font Mono";
+      package = pkgs.nerd-fonts.caskaydia-cove;
+    };
+  };
 
   system = {
     keyboard = {
       enableKeyMapping = true;
       remapCapsLockToEscape = true;
     };
+    primaryUser = "rcorrear";
     stateVersion = 4;
   };
 

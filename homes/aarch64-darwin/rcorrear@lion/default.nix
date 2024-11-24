@@ -2,19 +2,12 @@
   config,
   lib,
   pkgs,
-  stylix,
   ...
 }:
 let
   p = pkgs;
-
-  rcorrear-all = import ../../all-platforms/rcorrear;
 in
 {
-  imports = [
-    rcorrear-all
-  ];
-
   config = {
     home = {
       packages = [
@@ -110,25 +103,12 @@ in
         enable = true;
         extraPackages = epkgs: [
           epkgs.emacsql
-          epkgs.emacsql-sqlite
           epkgs.vterm
         ];
-        package = pkgs.emacs29;
       };
 
       fish = {
         enable = true;
-        plugins = [
-          {
-            name = "thefuck";
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "plugin-thefuck";
-              rev = "6c9a926d045dc404a11854a645917b368f78fc4d";
-              sha256 = "1n6ibqcgsq1p8lblj334ym2qpdxwiyaahyybvpz93c8c9g4f9ipl";
-            };
-          }
-        ];
       };
 
       git = {
@@ -152,10 +132,6 @@ in
         extraConfig = "IdentityAgent \"${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
       };
 
-      thefuck = {
-        enable = true;
-      };
-
       tmux = {
         enable = false;
       };
@@ -177,15 +153,6 @@ in
         defaultEditor = true;
         enable = true;
         startWithUserSession = true;
-      };
-    };
-
-    stylix = {
-      enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
-      fonts.monospace = {
-        name = "CaskaydiaCove Nerd Font Mono";
-        package = pkgs.nerd-fonts.caskaydia-cove;
       };
     };
   };

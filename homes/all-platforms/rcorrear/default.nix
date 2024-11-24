@@ -1,16 +1,35 @@
-{ config, lib, pkgs, ... }: {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+{
   config = {
     fonts.fontconfig.enable = true;
 
     home = {
+      packages = with pkgs; [
+        any-nix-shell
+        coreutils
+        fd
+        file
+        htop
+        jq
+        ripgrep
+        tree
+      ];
+
       sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
+
+      sessionVariables = {
+        PAGER = "${pkgs.less}/bin/less -FRSX";
+      };
+
+      stateVersion = lib.mkDefault "24.05";
     };
 
     programs = {
-      broot = {
-        enable = true;
-      };
-
       dircolors = {
         enable = true;
       };
@@ -98,6 +117,29 @@
         tmux = {
           enableShellIntegration = true;
           shellIntegrationOptions = [ "-d 40%" ];
+        };
+      };
+
+      git = {
+        enable = true;
+        userEmail = "r.correa.r@gmail.com";
+        userName = "Ricardo Correa";
+        extraConfig = {
+          github.user = "rcorrear";
+          pull.ff = "only";
+        };
+      };
+
+      jujutsu = {
+        enable = true;
+        settings = {
+          ui = {
+            diff.tool = "${pkgs.difftastic}/bin/difft --color=always $left $right";
+          };
+          user = {
+            email = "r.correa.r@gmail.com";
+            name = "Ricardo Correa";
+          };
         };
       };
 

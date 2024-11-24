@@ -287,10 +287,6 @@ in
             backend = "ssh";
             key = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
           };
-          ui = {
-            conflict-marker-style = "git";
-            diff.tool = "${pkgs.difftastic}/bin/difft --color=always $left $right";
-          };
         };
       };
 
@@ -307,11 +303,6 @@ in
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
-      };
-
-      thefuck = {
-        enable = true;
-        enableInstantMode = true;
       };
 
       tmux = {
