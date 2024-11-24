@@ -23,6 +23,10 @@ in
         ripgrep
         tree
       ];
+
+      sessionVariables = {
+        PAGER = "${pkgs.less}/bin/less -FRSX";
+      };
     };
 
     programs = {
