@@ -88,12 +88,13 @@ in
         p.firefox
         (p.flix.override { jre = pkgs.jdk22; })
         p.font-awesome
-        p.fractal
+        # p.fractal
         p.gnome-terminal
         p.gnome-tweaks
         p.gwe
         p.jdk22
         p.jetbrains.idea-community
+        p.jetbrains.pycharm-community
         p.keybase-gui
         p.lutris
         p.maestral
@@ -104,13 +105,6 @@ in
         p.mpg123
         p.mprime
         p.mtr-gui
-        (p.nerdfonts.override {
-          fonts = [
-            "DroidSansMono"
-            "FiraCode"
-            "RobotoMono"
-          ];
-        })
         p.nfs-utils
         p.nil
         p.nix-output-monitor
@@ -122,15 +116,16 @@ in
         p.nodejs
         p.ntfs3g
         p.nvd
+        p.nvtopPackages.nvidia
         # p.open-webui
         p.pciutils
         p.pipenv
         p.piper
         p.plexamp
+        p.psmisc
         (p.nerdfonts.override {
           fonts = [
             "DroidSansMono"
-            "FiraCode"
             "RobotoMono"
           ];
         })
@@ -153,7 +148,7 @@ in
         p.wireguard-tools
         p.xclip
         p.xfsprogs
-        p.yubioath-flutter
+        # p.yubioath-flutter
         p.zstd
       ];
 
@@ -278,6 +273,11 @@ in
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
+      };
+
+      thefuck = {
+        enable = true;
+        enableInstantMode = true;
       };
 
       tmux = {
