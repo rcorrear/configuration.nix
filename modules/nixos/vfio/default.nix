@@ -78,7 +78,7 @@ in
 
       kernel.sysctl = {
         "vm.nr_hugepages" = 16384;
-        "vm.hugetlb_shm_group" = config.ids.gids.kvm; # TODO: bind to kvm guid
+        "vm.hugetlb_shm_group" = config.ids.gids.kvm;
       };
     };
 

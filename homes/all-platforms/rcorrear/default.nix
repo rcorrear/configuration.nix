@@ -40,8 +40,20 @@ in
           github.user = "rcorrear";
           gpg.format = "ssh";
           pull.ff = "only";
-          safe.directory = "${config.home.homeDirectory}/Projects/nix/flake";
-          user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKa59A0LGSduyaIk+rKKImRNoeJBTQV9pvvUNJJqg6cC";
+        };
+      };
+
+      jujutsu = {
+        ediff = true;
+      };
+
+      jujutsu = {
+        enable = true;
+        settings = {
+          user = {
+            email = "r.correa.r@gmail.com";
+            name = "Ricardo Correa";
+          };
         };
       };
     };

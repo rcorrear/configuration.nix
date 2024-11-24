@@ -12,11 +12,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    lix-module = {
-      url = "https://git.lix.systems/lix-project/nixos-module/archive/2.91.0.tar.gz";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     opnix = {
       url = "github:mrjones2014/opnix";
       inputs.nixpkgs.follows = "nixpkgs";

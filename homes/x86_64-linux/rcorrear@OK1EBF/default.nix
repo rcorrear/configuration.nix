@@ -83,16 +83,14 @@ in
         p.evolution
         p.exercism
         p.fava
-        p.fira-code
-        p.fira-code-symbols
         p.firefox
-        (p.flix.override { jre = pkgs.jdk22; })
+        (p.flix.override { jre = pkgs.jdk23; })
         p.font-awesome
-        # p.fractal
+        p.fractal
         p.gnome-terminal
         p.gnome-tweaks
         p.gwe
-        p.jdk22
+        p.jdk23
         p.jetbrains.idea-community
         p.jetbrains.pycharm-community
         p.keybase-gui
@@ -100,11 +98,12 @@ in
         p.maestral
         p.mangohud
         p.metals
-        p.mission-center
         p.moonlight-qt
         p.mpg123
         p.mprime
         p.mtr-gui
+        p.nerd-fonts.blex-mono
+        p.nerd-fonts.iosevka-term-slab
         p.nfs-utils
         p.nil
         p.nix-output-monitor
@@ -117,18 +116,12 @@ in
         p.ntfs3g
         p.nvd
         p.nvtopPackages.nvidia
-        # p.open-webui
+        p.open-webui
         p.pciutils
         p.pipenv
         p.piper
         p.plexamp
         p.psmisc
-        (p.nerdfonts.override {
-          fonts = [
-            "DroidSansMono"
-            "RobotoMono"
-          ];
-        })
         p.remmina
         p.shellcheck
         p.shfmt
@@ -148,7 +141,7 @@ in
         p.wireguard-tools
         p.xclip
         p.xfsprogs
-        # p.yubioath-flutter
+        p.yubioath-flutter
         p.zstd
       ];
 
@@ -255,14 +248,7 @@ in
       };
 
       jujutsu = {
-        enable = true;
         ediff = true;
-        settings = {
-          user = {
-            email = "r.correa.r@gmail.com";
-            name = "Ricardo Correa";
-          };
-        };
       };
 
       obs-studio = {

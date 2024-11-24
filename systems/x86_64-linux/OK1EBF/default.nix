@@ -13,7 +13,6 @@ in
 {
   imports = [
     hardware
-    inputs.lix-module.nixosModules.default
     inputs.opnix.nixosModules.default
     inputs.stylix.nixosModules.stylix
   ];
@@ -51,10 +50,6 @@ in
       firewall.allowedTCPPorts = [ 56954 ];
       firewall.allowedUDPPorts = [ ];
 
-      # Configure network proxy if necessary
-      # proxy.default = "http://user:password@proxy:port/";
-      # proxy.noProxy = "127.0.0.1,localhost,internal.domain";
-
       networkmanager.enable = true;
     };
 
@@ -62,8 +57,6 @@ in
       extraOptions = ''
         experimental-features = nix-command flakes
       '';
-
-      package = pkgs.lix;
 
       settings.trusted-users = [
         "rcorrear"
@@ -191,7 +184,7 @@ in
       };
 
       open-webui = {
-        enable = false;
+        enable = true;
         environment = {
           CONTENT_EXTRACTION_ENGINE = "tika";
           DEVICE_TYPE = "cpu";
@@ -279,7 +272,6 @@ in
           Option "metamodes" "2560x1440_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
         '';
         videoDrivers = [ "nvidia" ];
-        # windowManager = {stumpwm.enable = true;};
       };
 
       zfs = {
@@ -299,12 +291,8 @@ in
         in
         {
           monospace = {
-            package = pkgs.nerdfonts.override {
-              fonts = [
-                "FiraCode"
-              ];
-            };
-            name = "FiraCode Nerd Font";
+            name = "CaskaydiaCove Nerd Font Mono";
+            package = pkgs.nerd-fonts.caskaydia-cove;
           };
         };
       image = pkgs.fetchurl {
@@ -370,7 +358,6 @@ in
         onBoot = "ignore";
         onShutdown = "shutdown";
       };
-      # spiceUSBRedirection.enable = true;
     };
 
     # This value determines the NixOS release from which the default
