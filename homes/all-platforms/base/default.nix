@@ -1,36 +1,8 @@
-{ config, pkgs, ... }:
-let
-  base16TmuxPlugin = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "tmuxcolors";
-    version = "30fc84afc723e027d4497a284fcae3cb75097441";
-    src = pkgs.fetchFromGitHub {
-      owner = "tinted-theming";
-      repo = "base16-tmux";
-      rev = "30fc84afc723e027d4497a284fcae3cb75097441";
-      sha256 = "1ncdfniz0fgbk61xvjcbpk5llynwg3phak5zmh5f3jnsli3dx7r4";
-    };
-  };
-in
-{
+{ config, lib, pkgs, ... }: {
   config = {
     fonts.fontconfig.enable = true;
 
     home = {
-      keyboard = {
-        options = [ "caps:escape" ];
-      };
-
-      packages = with pkgs; [
-        any-nix-shell
-        coreutils
-        fd
-        file
-        htop
-        jq
-        ripgrep
-        tree
-      ];
-
       sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
     };
 
@@ -129,16 +101,12 @@ in
         };
       };
 
-      nix-index = {
-        enable = true;
-      };
-
       starship = {
         enable = true;
       };
 
       tmux = {
-        enable = true;
+        enable = lib.mkDefault true;
         extraConfig = ''
           bind P paste-buffer
           bind-key -T copy-mode-vi v send-keys -X begin-selection
@@ -147,8 +115,6 @@ in
         '';
         keyMode = "vi";
         plugins = with pkgs; [
-          base16TmuxPlugin
-
           tmuxPlugins.ctrlw
           tmuxPlugins.pain-control
           tmuxPlugins.tmux-fzf

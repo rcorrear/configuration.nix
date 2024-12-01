@@ -1,6 +1,11 @@
 {
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+
+    darwin = {
+      url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
 
     devenv = {
       url = "github:cachix/devenv";
@@ -53,5 +58,14 @@
       # in the next section for information on how you can move your
       # Nix files to a separate directory.
       src = ./.;
+
+      # The outputs builder receives an attribute set of your available NixPkgs channels.
+      # These are every input that points to a NixPkgs instance (even forks). In this
+      # case, the only channel available in this flake is `channels.nixpkgs`.
+      outputs-builder = channels: {
+        # Outputs in the outputs builder are transformed to support each system. This
+        # entry will be turned into multiple different outputs like `formatter.x86_64-linux.*`.
+        formatter = channels.nixpkgs.nixfmt-rfc-style;
+      };
     };
 }
