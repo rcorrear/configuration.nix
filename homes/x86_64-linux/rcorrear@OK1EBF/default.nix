@@ -46,6 +46,18 @@ in
   ];
 
   config = {
+    dconf = {
+      enable = true;
+      settings."org/gnome/shell" = {
+        disable-user-extensions = false;
+        enabled-extensions = with pkgs.gnomeExtensions; [
+          blur-my-shell.extensionUuid
+          caffeine.extensionUuid
+          gsconnect.extensionUuid
+        ];
+      };
+    };
+
     home = {
       file = {
         "${config.xdg.configHome}/fish/conf.d/plugin-tmux000.fish" = {
@@ -82,7 +94,6 @@ in
         p.desktop-file-utils
         p.discord
         p.editorconfig-checker
-        p.emacs-all-the-icons-fonts
         p.enchant
         p.evolution
         p.exercism

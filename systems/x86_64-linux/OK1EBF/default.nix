@@ -286,15 +286,12 @@ in
 
     stylix = {
       enable = true;
-      fonts =
-        let
-        in
-        {
-          monospace = {
-            name = "CaskaydiaCove Nerd Font Mono";
-            package = pkgs.nerd-fonts.caskaydia-cove;
-          };
+      fonts = {
+        monospace = {
+          name = "CaskaydiaCove Nerd Font Mono";
+          package = pkgs.nerd-fonts.caskaydia-cove;
         };
+      };
       image = pkgs.fetchurl {
         url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";
         sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
