@@ -5,6 +5,12 @@
   ];
 
   config = {
+    boot.kernel.sysctl = {
+      "net.ipv6.conf.all.forwarding" = false;
+      "net.ipv6.conf.net0.accept_ra" = true;
+      "net.ipv6.conf.net0.accept_ra_rt_info_max_plen" = 64;
+    };
+
     # Packages installed in system profile. To search, run:
     # $ nix search wget
     environment.systemPackages = with pkgs; [ home-assistant-cli ];
@@ -60,6 +66,7 @@
         # extraPackages = [lennoxs30api];
         openFirewall = true;
       };
+      matter-server.enable = true;
       # Enable tailscale
       tailscale = {
         enable = true;
