@@ -1,4 +1,9 @@
-{ config, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   base = import ../../all-platforms/base;
 in
@@ -23,6 +28,8 @@ in
       sessionVariables = {
         PAGER = "${pkgs.less}/bin/less -FRSX";
       };
+
+      stateVersion = lib.mkDefault "24.05";
     };
 
     programs = {

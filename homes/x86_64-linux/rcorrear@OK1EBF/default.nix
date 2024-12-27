@@ -37,14 +37,8 @@ let
           }
         ];
     });
-
-  rcorrear-all = import ../../all-platforms/rcorrear;
 in
 {
-  imports = [
-    rcorrear-all
-  ];
-
   config = {
     dconf = {
       enable = true;
