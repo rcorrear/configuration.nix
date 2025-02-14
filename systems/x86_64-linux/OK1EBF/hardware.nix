@@ -135,8 +135,6 @@
       enable32Bit = true;
     };
 
-    pulseaudio.enable = false;
-
     sane = {
       enable = true;
       extraBackends = [ pkgs.hplipWithPlugin ];
@@ -152,7 +150,6 @@
   };
 
   pciPassthrough = {
-    enable = true;
     cpuType = "amd";
     kvmfr = true;
     libvirtUsers = [ "rcorrear" ];

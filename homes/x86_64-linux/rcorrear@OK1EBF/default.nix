@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -45,9 +46,9 @@ in
       settings."org/gnome/shell" = {
         disable-user-extensions = false;
         enabled-extensions = with pkgs.gnomeExtensions; [
-          blur-my-shell.extensionUuid
           caffeine.extensionUuid
           gsconnect.extensionUuid
+          vitals.extensionUuid
         ];
       };
     };
@@ -70,13 +71,17 @@ in
       packages = [
         vscode
 
+        inputs.ghostty.packages.x86_64-linux.default
+
         # arcan
         p.arcan
         p.cat9
         p.durden
         p.pipeworld
         p.prio
-        p.xarcan
+        #p.xarcan
+
+        p.rcorrear.exiled-exchange2
 
         (p.aspellWithDicts (dicts: [ dicts.en ]))
         p.beancount
@@ -98,10 +103,13 @@ in
         p.fractal
         p.gnome-terminal
         p.gnome-tweaks
+        p.gnomeExtensions.caffeine
+        p.gnomeExtensions.gsconnect
+        p.gnomeExtensions.vitals
         p.gwe
         p.jdk23
-        p.jetbrains.idea-community
-        p.jetbrains.pycharm-community
+        #p.jetbrains.idea-community
+        #p.jetbrains.pycharm-community
         p.keybase-gui
         p.lutris
         p.maestral
@@ -213,7 +221,6 @@ in
         enable = true;
         extraPackages = epkgs: [
           epkgs.emacsql
-          epkgs.emacsql-sqlite
           epkgs.vterm
         ];
         package = pkgs.emacs29;
