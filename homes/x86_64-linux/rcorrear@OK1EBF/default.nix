@@ -138,6 +138,7 @@ in
         p.pipenv
         p.piper
         p.plexamp
+        p.prismlauncher
         p.psmisc
         p.remmina
         p.shellcheck

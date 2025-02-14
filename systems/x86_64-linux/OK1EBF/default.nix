@@ -58,6 +58,12 @@ in
       # Open ports in the firewall.
       firewall.allowedTCPPorts = [ 56954 ];
       firewall.allowedUDPPorts = [ ];
+      firewall.allowedUDPPortRanges = [
+        {
+          from = 1714;
+          to = 1764;
+        }
+      ];
 
       networkmanager.enable = true;
     };
@@ -174,6 +180,12 @@ in
         enable = true;
         localuser = null;
         package = pkgs.plocate;
+      };
+
+      minecraft-server = {
+        enable = true;
+        eula = true;
+        openFirewall = true;
       };
 
       ollama = {
