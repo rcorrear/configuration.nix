@@ -22,8 +22,14 @@
         21063
         21064
       ];
-      firewall.interfaces.net0.allowedUDPPorts = [ 5353 ];
-      interfaces.net0.useDHCP = true;
+      firewall.interfaces = {
+        net0.allowedUDPPorts = [ 5353 ];
+        net3.allowedUDPPorts = [ 5353 ];
+      };
+      interfaces = {
+        net0.useDHCP = true;
+        net3.useDHCP = true;
+      };
     };
 
     nix = {
