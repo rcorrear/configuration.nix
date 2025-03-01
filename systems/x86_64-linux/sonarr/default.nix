@@ -18,7 +18,19 @@
       ];
     };
 
-    programs.fish.enable = true;
+    nixpkgs.config.permittedInsecurePackages = [
+      "aspnetcore-runtime-6.0.36"
+      "dotnet-sdk-6.0.428"
+    ];
+
+    programs = {
+      fish.enable = true;
+      nh = {
+        enable = true;
+        clean.enable = true;
+        clean.extraArgs = "--keep-since 4d --keep 3";
+      };
+    };
 
     # Enable sonarr
     services = {
