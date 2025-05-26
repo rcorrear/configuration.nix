@@ -18,14 +18,14 @@ in
   ];
 
   config = {
-    specialisation = {
-      passthrough.configuration = {
-        pciPassthrough.enable = true;
-      };
-      native.configuration = {
-        pciPassthrough.enable = false;
-      };
-    };
+    # specialisation = {
+    #   passthrough.configuration = {
+    #     pciPassthrough.enable = true;
+    #   };
+    #   native.configuration = {
+    #     pciPassthrough.enable = false;
+    #   };
+    # };
 
     # Packages installed in system profile. To search, run:
     # $ nix search wget
@@ -39,6 +39,7 @@ in
         ]);
       systemPackages = with pkgs; [
         neovim
+        pijul
       ];
     };
 
@@ -60,6 +61,7 @@ in
       firewall.allowedUDPPorts = [ ];
       firewall.allowedUDPPortRanges = [
         {
+          # gsconnect
           from = 1714;
           to = 1764;
         }
@@ -178,7 +180,6 @@ in
 
       locate = {
         enable = true;
-        localuser = null;
         package = pkgs.plocate;
       };
 

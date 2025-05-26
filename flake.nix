@@ -9,22 +9,10 @@
 
     devenv = {
       url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
-      inputs.nixpkgs-unstable.follows = "nixpkgs";
-    };
-
-    nixos-cosmic = {
-      url = "github:lilyinstarlight/nixos-cosmic";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     opnix = {
@@ -34,8 +22,7 @@
 
     pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
 
-    # The name "snowfall-lib" is required due to how Snowfall Lib processes your
-    # flake's inputs.
+    # The name "snowfall-lib" is required due to how Snowfall Lib processes flake inputs.
     snowfall-lib = {
       url = "github:snowfallorg/lib";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -43,7 +30,6 @@
 
     stylix = {
       url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
@@ -56,6 +42,11 @@
 
       channels-config = {
         allowUnfree = true;
+        permittedInsecurePackages = [
+          "dotnet-runtime-6.0.36"
+          "dotnet-sdk-6.0.136"
+          "dotnet-sdk-6.0.428"
+        ];
       };
 
       nixos.modules = [

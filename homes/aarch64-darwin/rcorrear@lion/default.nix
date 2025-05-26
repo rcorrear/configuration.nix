@@ -1,8 +1,8 @@
 {
   config,
   lib,
-  inputs,
   pkgs,
+  stylix,
   ...
 }:
 let
@@ -13,7 +13,6 @@ in
 {
   imports = [
     rcorrear-all
-    inputs.stylix.homeManagerModules.stylix
   ];
 
   config = {

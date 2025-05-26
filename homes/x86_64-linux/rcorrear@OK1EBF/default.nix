@@ -71,7 +71,6 @@ in
       packages = [
         vscode
 
-        inputs.ghostty.packages.x86_64-linux.default
 
         # arcan
         p.arcan
@@ -101,6 +100,7 @@ in
         (p.flix.override { jre = pkgs.jdk23; })
         p.font-awesome
         p.fractal
+        p.ghostty
         p.gnome-terminal
         p.gnome-tweaks
         p.gnomeExtensions.caffeine
@@ -144,7 +144,6 @@ in
         p.shellcheck
         p.shfmt
         p.simple-scan
-        p.skypeforlinux
         p.sqlite
         p.sshpass
         p.sunshine
@@ -224,7 +223,7 @@ in
           epkgs.emacsql
           epkgs.vterm
         ];
-        package = pkgs.emacs29;
+        package = pkgs.emacs30;
       };
 
       foot = {
@@ -270,6 +269,7 @@ in
         plugins = with pkgs.obs-studio-plugins; [ obs-pipewire-audio-capture ];
       };
 
+      nix-index = {
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
@@ -310,6 +310,7 @@ in
         enable = true;
         mountPoint = "Keybase";
       };
+      podman = {
     };
   };
 }
