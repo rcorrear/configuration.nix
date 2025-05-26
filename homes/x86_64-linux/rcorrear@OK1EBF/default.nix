@@ -82,6 +82,7 @@ in
         p.prio
         p.xarcan
 
+        p.rcorrear.cider-2
         p.rcorrear.exiled-exchange2
 
         p.aider-chat
@@ -91,7 +92,6 @@ in
         p.beancount-black
         p.beancount-language-server
         p.celluloid
-        p.cider
         p.cmake
         p.desktop-file-utils
         p.discord
