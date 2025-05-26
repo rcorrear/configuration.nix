@@ -64,9 +64,9 @@
         server = {
           enable = true;
           exports = ''
-            /exports                  192.168.0.0/16(sync,sec=sys,root_squash,rw,fsid=0,subtree_check)
-            /exports/elizabethfeitof  192.168.0.0/16(sync,sec=sys,root_squash,rw,nohide,no_subtree_check)
-            /exports/rcorrear         192.168.0.0/16(sync,sec=sys,root_squash,rw,nohide,no_subtree_check)
+            /exports                  192.168.0.0/16(sync,sec=sys,root_squash,rw,fsid=0,subtree_check) 100.64.0.0/10(sync,sec=sys,root_squash,rw,fsid=0,subtree_check)
+            /exports/elizabethfeitof  192.168.0.0/16(sync,sec=sys,root_squash,rw,nohide,no_subtree_check) 100.64.0.0/10(sync,sec=sys,root_squash,rw,nohide,no_subtree_check)
+            /exports/rcorrear         192.168.0.0/16(sync,sec=sys,root_squash,rw,nohide,no_subtree_check) 100.64.0.0/10(sync,sec=sys,root_squash,rw,nohide,no_subtree_check)
           '';
           lockdPort = 4001; # fixed port for firewall
           mountdPort = 4002; # fixed port for firewall
@@ -123,6 +123,15 @@
       #     enableMDNS = true;
       #   };
       # };
+
+      tailscale = {
+        enable = true;
+        extraUpFlags = [
+          "--accept-routes"
+        ];
+        openFirewall = true;
+        useRoutingFeatures = "client";
+      };
     };
 
     # This value determines the NixOS release from which the default
