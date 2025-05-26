@@ -18,15 +18,6 @@ in
   ];
 
   config = {
-    # specialisation = {
-    #   passthrough.configuration = {
-    #     pciPassthrough.enable = true;
-    #   };
-    #   native.configuration = {
-    #     pciPassthrough.enable = false;
-    #   };
-    # };
-
     # Packages installed in system profile. To search, run:
     # $ nix search wget
     environment = {

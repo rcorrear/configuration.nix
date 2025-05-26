@@ -126,7 +126,7 @@
 
     nvidia = {
       modesetting.enable = true;
-      open = false;
+      open = true;
       powerManagement.enable = true;
     };
 
@@ -149,12 +149,12 @@
     };
   };
 
-  pciPassthrough = {
-    cpuType = "amd";
-    kvmfr = true;
-    libvirtUsers = [ "rcorrear" ];
-    pciIDs = "10de:2206,10de:1aef";
-  };
+  # pciPassthrough = {
+  #   cpuType = "amd";
+  #   kvmfr = true;
+  #   libvirtUsers = [ "rcorrear" ];
+  #   pciIDs = "10de:2206,10de:1aef";
+  # };
 
   swapDevices = [ ];
 }
