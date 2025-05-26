@@ -11,9 +11,14 @@
   config = {
     boot.kernel.sysctl = {
       "net.ipv4.ip_forward" = 1;
+      "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    networking.interfaces.net0.useDHCP = true;
+    networking.interfaces = {
+      net0.useDHCP = true;
+      net3.useDHCP = true;
+      net30.useDHCP = true;
+    };
 
     nix = {
       settings.trusted-users = [
@@ -31,14 +36,17 @@
     };
 
     # Enable tailscale
-    services.tailscale = {
-      enable = true;
-      extraUpFlags = [
-        "--advertise-exit-node"
-        "--advertise-routes 192.168.0.0/16"
-      ];
-      openFirewall = true;
-      useRoutingFeatures = "server";
+    services = {
+      tailscale = {
+        enable = true;
+        extraUpFlags = [
+          "--advertise-exit-node"
+          "--advertise-routes=192.168.1.0/24,192.168.3.0/24,192.168.30.0/24"
+          "--snat-subnet-routes=false"
+        ];
+        openFirewall = true;
+        useRoutingFeatures = "server";
+      };
     };
 
     # This value determines the NixOS release from which the default
@@ -49,9 +57,40 @@
     # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
     system.stateVersion = "22.05"; # Did you read the comment?
 
-    systemd.suppressedSystemUnits = [
-      "sys-kernel-debug.mount"
-    ];
+    systemd = {
+      services = {
+        ethtool-net0 = {
+          description = "ethtool-net0";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "root";
+            ExecStart = "${pkgs.ethtool}/bin/ethtool -K net0 rx-udp-gro-forwarding on rx-gro-list off";
+          };
+          wantedBy = [ "multi-user.target" ];
+        };
+        ethtool-net3 = {
+          description = "ethtool-net3";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "root";
+            ExecStart = "${pkgs.ethtool}/bin/ethtool -K net3 rx-udp-gro-forwarding on rx-gro-list off";
+          };
+          wantedBy = [ "multi-user.target" ];
+        };
+        ethtool-net30 = {
+          description = "ethtool-net30";
+          serviceConfig = {
+            Type = "oneshot";
+            User = "root";
+            ExecStart = "${pkgs.ethtool}/bin/ethtool -K net30 rx-udp-gro-forwarding on rx-gro-list off";
+          };
+          wantedBy = [ "multi-user.target" ];
+        };
+      };
+      suppressedSystemUnits = [
+        "sys-kernel-debug.mount"
+      ];
+    };
 
     # Define a user account. Don't forget to set a password with ‘passwd’.
     users.users.rcorrear = {
