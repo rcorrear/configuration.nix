@@ -26,8 +26,10 @@ let
         with vscode-extensions;
         [
           asvetliakov.vscode-neovim
+          betterthantomorrow.calva
           mechatroner.rainbow-csv
           mkhl.direnv
+          visualjj.visualjj
         ]
         ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
           {
@@ -48,6 +50,7 @@ in
         enabled-extensions = with pkgs.gnomeExtensions; [
           caffeine.extensionUuid
           gsconnect.extensionUuid
+          tailscale-status.extensionUuid
           vitals.extensionUuid
         ];
       };
@@ -71,17 +74,17 @@ in
       packages = [
         vscode
 
-
         # arcan
         p.arcan
         p.cat9
         p.durden
         p.pipeworld
         p.prio
-        #p.xarcan
+        p.xarcan
 
         p.rcorrear.exiled-exchange2
 
+        p.aider-chat
         (p.aspellWithDicts (dicts: [ dicts.en ]))
         p.atlauncher
         p.beancount
@@ -92,6 +95,7 @@ in
         p.cmake
         p.desktop-file-utils
         p.discord
+        p.dotnetCorePackages.sdk_9_0_1xx-bin
         p.editorconfig-checker
         p.enchant
         p.evolution
@@ -101,16 +105,19 @@ in
         (p.flix.override { jre = pkgs.jdk23; })
         p.font-awesome
         p.fractal
+        p.gg-jj
         p.ghostty
         p.gnome-terminal
         p.gnome-tweaks
         p.gnomeExtensions.caffeine
         p.gnomeExtensions.gsconnect
+        p.gnomeExtensions.tailscale-status
         p.gnomeExtensions.vitals
         p.gwe
         p.jdk23
-        #p.jetbrains.idea-community
-        #p.jetbrains.pycharm-community
+        p.jetbrains.idea-community
+        p.jetbrains.pycharm-community
+        p.jetbrains.rider
         p.keybase-gui
         p.lutris
         p.maestral
@@ -119,6 +126,7 @@ in
         p.moonlight-qt
         p.mpg123
         p.mprime
+        p.msbuild
         p.mtr-gui
         p.nerd-fonts.blex-mono
         p.nerd-fonts.iosevka-term-slab
@@ -136,11 +144,14 @@ in
         p.nvtopPackages.nvidia
         p.open-webui
         p.pciutils
+        p.pijul
         p.pipenv
         p.piper
         p.plexamp
+        p.podman
         p.prismlauncher
         p.psmisc
+        p.python3
         p.remmina
         p.shellcheck
         p.shfmt
@@ -151,6 +162,7 @@ in
         p.uhk-agent
         p.usbutils
         p.unison-ucm
+        p.virtiofsd
         p.vorbis-tools
         p.vulkan-tools
         p.whatsapp-for-linux
@@ -160,6 +172,8 @@ in
         p.xclip
         p.xfsprogs
         p.yubioath-flutter
+        p.zed
+        p.zed-editor
         p.zstd
       ];
 
@@ -263,6 +277,16 @@ in
 
       jujutsu = {
         ediff = true;
+        settings = {
+          signing = {
+            behavior = "own";
+            backend = "ssh";
+            key = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
+          };
+          ui = {
+            diff.tool = "${pkgs.difftastic}/bin/difft --color=always $left $right";
+          };
+        };
       };
 
       obs-studio = {
@@ -271,6 +295,10 @@ in
       };
 
       nix-index = {
+        enable = true;
+        enableFishIntegration = true;
+      };
+
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent ~/.1password/agent.sock";
@@ -311,7 +339,13 @@ in
         enable = true;
         mountPoint = "Keybase";
       };
+
       podman = {
+        enable = true;
+        settings = {
+          policy = { };
+        };
+      };
     };
   };
 }
