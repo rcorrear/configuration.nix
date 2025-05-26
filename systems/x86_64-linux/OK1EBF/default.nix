@@ -246,6 +246,13 @@ in
 
       ratbagd.enable = true;
 
+      resolved = {
+        enable = true;
+        dnssec = "allow-downgrade";
+        dnsovertls = "opportunistic";
+        domains = [ "home.arpa" ];
+      };
+
       searx = {
         enable = true;
         environmentFile = /run/credentials/searx.service/env;
