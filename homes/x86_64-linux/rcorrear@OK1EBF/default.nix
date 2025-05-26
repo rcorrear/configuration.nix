@@ -83,6 +83,7 @@ in
         p.rcorrear.exiled-exchange2
 
         (p.aspellWithDicts (dicts: [ dicts.en ]))
+        p.atlauncher
         p.beancount
         p.beancount-black
         p.beancount-language-server

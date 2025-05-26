@@ -57,7 +57,9 @@ in
       hostName = "OK1EBF"; # Define your hostname.
 
       # Open ports in the firewall.
-      firewall.allowedTCPPorts = [ 56954 ];
+      firewall.allowedTCPPorts = [
+        25565 # Minecraft
+      ];
       firewall.allowedUDPPorts = [ ];
       firewall.allowedUDPPortRanges = [
         {
@@ -132,6 +134,14 @@ in
         flake = "/etc/nixos";
       };
 
+      nix-ld = {
+        enable = true;
+        libraries = with pkgs; [
+          icu
+          sqlite
+        ];
+      };
+
       steam.enable = true;
 
       ssh.askPassword = "${pkgs.libsForQt5.ksshaskpass.out}/bin/ksshaskpass";
@@ -181,12 +191,6 @@ in
       locate = {
         enable = true;
         package = pkgs.plocate;
-      };
-
-      minecraft-server = {
-        enable = true;
-        eula = true;
-        openFirewall = true;
       };
 
       ollama = {
