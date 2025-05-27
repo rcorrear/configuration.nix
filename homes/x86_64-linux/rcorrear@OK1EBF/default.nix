@@ -278,12 +278,17 @@ in
       jujutsu = {
         ediff = true;
         settings = {
+          core = {
+            fsmonitor = "watchman";
+            watchman.register-snapshot-trigger = true;
+          };
           signing = {
             behavior = "own";
             backend = "ssh";
             key = "${config.home.homeDirectory}/.ssh/id_ed25519.pub";
           };
           ui = {
+            conflict-marker-style = "git";
             diff.tool = "${pkgs.difftastic}/bin/difft --color=always $left $right";
           };
         };
