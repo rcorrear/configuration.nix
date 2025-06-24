@@ -60,6 +60,7 @@
       name = "CaskaydiaCove Nerd Font Mono";
       package = pkgs.nerd-fonts.caskaydia-cove;
     };
+    polarity = "dark";
   };
 
   system = {

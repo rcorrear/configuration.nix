@@ -48,17 +48,19 @@ in
       hostName = "OK1EBF"; # Define your hostname.
 
       # Open ports in the firewall.
-      firewall.allowedTCPPorts = [
-        25565 # Minecraft
-      ];
-      firewall.allowedUDPPorts = [ ];
-      firewall.allowedUDPPortRanges = [
-        {
-          # gsconnect
-          from = 1714;
-          to = 1764;
-        }
-      ];
+      firewall = {
+        allowedTCPPorts = [
+          25565 # Minecraft
+        ];
+        allowedUDPPorts = [ ];
+        allowedUDPPortRanges = [
+          {
+            # gsconnect
+            from = 1714;
+            to = 1764;
+          }
+        ];
+      };
 
       networkmanager.enable = true;
     };
@@ -169,6 +171,12 @@ in
       };
 
       cpupower-gui.enable = true;
+
+      desktopManager.gnome.enable = true; # Enable the GNOME Desktop Environment.
+
+      displayManager.gdm = {
+        enable = true;
+      };
 
       gnome = {
         games.enable = true;
@@ -286,11 +294,6 @@ in
 
       xserver = {
         enable = true; # Enable the X11 windowing system.
-        desktopManager.gnome.enable = true; # Enable the GNOME Desktop Environment.
-        displayManager.gdm = {
-          debug = true;
-          enable = true;
-        };
         xkb.layout = "us"; # Configure keymap in X11
         screenSection = ''
           Option "metamodes" "2560x1440_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
@@ -321,6 +324,9 @@ in
         sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
       };
       polarity = "dark";
+      targets = {
+        kde.enable = false;
+      };
     };
 
     systemd = {

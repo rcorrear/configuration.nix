@@ -21,9 +21,12 @@ inputs.devenv.lib.mkShell {
     (
       { pkgs, config, ... }:
       {
+        packages = [
+          pkgs.devenv
+        ];
         pre-commit.hooks = {
           flake-checker.enable = true;
-          # nixfmt-rfc-style.enable = true;
+          nixfmt-rfc-style.enable = true;
           statix.enable = true;
         };
       }

@@ -31,11 +31,11 @@
 
     programs = {
       dircolors = {
-        enable = true;
+        enable = lib.mkDefault true;
       };
 
       fish = {
-        enable = true;
+        enable = lib.mkDefault true;
         interactiveShellInit = ''
           any-nix-shell fish --info-right | source
         '';
@@ -86,21 +86,11 @@
               # date = "2021-07-06T09:14:51-07:00";
             };
           }
-          {
-            name = "tmux";
-            src = pkgs.fetchFromGitHub {
-              owner = "budimanjojo";
-              repo = "tmux.fish";
-              rev = "87ef5c238b7fb133d7b49988c7c3fcb097953bd2";
-              sha256 = "02pxx2rhc2by0j50n9k0vv51b29lpj5a4mjdca0rx5hpblvmdkbn";
-              # date = "2023-03-26T02:15:51-07:00";
-            };
-          }
         ];
       };
 
       fzf = {
-        enable = true;
+        enable = lib.mkDefault true;
         changeDirWidgetCommand = "fd --type d";
         changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
         defaultCommand = "fd --type f";
@@ -114,14 +104,10 @@
           "--sort"
           "--exact"
         ];
-        tmux = {
-          enableShellIntegration = true;
-          shellIntegrationOptions = [ "-d 40%" ];
-        };
       };
 
       git = {
-        enable = true;
+        enable = lib.mkDefault true;
         userEmail = "r.correa.r@gmail.com";
         userName = "Ricardo Correa";
         extraConfig = {
@@ -131,7 +117,7 @@
       };
 
       jujutsu = {
-        enable = true;
+        enable = lib.mkDefault true;
         settings = {
           ui = {
             diff.tool = "${pkgs.difftastic}/bin/difft --color=always $left $right";
@@ -144,7 +130,7 @@
       };
 
       starship = {
-        enable = true;
+        enable = lib.mkDefault true;
       };
 
       tmux = {

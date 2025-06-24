@@ -58,7 +58,10 @@
       # The `src` must be the root of the flake. See configuration
       # in the next section for information on how you can move your
       # Nix files to a separate directory.
-      src = ./.;
+      src = builtins.path {
+        path = ./.;
+        name = "source";
+      };
 
       # The outputs builder receives an attribute set of your available NixPkgs channels.
       # These are every input that points to a NixPkgs instance (even forks). In this
