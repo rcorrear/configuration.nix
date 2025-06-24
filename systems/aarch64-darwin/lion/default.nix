@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -43,6 +44,7 @@
   };
 
   nix = {
+    enable = false;
     channel.enable = false;
     settings.trusted-users = [
       "rcorrear"

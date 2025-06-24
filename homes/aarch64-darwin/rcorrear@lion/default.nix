@@ -8,6 +8,10 @@ let
   p = pkgs;
 in
 {
+  imports = [
+    ../../all-platforms/rcorrear
+  ];
+
   config = {
     home = {
       packages = [

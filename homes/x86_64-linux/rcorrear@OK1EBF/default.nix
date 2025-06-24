@@ -42,6 +42,10 @@ let
     });
 in
 {
+  imports = [
+    ../../all-platforms/rcorrear
+  ];
+
   config = {
     dconf = {
       enable = true;
