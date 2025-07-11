@@ -131,6 +131,22 @@ in
         goPath = "${config.home.homeDirectory}/Projects/go";
       };
 
+      jujutsu = {
+        ediff = true;
+        settings = {
+          core = {
+            fsmonitor = "watchman";
+            watchman.register-snapshot-trigger = true;
+          };
+          signing = {
+            behavior = "own";
+            backend = "ssh";
+            backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
+            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
+          };
+        };
+      };
+
       ssh = {
         enable = true;
         extraConfig = "IdentityAgent \"${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
