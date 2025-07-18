@@ -86,7 +86,7 @@ in
         p.prio
         p.xarcan
 
-        p.rcorrear.cider-2
+        p.rcorrear.cider-3
         p.rcorrear.exiled-exchange2
 
         p.aider-chat
