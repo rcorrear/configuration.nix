@@ -118,6 +118,8 @@ in
 
       fish.enable = true;
 
+      hyprland.enable = true;
+
       mtr.enable = true;
 
       nh = {
@@ -126,6 +128,8 @@ in
         clean.extraArgs = "--keep-since 4d --keep 3";
         flake = "/etc/nixos";
       };
+
+      niri.enable = true;
 
       nix-ld = {
         enable = true;
@@ -174,9 +178,7 @@ in
 
       desktopManager.gnome.enable = true; # Enable the GNOME Desktop Environment.
 
-      displayManager.gdm = {
-        enable = true;
-      };
+      displayManager.gdm.enable = true;
 
       gnome = {
         games.enable = true;
@@ -306,6 +308,10 @@ in
         autoSnapshot.enable = true;
         trim.enable = true;
       };
+
+      zookeeper = {
+        enable = true;
+      };
     };
 
     # Enable Polkit
@@ -324,9 +330,6 @@ in
         sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
       };
       polarity = "dark";
-      targets = {
-        kde.enable = false;
-      };
     };
 
     systemd = {
