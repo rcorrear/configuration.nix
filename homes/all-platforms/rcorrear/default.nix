@@ -26,6 +26,11 @@
         PAGER = "${pkgs.less}/bin/less -FRSX";
       };
 
+      shellAliases = {
+        jjd = "${pkgs.jujutsu}/bin/jj diff";
+        jjl = "${pkgs.jujutsu}/bin/jj log";
+      };
+
       stateVersion = lib.mkDefault "24.05";
     };
 
@@ -110,6 +115,7 @@
         enable = lib.mkDefault true;
         settings = {
           ui = {
+            default-command = "status";
             diff.formatter = "${pkgs.difftastic}/bin/difft --color=always $left $right";
           };
           user = {
