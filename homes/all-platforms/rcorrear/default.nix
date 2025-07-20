@@ -114,6 +114,12 @@
       jujutsu = {
         enable = lib.mkDefault true;
         settings = {
+          fix.tools = {
+            nixfmt = {
+              command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+              patterns = [ "glob:'**/*.nix'" ];
+            };
+          };
           ui = {
             default-command = "status";
             diff.formatter = "${pkgs.difftastic}/bin/difft --color=always $left $right";
