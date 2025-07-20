@@ -24,7 +24,7 @@ inputs.devenv.lib.mkShell {
         packages = [
           pkgs.devenv
         ];
-        pre-commit.hooks = {
+        git-hooks.hooks = {
           flake-checker.enable = true;
           nixfmt-rfc-style.enable = true;
           statix.enable = true;
