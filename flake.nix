@@ -15,6 +15,10 @@
       url = "github:nix-community/home-manager";
     };
 
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+    };
+
     opnix = {
       url = "github:mrjones2014/opnix";
       inputs.nixpkgs.follows = "nixpkgs";
@@ -51,6 +55,10 @@
 
       nixos.modules = [
         inputs.devenv.flakeModule
+      ];
+
+      overlays = [
+        inputs.niri-flake.overlays.niri
       ];
 
       snowfall.namespace = "rcorrear";

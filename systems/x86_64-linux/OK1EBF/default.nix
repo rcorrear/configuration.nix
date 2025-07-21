@@ -13,6 +13,7 @@ in
 {
   imports = [
     hardware
+    inputs.niri-flake.nixosModules.niri
     inputs.opnix.nixosModules.default
     inputs.stylix.nixosModules.stylix
   ];
