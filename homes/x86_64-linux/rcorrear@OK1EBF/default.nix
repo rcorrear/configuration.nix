@@ -96,6 +96,7 @@ in
         p.beancount-black
         p.beancount-language-server
         p.celluloid
+        p.clang
         p.cmake
         p.desktop-file-utils
         p.discord
@@ -156,6 +157,7 @@ in
         p.shellcheck
         p.shfmt
         p.simple-scan
+        p.slack
         p.sqlite
         p.sshpass
         p.sunshine
