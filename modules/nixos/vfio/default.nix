@@ -1,6 +1,5 @@
 {
   config,
-  namespace,
   pkgs,
   lib,
   ...

@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   lib,
   pkgs,
   ...
@@ -150,6 +149,7 @@ in
         p.piper
         p.plexamp
         p.podman
+        p.pre-commit
         p.prismlauncher
         p.psmisc
         p.python3

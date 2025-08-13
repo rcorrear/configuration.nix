@@ -5,9 +5,6 @@
   # You also have access to your flake's inputs.
   inputs,
 
-  # The namespace used for your flake, defaulting to "internal" if not set.
-  namespace,
-
   # All other arguments come from NixPkgs. You can use `pkgs` to pull shells or helpers
   # programmatically or you may add the named attributes as arguments here.
   pkgs,
@@ -19,15 +16,19 @@ inputs.devenv.lib.mkShell {
 
   modules = [
     (
-      { pkgs, config, ... }:
+      { pkgs, ... }:
       {
         packages = [
           pkgs.devenv
         ];
         git-hooks.hooks = {
+          deadnix.enable = true;
           flake-checker.enable = true;
           nixfmt-rfc-style.enable = true;
+          shfmt.enable = true;
           statix.enable = true;
+          trufflehog.enable = true;
+          yamllint.enable = true;
         };
       }
     )
