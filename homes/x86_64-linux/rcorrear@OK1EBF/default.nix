@@ -88,8 +88,10 @@ in
         p.rcorrear.cider-3
         p.rcorrear.exiled-exchange2
 
-        p.aider-chat
         (p.aspellWithDicts (dicts: [ dicts.en ]))
+        (p.flix.override { jre = pkgs.jdk23; })
+
+        p.aider-chat
         p.atlauncher
         p.beancount
         p.beancount-black
@@ -106,7 +108,6 @@ in
         p.exercism
         p.fava
         p.firefox
-        (p.flix.override { jre = pkgs.jdk23; })
         p.font-awesome
         p.fractal
         p.gg-jj
@@ -162,8 +163,9 @@ in
         p.sshpass
         p.sunshine
         p.uhk-agent
-        p.usbutils
+        p.umu-launcher
         p.unison-ucm
+        p.usbutils
         p.virtiofsd
         p.vorbis-tools
         p.vulkan-tools
