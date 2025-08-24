@@ -1,6 +1,7 @@
 {
   config,
   lib,
+  namespace,
   pkgs,
   ...
 }:
@@ -46,6 +47,10 @@ in
   ];
 
   config = {
+    archetypes.programs = {
+      emacs.enable = true;
+    };
+
     dconf = {
       enable = true;
       settings."org/gnome/shell" = {
@@ -381,7 +386,6 @@ in
 
       ssh = {
         enable = true;
-        extraConfig = "IdentityAgent ~/.1password/agent.sock";
       };
 
       tmux = {

@@ -320,11 +320,10 @@ in
 
     stylix = {
       enable = true;
-      fonts = {
-        monospace = {
-          name = "CaskaydiaCove Nerd Font Mono";
-          package = pkgs.nerd-fonts.caskaydia-cove;
-        };
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
+      fonts.monospace = {
+        name = "CaskaydiaCove Nerd Font Mono";
+        package = pkgs.nerd-fonts.caskaydia-cove;
       };
       image = pkgs.fetchurl {
         url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";

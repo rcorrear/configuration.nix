@@ -24,6 +24,7 @@ in
       };
     }
   ];
+
   config.programs.fzf.tmux = lib.mkIf (fzf_cfg.enable && tmux_cfg.enable) {
     enableShellIntegration = true;
     shellIntegrationOptions = [ "-d 40%" ];
