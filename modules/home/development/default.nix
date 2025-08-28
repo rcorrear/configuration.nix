@@ -6,58 +6,68 @@
   ...
 }:
 let
-  programs = config.programs;
-  _1passwordEnabled = osConfig.programs._1password.enable;
-  _1passwordGuiEnabled = osConfig.programs._1password-gui.enable;
+  _1PasswordGuiEnabled = osConfig.programs._1password-gui.enable;
+  _1PasswordSshSock =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+    else
+      "${config.home.homeDirectory}/.1password/agent.sock";
+  op-ssh-sign =
+    if pkgs.stdenv.hostPlatform.isDarwin then
+      "${pkgs._1password-gui}/Applications/1Password.app/Contents/MacOS/op-ssh-sign"
+    else
+      "${pkgs._1password-gui}/bin/op-ssh-sign";
 in
 {
+  home = {
+    sessionVariables = {
+      SSH_AUTH_SOCK = _1PasswordSshSock;
+    };
+  };
+
   programs = lib.mkMerge [
-    (lib.mkIf programs.git.enable {
+    (lib.mkIf config.programs.git.enable {
       git = {
         difftastic.enable = true;
+      }
+      // lib.optionalAttrs _1PasswordGuiEnabled {
         extraConfig = {
           commit.gpgsign = true;
+          "gpg \"ssh\"".program = op-ssh-sign;
           gpg.format = "ssh";
-          safe.directory = "${config.home.homeDirectory}/Projects/nix/flake";
-          user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
-        }
-        // lib.optionalAttrs _1passwordGuiEnabled {
-          "gpg \"ssh\"".program = "${pkgs._1password-gui}/bin/op-ssh-sign";
         };
       };
     })
-    (lib.mkIf programs.jujutsu.enable {
+    (lib.mkIf config.programs.jujutsu.enable {
       jujutsu = {
         settings = {
-          core = {
-            fsmonitor = "watchman";
+          fix.tools = {
+            nixfmt = {
+              command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+              patterns = [ "glob:'**/*.nix'" ];
+            };
+          };
+          fsmonitor = {
+            backend = "watchman";
             watchman.register-snapshot-trigger = true;
           };
-          signing = {
-            behavior = "own";
-            backend = "ssh";
-            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
+          ui = {
+            default-command = "status";
+            diff.formatter = "${pkgs.difftastic}/bin/difft --color=always $left $right";
           }
-          // lib.optionalAttrs _1passwordGuiEnabled {
-            backends.ssh.program = "${pkgs._1password-gui}/bin/op-ssh-sign";
+          // lib.optionalAttrs _1PasswordGuiEnabled {
+            backends.ssh.program = op-ssh-sign;
+            git.sign-on-push = true;
+            signing = {
+              behavior = "own";
+              backend = "ssh";
+            };
           };
         };
       }
-      // lib.optionalAttrs (programs.emacs.enable or osConfig.programs.emacs.enable) {
+      // lib.optionalAttrs (config.programs.emacs.enable or osConfig.programs.emacs.enable) {
         ediff = true;
       };
-    })
-    (lib.mkIf programs.ssh.enable {
-      ssh = lib.mkMerge [
-        # Enable the 1Password ssh agent
-        (lib.mkIf (_1passwordGuiEnabled && pkgs.stdenv.hostPlatform.isDarwin) {
-          matchBlocks."*".identityAgent =
-            "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock";
-        })
-        (lib.mkIf (_1passwordGuiEnabled && pkgs.stdenv.hostPlatform.isLinux) {
-          matchBlocks."*".identityAgent = "${config.home.homeDirectory}/.1password/agent.sock";
-        })
-      ];
     })
   ];
 }

@@ -24,7 +24,8 @@ in
         p.jdk23
         p.jetbrains.idea-community
         p.jetbrains.pycharm-community
-        p.maestral
+        # p.maestral
+        # p.maestral-gui
         p.metals
         p.mpg123
         p.nix-output-monitor
@@ -54,7 +55,6 @@ in
 
       sessionVariables = {
         FLAKE = /etc/nixos;
-        SSH_AUTH_SOCK = "${config.home.homeDirectory}/.1password/agent.sock";
       };
 
       # This value determines the Home Manager release that your
@@ -115,11 +115,8 @@ in
       };
 
       git = {
-        difftastic.enable = true;
+        enable = true;
         extraConfig = {
-          commit.gpgsign = true;
-          gpg.format = "ssh";
-          "gpg \"ssh\"".program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
           safe.directory = "${config.home.homeDirectory}/Projects/nix/flake";
           user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
         };
@@ -131,16 +128,11 @@ in
       };
 
       jujutsu = {
-        ediff = true;
+        enable = true;
         settings = {
-          core = {
-            fsmonitor = "watchman";
-            watchman.register-snapshot-trigger = true;
-          };
           signing = {
             behavior = "own";
             backend = "ssh";
-            backends.ssh.program = "/Applications/1Password.app/Contents/MacOS/op-ssh-sign";
             key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
           };
         };
@@ -148,7 +140,6 @@ in
 
       ssh = {
         enable = true;
-        extraConfig = "IdentityAgent \"${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock\"";
       };
 
       tmux = {

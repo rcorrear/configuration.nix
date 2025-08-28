@@ -102,7 +102,6 @@
       };
 
       git = {
-        enable = lib.mkDefault true;
         userEmail = "r.correa.r@gmail.com";
         userName = "Ricardo Correa";
         extraConfig = {
@@ -112,18 +111,7 @@
       };
 
       jujutsu = {
-        enable = lib.mkDefault true;
         settings = {
-          fix.tools = {
-            nixfmt = {
-              command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
-              patterns = [ "glob:'**/*.nix'" ];
-            };
-          };
-          ui = {
-            default-command = "status";
-            diff.formatter = "${pkgs.difftastic}/bin/difft --color=always $left $right";
-          };
           user = {
             email = "r.correa.r@gmail.com";
             name = "Ricardo Correa";

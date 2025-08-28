@@ -57,7 +57,6 @@
 
     _1password-gui = {
       enable = true;
-      polkitPolicyOwners = [ "rcorrear" ];
     };
   };
 

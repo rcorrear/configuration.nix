@@ -1,7 +1,6 @@
 {
   config,
   lib,
-  namespace,
   pkgs,
   ...
 }:
@@ -285,17 +284,11 @@ in
       };
 
       jujutsu = {
-        ediff = true;
-        settings = {
-          core = {
-            fsmonitor = "watchman";
-            watchman.register-snapshot-trigger = true;
-          };
-          signing = {
-            behavior = "own";
-            backend = "ssh";
-            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
-          };
+        enable = true;
+        signing = {
+          behavior = "own";
+          backend = "ssh";
+          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
         };
       };
 
