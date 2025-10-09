@@ -142,8 +142,6 @@ in
 
       steam.enable = true;
 
-      ssh.askPassword = "${pkgs.libsForQt5.ksshaskpass.out}/bin/ksshaskpass";
-
       xwayland.enable = true;
     };
 

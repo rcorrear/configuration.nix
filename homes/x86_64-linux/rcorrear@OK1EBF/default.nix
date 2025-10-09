@@ -7,38 +7,40 @@
 let
   p = pkgs;
 
-  onePasswordTmuxPlugin = pkgs.tmuxPlugins.mkTmuxPlugin {
-    pluginName = "plugin";
-    version = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
-    src = pkgs.fetchFromGitHub {
-      owner = "yardnsm";
-      repo = "tmux-1password";
-      rev = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
-      sha256 = "11pvwyxxkxqxyg34mcrzydz9q1wfkj1x5vx3wmy3l4p89qf2dvlk";
+  local = {
+    onePasswordTmuxPlugin = pkgs.tmuxPlugins.mkTmuxPlugin {
+      pluginName = "plugin";
+      version = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
+      src = pkgs.fetchFromGitHub {
+        owner = "yardnsm";
+        repo = "tmux-1password";
+        rev = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
+        sha256 = "11pvwyxxkxqxyg34mcrzydz9q1wfkj1x5vx3wmy3l4p89qf2dvlk";
+      };
     };
-  };
 
-  vscode =
-    with pkgs;
-    (vscode-with-extensions.override {
-      vscodeExtensions =
-        with vscode-extensions;
-        [
-          asvetliakov.vscode-neovim
-          betterthantomorrow.calva
-          mechatroner.rainbow-csv
-          mkhl.direnv
-          visualjj.visualjj
-        ]
-        ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-          {
-            name = "vscode-deno";
-            publisher = "denoland";
-            version = "3.36.0";
-            sha256 = "1l094qk854vgabbxbxkc8bqzwgld949sh9yvk44gl255ixqgnxy4";
-          }
-        ];
-    });
+    vscode =
+      with pkgs;
+      (vscode-with-extensions.override {
+        vscodeExtensions =
+          with vscode-extensions;
+          [
+            asvetliakov.vscode-neovim
+            betterthantomorrow.calva
+            mechatroner.rainbow-csv
+            mkhl.direnv
+            visualjj.visualjj
+          ]
+          ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
+            {
+              name = "vscode-deno";
+              publisher = "denoland";
+              version = "3.36.0";
+              sha256 = "1l094qk854vgabbxbxkc8bqzwgld949sh9yvk44gl255ixqgnxy4";
+            }
+          ];
+      });
+  };
 in
 {
   imports = [
@@ -79,7 +81,7 @@ in
       };
 
       packages = [
-        vscode
+        local.vscode
 
         # arcan
         p.arcan
@@ -103,6 +105,7 @@ in
         p.celluloid
         p.clang
         p.cmake
+        p.codex
         p.desktop-file-utils
         p.discord
         p.dotnetCorePackages.sdk_9_0_1xx-bin
@@ -124,6 +127,7 @@ in
         p.gnomeExtensions.vitals
         p.gwe
         p.jdk23
+        p.jetbrains.idea-community-bin
         p.keybase-gui
         p.lutris
         p.maestral
@@ -148,6 +152,7 @@ in
         p.ntfs3g
         p.nvd
         p.nvtopPackages.nvidia
+        p.opencode
         p.pciutils
         p.pijul
         p.pipenv
@@ -246,7 +251,14 @@ in
           epkgs.emacsql
           epkgs.vterm
         ];
-        package = pkgs.emacs30;
+        package = (
+          pkgs.emacs30.overrideAttrs (oldAttrs: {
+            propagatedUserEnvPkgs = oldAttrs.propagatedUserEnvPkgs ++ [
+              pkgs.nodejs
+              pkgs.uv
+            ];
+          })
+        );
       };
 
       foot = {
@@ -268,6 +280,7 @@ in
       };
 
       git = {
+        enable = true;
         difftastic.enable = true;
         extraConfig = {
           "gpg \"ssh\"".program = "${pkgs._1password-gui}/bin/op-ssh-sign";
@@ -285,10 +298,12 @@ in
 
       jujutsu = {
         enable = true;
-        signing = {
-          behavior = "own";
-          backend = "ssh";
-          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
+        settings = {
+          signing = {
+            behavior = "own";
+            backend = "ssh";
+            key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
+          };
         };
       };
 
@@ -385,7 +400,7 @@ in
         mouse = true;
         plugins = with pkgs; [
           {
-            plugin = onePasswordTmuxPlugin;
+            plugin = local.onePasswordTmuxPlugin;
             extraConfig = ''
               set -g @1password-account 'los_correa'
               set -g @1password-key 'o'
