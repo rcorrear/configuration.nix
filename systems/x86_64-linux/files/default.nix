@@ -9,6 +9,10 @@
   ];
 
   config = {
+    environment.systemPackages = [
+      pkgs.rsync
+    ];
+
     fileSystems."/exports/rcorrear" = {
       device = "/srv/files/rcorrear";
       options = [ "bind" ];
@@ -128,6 +132,8 @@
         enable = true;
         extraUpFlags = [
           "--accept-routes"
+          "--exit-node-allow-lan-access"
+          "--exit-node=tailscale"
         ];
         openFirewall = true;
         useRoutingFeatures = "client";

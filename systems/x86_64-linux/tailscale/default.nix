@@ -42,7 +42,7 @@
         extraUpFlags = [
           "--advertise-exit-node"
           "--advertise-routes=192.168.1.0/24,192.168.3.0/24,192.168.30.0/24"
-          "--snat-subnet-routes=false"
+          "--snat-subnet-routes=true"
         ];
         openFirewall = true;
         useRoutingFeatures = "server";
@@ -60,6 +60,7 @@
     systemd = {
       services = {
         ethtool-net0 = {
+          enable = true;
           description = "ethtool-net0";
           serviceConfig = {
             Type = "oneshot";
@@ -69,6 +70,7 @@
           wantedBy = [ "multi-user.target" ];
         };
         ethtool-net3 = {
+          enable = true;
           description = "ethtool-net3";
           serviceConfig = {
             Type = "oneshot";
@@ -78,6 +80,7 @@
           wantedBy = [ "multi-user.target" ];
         };
         ethtool-net30 = {
+          enable = true;
           description = "ethtool-net30";
           serviceConfig = {
             Type = "oneshot";

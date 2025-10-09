@@ -87,13 +87,15 @@
     };
 
     "/home/rcorrear/Documents" = {
-      device = "files.home.arpa:/rcorrear/Documents";
+      device = "files:/rcorrear/Documents";
       fsType = "nfs4";
       options = [
+        "bg"
+        "noauto"
         "sec=sys"
+        "soft"
         "x-systemd.automount"
         "x-systemd.idle-timeout=600"
-        "noauto"
       ];
     };
 
@@ -103,13 +105,15 @@
     };
 
     "/home/rcorrear/Projects" = {
-      device = "files.home.arpa:/rcorrear/Projects";
+      device = "files:/rcorrear/Projects";
       fsType = "nfs4";
       options = [
+        "bg"
+        "noauto"
         "sec=sys"
+        "soft"
         "x-systemd.automount"
         "x-systemd.idle-timeout=600"
-        "noauto"
       ];
     };
 

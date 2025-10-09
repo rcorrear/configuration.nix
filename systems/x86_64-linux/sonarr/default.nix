@@ -43,6 +43,8 @@
         enable = true;
         extraUpFlags = [
           "--accept-routes"
+          "--exit-node-allow-lan-access"
+          "--exit-node=tailscale"
         ];
         openFirewall = true;
         useRoutingFeatures = "client";

@@ -73,7 +73,6 @@
           "ios"
           "ipp"
           "zeroconf"
-          "zha"
         ];
         # extraPackages = [lennoxs30api];
         openFirewall = true;
@@ -82,7 +81,11 @@
       # Enable tailscale
       tailscale = {
         enable = true;
-        extraUpFlags = [ "--accept-routes" ];
+        extraUpFlags = [
+          "--accept-routes"
+          "--exit-node-allow-lan-access"
+          "--exit-node=tailscale"
+        ];
         openFirewall = true;
         useRoutingFeatures = "client";
       };
