@@ -15,8 +15,8 @@ let
   pname = "exiled-exchange2";
   src = fetchurl {
     inherit pname;
-    url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.6.2/Exiled-Exchange-2-0.6.2.AppImage";
-    sha256 = "poGUsTNgCL7CVQtv7wjfTTVxwd20K4WjA7j50uNOYAE=";
+    url = "https://github.com/Kvan7/Exiled-Exchange-2/releases/download/v0.12.8/exiled-exchange-2-0.12.8.AppImage";
+    sha256 = "sha256-hGUmwyhFsM+8XTrFCuaLVYAA85jwrKCftkQ/wlViRHI=";
   };
 in
 appimageTools.wrapType2 rec {
