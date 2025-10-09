@@ -257,7 +257,7 @@ in
 
       resolved = {
         enable = true;
-        dnssec = "allow-downgrade";
+        dnssec = "false";
         dnsovertls = "opportunistic";
         domains = [ "home.arpa" ];
       };
