@@ -138,6 +138,7 @@ in
         p.mprime
         p.msbuild
         p.mtr-gui
+        p.multimarkdown
         p.nerd-fonts.blex-mono
         p.nerd-fonts.iosevka-term-slab
         p.nfs-utils
