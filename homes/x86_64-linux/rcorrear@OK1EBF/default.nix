@@ -293,7 +293,9 @@ in
 
       go = {
         enable = true;
-        goPath = "${config.home.homeDirectory}/Projects/go";
+        env = {
+          GOPATH = "${config.home.homeDirectory}/Projects/go";
+        };
       };
 
       jujutsu = {
