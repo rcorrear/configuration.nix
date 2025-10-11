@@ -310,6 +310,12 @@ in
 
       zookeeper = {
         enable = true;
+        extraConf = ''
+          admin.serverPort=9876
+          initLimit=5
+          syncLimit=2
+          tickTime=2000
+        '';
       };
     };
 
