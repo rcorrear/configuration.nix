@@ -318,7 +318,7 @@ in
 
     stylix = {
       enable = true;
-      base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
       fonts.monospace = {
         name = "CaskaydiaCove Nerd Font Mono";
         package = pkgs.nerd-fonts.caskaydia-cove;
