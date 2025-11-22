@@ -66,16 +66,6 @@ in
     };
 
     home = {
-      file = {
-        "${config.xdg.configHome}/fish/conf.d/plugin-tmux000.fish" = {
-          text = ''
-            set -Ux fish_tmux_autostart false
-            set -Ux fish_tmux_autostart_once false
-            set -Ux fish_tmux_config $HOME/.config/tmux/tmux.conf
-          '';
-        };
-      };
-
       keyboard = {
         options = [ "caps:escape" ];
       };
@@ -400,20 +390,7 @@ in
         enable = true;
       };
 
-      tmux = {
-        mouse = true;
-        plugins = with pkgs; [
-          {
-            plugin = local.onePasswordTmuxPlugin;
-            extraConfig = ''
-              set -g @1password-account 'los_correa'
-              set -g @1password-key 'o'
-            '';
-          }
-
-          tmuxPlugins.better-mouse-mode
-        ];
-      };
+      tmux.enable = false;
     };
 
     services = {
