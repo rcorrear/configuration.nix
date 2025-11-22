@@ -92,6 +92,7 @@ in
         p.xarcan
 
         p.rcorrear.cider-3
+        p.rcorrear.codex-acp
         p.rcorrear.exiled-exchange2
 
         (p.aspellWithDicts (dicts: [ dicts.en ]))
