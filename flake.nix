@@ -15,6 +15,13 @@
       url = "github:nix-community/home-manager";
     };
 
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.3";
+
+      # Optional but recommended to limit the size of your system closure.
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     niri-flake = {
       url = "github:sodiboo/niri-flake";
     };

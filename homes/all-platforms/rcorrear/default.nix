@@ -102,11 +102,13 @@
       };
 
       git = {
-        userEmail = "r.correa.r@gmail.com";
-        userName = "Ricardo Correa";
-        extraConfig = {
+        settings = {
           github.user = "rcorrear";
           pull.ff = "only";
+          user = {
+            email = "r.correa.r@gmail.com";
+            name = "Ricardo Correa";
+          };
         };
       };
 

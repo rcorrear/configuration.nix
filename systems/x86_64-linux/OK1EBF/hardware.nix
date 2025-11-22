@@ -42,18 +42,23 @@
 
     # kernelPackages = pkgs.linuxPackages_6_15;
 
-    loader = {
-      grub.devices = [
-        "/dev/sda"
-        "/dev/sdb"
-        "/dev/sdc"
-      ];
+    lanzaboote = {
+      enable = true;
+      pkiBundle = "/var/lib/sbctl";
+    };
 
+    loader = {
       efi.canTouchEfiVariables = true;
 
       systemd-boot = {
-        enable = true; # Use the systemd-boot EFI boot loader.
+        # Lanzaboote currently replaces the systemd-boot module.
+        # This setting is usually set to true in configuration.nix
+        # generated at installation time. So we force it to false
+        # for now.
+        enable = false;
         consoleMode = "max";
+        edk2-uefi-shell.enable = true;
+        memtest86.enable = true;
       };
     };
 
@@ -66,6 +71,7 @@
   environment.systemPackages = with pkgs; [
     hddtemp
     lm_sensors
+    sbctl
     thin-provisioning-tools
   ];
 

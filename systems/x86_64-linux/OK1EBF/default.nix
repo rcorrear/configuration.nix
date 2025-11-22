@@ -13,6 +13,7 @@ in
 {
   imports = [
     hardware
+    inputs.lanzaboote.nixosModules.lanzaboote
     inputs.niri-flake.nixosModules.niri
     inputs.opnix.nixosModules.default
     inputs.stylix.nixosModules.stylix
@@ -31,7 +32,6 @@ in
         ]);
       systemPackages = with pkgs; [
         neovim
-        pijul
       ];
     };
 
@@ -64,6 +64,7 @@ in
       };
 
       nftables.enable = true;
+
       networkmanager.enable = true;
     };
 
@@ -181,6 +182,7 @@ in
       displayManager.gdm.enable = true;
 
       fwupd.enable = true;
+
       gnome = {
         games.enable = true;
       };
@@ -212,7 +214,7 @@ in
       };
 
       open-webui = {
-        enable = true;
+        enable = false;
         environment = {
           CONTENT_EXTRACTION_ENGINE = "tika";
           DEVICE_TYPE = "cpu";
@@ -335,6 +337,7 @@ in
         url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";
         sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
       };
+      targets.qt.enable = false;
       polarity = "dark";
     };
 

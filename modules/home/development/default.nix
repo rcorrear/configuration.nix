@@ -26,16 +26,11 @@ in
   };
 
   programs = lib.mkMerge [
-    (lib.mkIf config.programs.git.enable {
-      git = {
-        difftastic.enable = true;
-      }
-      // lib.optionalAttrs _1PasswordGuiEnabled {
-        extraConfig = {
-          commit.gpgsign = true;
-          "gpg \"ssh\"".program = op-ssh-sign;
-          gpg.format = "ssh";
-        };
+    (lib.mkIf (config.programs.git.enable && _1PasswordGuiEnabled) {
+      git.settings = {
+        commit.gpgsign = true;
+        "gpg \"ssh\"".program = op-ssh-sign;
+        gpg.format = "ssh";
       };
     })
     (lib.mkIf config.programs.jujutsu.enable {

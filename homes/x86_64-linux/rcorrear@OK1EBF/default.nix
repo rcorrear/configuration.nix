@@ -74,19 +74,19 @@ in
         local.vscode
 
         # arcan
-        p.arcan
-        p.cat9
-        p.durden
-        p.pipeworld
-        p.prio
-        p.xarcan
+        # p.arcan
+        # p.cat9
+        # p.durden
+        # p.pipeworld
+        # p.prio
+        # p.xarcan
 
         p.rcorrear.cider-3
         p.rcorrear.codex-acp
         p.rcorrear.exiled-exchange2
 
         (p.aspellWithDicts (dicts: [ dicts.en ]))
-        (p.flix.override { jre = pkgs.jdk23; })
+        (p.flix.override { jre = pkgs.jdk25; })
 
         p.aider-chat
         p.atlauncher
@@ -117,7 +117,7 @@ in
         p.gnomeExtensions.tailscale-status
         p.gnomeExtensions.vitals
         p.gwe
-        p.jdk23
+        p.jdk25
         p.jetbrains.idea-community-bin
         p.keybase-gui
         p.lutris
@@ -131,6 +131,7 @@ in
         p.mtr-gui
         p.multimarkdown
         p.nerd-fonts.blex-mono
+        p.nerd-fonts.caskaydia-cove
         p.nerd-fonts.iosevka-term-slab
         p.nfs-utils
         p.nil
@@ -144,7 +145,7 @@ in
         p.ntfs3g
         p.nvd
         p.nvtopPackages.nvidia
-        p.opencode
+        # p.opencode
         p.pciutils
         p.pijul
         p.pipenv
@@ -170,7 +171,7 @@ in
         p.virtiofsd
         p.vorbis-tools
         p.vulkan-tools
-        p.whatsapp-for-linux
+        p.wasistlos
         p.wineWowPackages.stagingFull
         p.winetricks
         p.wireguard-tools
@@ -230,6 +231,11 @@ in
         };
       };
 
+      difftastic = {
+        enable = true;
+        git.enable = true;
+      };
+
       direnv = {
         enable = true;
         nix-direnv = {
@@ -273,8 +279,7 @@ in
 
       git = {
         enable = true;
-        difftastic.enable = true;
-        extraConfig = {
+        settings = {
           "gpg \"ssh\"".program = "${pkgs._1password-gui}/bin/op-ssh-sign";
           commit.gpgsign = true;
           gpg.format = "ssh";
