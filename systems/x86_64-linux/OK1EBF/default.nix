@@ -63,6 +63,7 @@ in
         ];
       };
 
+      nftables.enable = true;
       networkmanager.enable = true;
     };
 
@@ -179,6 +180,7 @@ in
 
       displayManager.gdm.enable = true;
 
+      fwupd.enable = true;
       gnome = {
         games.enable = true;
       };
