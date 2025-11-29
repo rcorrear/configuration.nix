@@ -16,20 +16,23 @@
     environment.systemPackages = with pkgs; [ home-assistant-cli ];
 
     networking = {
-      # TCP 21063: HASS HomeKit
-      # UDP 5353:  HASS HomeKit
-      firewall.allowedTCPPorts = [
-        21063
-        21064
-      ];
-      firewall.interfaces = {
-        net0.allowedUDPPorts = [ 5353 ];
-        net3.allowedUDPPorts = [ 5353 ];
+      firewall = {
+        allowedTCPPorts = [
+          # TCP 21063: HASS HomeKit
+          # UDP 5353:  HASS HomeKit
+          21063
+          21064
+        ];
+        interfaces = {
+          net0.allowedUDPPorts = [ 5353 ];
+          net3.allowedUDPPorts = [ 5353 ];
+        };
       };
       interfaces = {
         net0.useDHCP = true;
         net3.useDHCP = true;
       };
+      nftables.enable = true;
     };
 
     nix = {

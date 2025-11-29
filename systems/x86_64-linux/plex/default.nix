@@ -11,6 +11,8 @@
   config = {
     networking.interfaces.net30.useDHCP = true;
 
+    nftables.enable = true;
+
     nix = {
       settings.trusted-users = [
         "rcorrear"

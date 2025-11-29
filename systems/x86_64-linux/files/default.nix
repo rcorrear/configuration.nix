@@ -45,6 +45,7 @@
         ];
       };
       interfaces.net0.useDHCP = true;
+      nftables.enable = true;
     };
 
     nix = {
