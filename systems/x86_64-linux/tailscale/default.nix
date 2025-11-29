@@ -41,7 +41,7 @@
         enable = true;
         extraUpFlags = [
           "--advertise-exit-node"
-          "--advertise-routes=192.168.1.0/24,192.168.3.0/24,192.168.30.0/24"
+          "--advertise-routes=192.168.1.0/24,192.168.3.0/24,192.168.30.0/24,192.168.40.0/24"
           "--snat-subnet-routes=true"
         ];
         openFirewall = true;
