@@ -1,6 +1,5 @@
 {
   config,
-  lib,
   pkgs,
   ...
 }:
@@ -249,14 +248,12 @@ in
           epkgs.emacsql
           epkgs.vterm
         ];
-        package = (
-          pkgs.emacs30.overrideAttrs (oldAttrs: {
-            propagatedUserEnvPkgs = oldAttrs.propagatedUserEnvPkgs ++ [
-              pkgs.nodejs
-              pkgs.uv
-            ];
-          })
-        );
+        package = pkgs.emacs30.overrideAttrs (oldAttrs: {
+          propagatedUserEnvPkgs = oldAttrs.propagatedUserEnvPkgs ++ [
+            pkgs.nodejs
+            pkgs.uv
+          ];
+        });
       };
 
       foot = {

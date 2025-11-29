@@ -13,7 +13,6 @@
 
     nix = {
       settings.trusted-users = [
-        "root"
         "rcorrear"
       ];
     };
