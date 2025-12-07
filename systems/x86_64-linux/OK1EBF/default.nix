@@ -166,10 +166,10 @@ in
       caddy = {
         enable = true;
         virtualHosts = {
-          "openwebui.ok1ebf.home.arpa".extraConfig = ''
+          "openwebui.home.arpa".extraConfig = ''
             reverse_proxy 127.0.0.1:8080
           '';
-          "search.ok1ebf.home.arpa".extraConfig = ''
+          "search.home.arpa".extraConfig = ''
             reverse_proxy 127.0.0.1:3002
           '';
         };
@@ -214,7 +214,7 @@ in
       };
 
       open-webui = {
-        enable = false;
+        enable = true;
         environment = {
           CONTENT_EXTRACTION_ENGINE = "tika";
           DEVICE_TYPE = "cpu";
