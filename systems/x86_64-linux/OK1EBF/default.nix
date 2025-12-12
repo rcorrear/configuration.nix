@@ -263,7 +263,11 @@ in
         enable = true;
         dnssec = "false";
         dnsovertls = "opportunistic";
-        domains = [ "home.arpa" ];
+        domains = [
+          "home.arpa"
+          "media.home.arpa"
+          "wifi.home.arpa"
+        ];
       };
 
       searx = {

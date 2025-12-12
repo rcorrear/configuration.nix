@@ -14,13 +14,14 @@
       "net.ipv6.conf.all.forwarding" = 1;
     };
 
-    networking.interfaces = {
-      net0.useDHCP = true;
-      net3.useDHCP = true;
-      net30.useDHCP = true;
+    networking = {
+      interfaces = {
+        net0.useDHCP = true;
+        net3.useDHCP = true;
+        net30.useDHCP = true;
+      };
+      nftables.enable = true;
     };
-
-    nftables.enable = true;
 
     nix = {
       settings.trusted-users = [
