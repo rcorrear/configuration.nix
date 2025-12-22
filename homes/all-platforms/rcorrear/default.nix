@@ -55,24 +55,6 @@
             };
           }
           {
-            name = "000-argu";
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "plugin-argu";
-              rev = "1332d5c0561f9587c956b16cf096034f67202c83";
-              sha256 = "sha256-dDT0rRhkSQV/ZqhtaPnDwhaxUyjg+6VGGeH9L2SUsEY=";
-            };
-          }
-          {
-            name = "001-expand";
-            src = pkgs.fetchFromGitHub {
-              owner = "oh-my-fish";
-              repo = "plugin-expand";
-              rev = "ffb18d57506c7332ae8b7b8bc8d7f56e3a2390d2";
-              sha256 = "sha256-mEgoKxoe7/88p0/5vcX27VM83wp4Cii5C3sTjwnoLJ8=";
-            };
-          }
-          {
             name = "git";
             src = pkgs.fetchFromGitHub {
               owner = "jhillyerd";
