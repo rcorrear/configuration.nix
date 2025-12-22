@@ -35,6 +35,17 @@
         enable = true;
         openFirewall = true;
       };
+      # Enable tailscale
+      tailscale = {
+        enable = true;
+        extraUpFlags = [
+          "--accept-routes"
+          "--exit-node-allow-lan-access"
+          "--exit-node=tailscale"
+        ];
+        openFirewall = true;
+        useRoutingFeatures = "client";
+      };
       tautulli = {
         enable = true;
         openFirewall = true;
