@@ -14,6 +14,11 @@ inputs.devenv.lib.mkShell {
     (
       { pkgs, ... }:
       {
+        devenv.root =
+          let
+            pwd = builtins.getEnv "PWD";
+          in
+          if pwd != "" then pwd else toString inputs.self;
         packages = [
           pkgs.devenv
         ];
