@@ -27,7 +27,7 @@
     };
 
     opnix = {
-      url = "github:mrjones2014/opnix";
+      url = "github:brizzbuzz/opnix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
@@ -65,6 +65,7 @@
       ];
 
       overlays = [
+        inputs.opnix.overlays.default
         inputs.niri-flake.overlays.niri
       ];
 

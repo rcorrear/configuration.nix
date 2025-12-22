@@ -307,11 +307,11 @@
         "systems": "systems"
       },
       "locked": {
-        "lastModified": 1710146030,
-        "narHash": "sha256-SZ5L6eA7HJ/nmkzGG7/ISclqe6oZdOZTNoesiInkXPQ=",
+        "lastModified": 1731533236,
+        "narHash": "sha256-l0KFg5HjrsfsO/JpG+r7fRrqm12kzFHyUHqHCVpMMbI=",
         "owner": "numtide",
         "repo": "flake-utils",
-        "rev": "b1d9ab70662946ef0850d488da1c9019f3a9752a",
+        "rev": "11707dc2f618dd54ca8739b309ec4fc024de578b",
         "type": "github"
       },
       "original": {
@@ -768,15 +768,15 @@
         ]
       },
       "locked": {
-        "lastModified": 1739208844,
-        "narHash": "sha256-p+WUaWqGIFM+3oUv5vI6RuHe/02v8G5a6JQVkVtVVhs=",
-        "owner": "mrjones2014",
+        "lastModified": 1764172006,
+        "narHash": "sha256-89VihsuY1WWscerecKG+pe6WVPzFQ3ImYSqQDye78Cs=",
+        "owner": "brizzbuzz",
         "repo": "opnix",
-        "rev": "9330a9cebbd31491d9ff94846fd85cba582e84dc",
+        "rev": "eaacde99a78ef4fb10ee1a68513a98532611c882",
         "type": "github"
       },
       "original": {
-        "owner": "mrjones2014",
+        "owner": "brizzbuzz",
         "repo": "opnix",
         "type": "github"
       }
