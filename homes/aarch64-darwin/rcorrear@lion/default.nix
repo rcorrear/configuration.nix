@@ -142,10 +142,6 @@ in
         enable = true;
       };
 
-      tmux = {
-        enable = false;
-      };
-
       zsh = {
         enable = true;
         loginExtra = ''

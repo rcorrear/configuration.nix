@@ -41,7 +41,10 @@
 
     stylix = {
       url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    zmx.url = "github:neurosnap/zmx/v0.1.1";
   };
 
   # We will handle this in the next section.

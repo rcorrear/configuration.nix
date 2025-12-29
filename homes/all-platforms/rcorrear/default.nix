@@ -1,5 +1,6 @@
 {
   config,
+  inputs,
   lib,
   pkgs,
   ...
@@ -10,6 +11,8 @@
 
     home = {
       packages = with pkgs; [
+        inputs.zmx.packages.${pkgs.stdenv.hostPlatform.system}.zmx
+
         any-nix-shell
         coreutils
         fd
@@ -105,61 +108,35 @@
 
       ssh = {
         enableDefaultConfig = false;
-        matchBlocks."*" = {
-          forwardAgent = false;
-          addKeysToAgent = "no";
-          compression = false;
-          serverAliveInterval = 0;
-          serverAliveCountMax = 3;
-          hashKnownHosts = false;
-          userKnownHostsFile = "~/.ssh/known_hosts";
-          controlMaster = "no";
-          controlPath = "~/.ssh/master-%r@%n:%p";
-          controlPersist = "no";
+        matchBlocks = {
+          "*" = {
+            forwardAgent = false;
+            addKeysToAgent = "no";
+            compression = false;
+            serverAliveInterval = 0;
+            serverAliveCountMax = 3;
+            hashKnownHosts = false;
+            userKnownHostsFile = "~/.ssh/known_hosts";
+            controlMaster = "no";
+            controlPath = "~/.ssh/master-%r@%n:%p";
+            controlPersist = "no";
+          };
+          "z.*" = {
+            controlMaster = "auto";
+            controlPersist = "10m";
+            hostname = "%h";
+            proxyCommand = "sh -c 'hn=\${1#z.}; exec nc \"$hn\" %p' sh %n";
+            extraOptions = {
+              ConnectTimeout = "5";
+              RemoteCommand = "zmx attach %k";
+              RequestTTY = "yes";
+            };
+          };
         };
       };
 
       starship = {
         enable = lib.mkDefault true;
-      };
-
-      tmux = {
-        enable = lib.mkDefault true;
-        extraConfig = ''
-          bind P paste-buffer
-          bind-key -T copy-mode-vi v send-keys -X begin-selection
-          bind-key -T copy-mode-vi y send-keys -X copy-selection
-          bind-key -T copy-mode-vi r send-keys -X rectangle-toggle
-        '';
-        keyMode = "vi";
-        plugins = with pkgs; [
-          tmuxPlugins.ctrlw
-          tmuxPlugins.pain-control
-          tmuxPlugins.tmux-fzf
-          tmuxPlugins.urlview
-
-          {
-            plugin = tmuxPlugins.mode-indicator;
-            extraConfig = ''
-              set -g status-right '%Y-%m-%d %H:%M #{tmux_mode_indicator}'
-            '';
-          }
-          {
-            plugin = tmuxPlugins.tmux-thumbs;
-            extraConfig = ''
-              set -g @thumbs-key T
-              set -g @thumbs-osc52 1
-            '';
-          }
-          {
-            plugin = tmuxPlugins.yank;
-            extraConfig = ''
-              set -g @yank_selection 'clipboard'
-              set -g @yank_selection_mouse 'clipboard'
-            '';
-          }
-        ];
-        terminal = "screen-256color";
       };
     };
   };

@@ -7,17 +7,6 @@ let
   p = pkgs;
 
   local = {
-    onePasswordTmuxPlugin = pkgs.tmuxPlugins.mkTmuxPlugin {
-      pluginName = "plugin";
-      version = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
-      src = pkgs.fetchFromGitHub {
-        owner = "yardnsm";
-        repo = "tmux-1password";
-        rev = "bb1bbd2acfe1b4d5dcf917f6ddf3b0f634a13362";
-        sha256 = "11pvwyxxkxqxyg34mcrzydz9q1wfkj1x5vx3wmy3l4p89qf2dvlk";
-      };
-    };
-
     vscode =
       with pkgs;
       (vscode-with-extensions.override {
@@ -391,8 +380,6 @@ in
       ssh = {
         enable = true;
       };
-
-      tmux.enable = false;
     };
 
     services = {
