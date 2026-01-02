@@ -172,10 +172,10 @@ in
 
       ollama = {
         enable = true;
-        acceleration = "cuda";
         environmentVariables = {
           CUDA_DEVICE_ORDER = "FASTEST_FIRST";
         };
+        package = pkgs.ollama-cuda;
       };
 
       openssh = {
@@ -187,7 +187,7 @@ in
       };
 
       open-webui = {
-        enable = true;
+        enable = false;
         environment = {
           CONTENT_EXTRACTION_ENGINE = "tika";
           DEVICE_TYPE = "cpu";

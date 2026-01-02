@@ -11,7 +11,7 @@
 
     home = {
       packages = with pkgs; [
-        inputs.zmx.packages.${pkgs.stdenv.hostPlatform.system}.zmx
+        inputs.zmx.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         any-nix-shell
         coreutils

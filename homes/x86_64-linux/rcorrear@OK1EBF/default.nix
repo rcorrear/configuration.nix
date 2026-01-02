@@ -1,34 +1,11 @@
 {
   config,
+  inputs,
   pkgs,
   ...
 }:
 let
   p = pkgs;
-
-  local = {
-    vscode =
-      with pkgs;
-      (vscode-with-extensions.override {
-        vscodeExtensions =
-          with vscode-extensions;
-          [
-            asvetliakov.vscode-neovim
-            betterthantomorrow.calva
-            mechatroner.rainbow-csv
-            mkhl.direnv
-            visualjj.visualjj
-          ]
-          ++ pkgs.vscode-utils.extensionsFromVscodeMarketplace [
-            {
-              name = "vscode-deno";
-              publisher = "denoland";
-              version = "3.36.0";
-              sha256 = "1l094qk854vgabbxbxkc8bqzwgld949sh9yvk44gl255ixqgnxy4";
-            }
-          ];
-      });
-  };
 in
 {
   imports = [
@@ -59,7 +36,8 @@ in
       };
 
       packages = [
-        local.vscode
+        inputs.code.packages.${pkgs.stdenv.hostPlatform.system}.default
+        # local.vscode
 
         # arcan
         # p.arcan
@@ -84,7 +62,7 @@ in
         p.celluloid
         p.clang
         p.cmake
-        p.codex
+        # p.codex
         p.desktop-file-utils
         p.discord
         p.dotnetCorePackages.sdk_9_0_1xx-bin
@@ -107,6 +85,7 @@ in
         p.gwe
         p.jdk25
         p.jetbrains.idea-community-bin
+        p.jetbrains.rider
         p.keybase-gui
         p.lutris
         p.maestral
@@ -133,7 +112,6 @@ in
         p.ntfs3g
         p.nvd
         p.nvtopPackages.nvidia
-        # p.opencode
         p.pciutils
         p.pijul
         p.pipenv

@@ -7,13 +7,11 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    devenv = {
-      url = "github:cachix/devenv";
-    };
+    devenv.url = "github:cachix/devenv";
 
-    home-manager = {
-      url = "github:nix-community/home-manager";
-    };
+    code.url = "github:just-every/code";
+
+    home-manager.url = "github:nix-community/home-manager";
 
     lanzaboote = {
       url = "github:nix-community/lanzaboote/v0.4.3";
@@ -22,9 +20,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    niri-flake = {
-      url = "github:sodiboo/niri-flake";
-    };
+    niri-flake.url = "github:sodiboo/niri-flake";
 
     opnix = {
       url = "github:brizzbuzz/opnix";
