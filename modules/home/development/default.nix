@@ -20,6 +20,10 @@ let
 in
 {
   home = {
+    packages = [
+      pkgs.watchman
+    ];
+
     sessionVariables = {
       SSH_AUTH_SOCK = _1PasswordSshSock;
     };

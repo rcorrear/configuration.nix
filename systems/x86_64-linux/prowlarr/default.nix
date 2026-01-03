@@ -29,7 +29,6 @@
       };
     };
 
-    # Enable prowlarr
     services = {
       prowlarr = {
         enable = true;

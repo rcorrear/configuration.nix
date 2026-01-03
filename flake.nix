@@ -9,8 +9,6 @@
 
     devenv.url = "github:cachix/devenv";
 
-    code.url = "github:just-every/code";
-
     home-manager.url = "github:nix-community/home-manager";
 
     lanzaboote = {

@@ -19,6 +19,7 @@
         file
         htop
         jq
+        neovim
         ripgrep
         tree
       ];

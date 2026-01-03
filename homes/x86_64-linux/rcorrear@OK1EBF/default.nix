@@ -1,6 +1,5 @@
 {
   config,
-  inputs,
   pkgs,
   ...
 }:
@@ -41,17 +40,22 @@ in
       };
 
       packages = [
-        inputs.code.packages.${pkgs.stdenv.hostPlatform.system}.default
 
         local.clojure
 
         # arcan
-        # p.arcan
-        # p.cat9
-        # p.durden
-        # p.pipeworld
-        # p.prio
-        # p.xarcan
+        p.arcan
+        p.cat9
+        p.durden
+        p.pipeworld
+        p.prio
+        p.xarcan
+        p.arcan
+        p.cat9
+        p.durden
+        p.pipeworld
+        p.prio
+        p.xarcan
 
         p.rcorrear.cider-3
         p.rcorrear.codex-acp
@@ -67,8 +71,9 @@ in
         p.beancount-language-server
         p.celluloid
         p.clang
+        p.claude-code
         p.cmake
-        # p.codex
+        p.codex
         p.desktop-file-utils
         p.discord
         p.dotnetCorePackages.sdk_9_0_1xx-bin
@@ -218,7 +223,6 @@ in
       emacs = {
         enable = true;
         extraPackages = epkgs: [
-          epkgs.emacsql
           epkgs.vterm
         ];
         package = pkgs.emacs30.overrideAttrs (oldAttrs: {
