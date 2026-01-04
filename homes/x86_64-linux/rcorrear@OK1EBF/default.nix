@@ -6,6 +6,11 @@
 }:
 let
   p = pkgs;
+
+  local = rec {
+    jdk25 = pkgs.jdk25.override { enableJavaFX = false; };
+    clojure = pkgs.clojure.override { jdk = jdk25; };
+  };
 in
 {
   imports = [
@@ -37,7 +42,8 @@ in
 
       packages = [
         inputs.code.packages.${pkgs.stdenv.hostPlatform.system}.default
-        # local.vscode
+
+        local.clojure
 
         # arcan
         # p.arcan
@@ -84,7 +90,7 @@ in
         p.gnomeExtensions.vitals
         p.gwe
         p.jdk25
-        p.jetbrains.idea-community-bin
+        p.jetbrains.idea-oss
         p.jetbrains.rider
         p.keybase-gui
         p.lutris
