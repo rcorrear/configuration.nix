@@ -54,7 +54,7 @@ in
       ];
 
       sessionVariables = {
-        FLAKE = /etc/nixos;
+        NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
       };
 
       # This value determines the Home Manager release that your

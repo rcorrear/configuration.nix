@@ -899,6 +899,7 @@
         "pre-commit-hooks": "pre-commit-hooks",
         "snowfall-lib": "snowfall-lib",
         "stylix": "stylix",
+        "zig2nix": "zig2nix",
         "zmx": "zmx"
       }
     },
@@ -1191,12 +1192,15 @@
       "original": {
         "owner": "Cloudef",
         "repo": "zig2nix",
+        "rev": "8b6ec85bccdf6b91ded19e9ef671205937e271e6",
         "type": "github"
       }
     },
     "zmx": {
       "inputs": {
-        "zig2nix": "zig2nix"
+        "zig2nix": [
+          "zig2nix"
+        ]
       },
       "locked": {
         "lastModified": 1765941419,

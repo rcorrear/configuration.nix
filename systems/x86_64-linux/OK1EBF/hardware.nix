@@ -111,16 +111,8 @@
     };
 
     "/home/rcorrear/Projects" = {
-      device = "files:/rcorrear/Projects";
-      fsType = "nfs4";
-      options = [
-        "bg"
-        "noauto"
-        "sec=sys"
-        "soft"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=600"
-      ];
+      device = "/dev/mapper/data-projects";
+      fsType = "xfs";
     };
 
     "/nix/store" = {
