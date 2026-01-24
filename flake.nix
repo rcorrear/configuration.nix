@@ -38,7 +38,12 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
 
-    zmx.url = "github:neurosnap/zmx/v0.1.1";
+    zig2nix.url = "github:Cloudef/zig2nix/8b6ec85bccdf6b91ded19e9ef671205937e271e6";
+
+    zmx = {
+      url = "github:neurosnap/zmx/v0.1.1";
+      inputs.zig2nix.follows = "zig2nix";
+    };
   };
 
   # We will handle this in the next section.
