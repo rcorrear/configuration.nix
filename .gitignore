@@ -4,6 +4,7 @@
 ### custom ###
 ### aider ###
 .aider*
+.codex/
 
 ### nix ###
 result

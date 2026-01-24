@@ -21,6 +21,7 @@ inputs.devenv.lib.mkShell {
           if pwd != "" then pwd else toString inputs.self;
         packages = [
           pkgs.devenv
+	  pkgs.uv
         ];
         git-hooks.hooks = {
           deadnix.enable = true;
