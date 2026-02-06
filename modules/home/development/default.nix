@@ -42,7 +42,7 @@ in
         settings = {
           fix.tools = {
             nixfmt = {
-              command = "${pkgs.nixfmt-rfc-style}/bin/nixfmt";
+              command = "${pkgs.nixfmt}/bin/nixfmt";
               patterns = [ "glob:'**/*.nix'" ];
             };
           };

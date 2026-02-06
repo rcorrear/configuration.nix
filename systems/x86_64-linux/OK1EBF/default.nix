@@ -2,7 +2,6 @@
 # your system.  Help is available in the configuration.nix(5) man page
 # and in the NixOS manual (accessible by running ‘nixos-help’).
 {
-  config,
   inputs,
   lib,
   pkgs,
@@ -170,14 +169,6 @@ in
         package = pkgs.plocate;
       };
 
-      ollama = {
-        enable = true;
-        environmentVariables = {
-          CUDA_DEVICE_ORDER = "FASTEST_FIRST";
-        };
-        package = pkgs.ollama-cuda;
-      };
-
       openssh = {
         enable = true;
         openFirewall = true;
@@ -186,37 +177,8 @@ in
         };
       };
 
-      open-webui = {
-        enable = false;
-        environment = {
-          CONTENT_EXTRACTION_ENGINE = "tika";
-          DEVICE_TYPE = "cpu";
-          DOCS_DIR = "/docs";
-          ENABLE_OLLAMA_API = "True";
-          ENABLE_RAG_HYBRID_SEARCH = "True";
-          ENABLE_RAG_WEB_LOADER_SSL_VERIFICATION = "False";
-          ENABLE_RAG_WEB_SEARCH = "True";
-          OLLAMA_API_BASE_URL = "http://127.0.0.1:11434/api";
-          OLLAMA_BASE_URL = "http://127.0.0.1:11434";
-          PDF_EXTRACT_IMAGES = "True";
-          PYDANTIC_SKIP_VALIDATING_CORE_SCHEMAS = "true";
-          RAG_EMBEDDING_ENGINE = "ollama";
-          RAG_EMBEDDING_MODEL = "bge-m3:latest";
-          RAG_EMBEDDING_MODEL_AUTO_UPDATE = "True";
-          RAG_RERANKING_MODEL = "BAAI/bge-reranker-v2-m3";
-          RAG_RERANKING_MODEL_AUTO_UPDATE = "True";
-          RAG_WEB_SEARCH_ENGINE = "searxng";
-          RAG_WEB_SEARCH_RESULT_COUNT = "5";
-          RESET_CONFIG_ON_START = "True";
-          SEARXNG_QUERY_URL = "http://127.0.0.1:3002/search?q=<query>";
-          TIKA_SERVER_URL = "http://127.0.0.1:9998/";
-          WEBUI_AUTH = "True";
-          WEBUI_NAME = "LLM @ Home";
-        };
-      };
-
       onepassword-secrets = {
-        enable = true;
+        enable = false;
         # This is where you put your Service Account token
         # See: https://developer.1password.com/docs/service-accounts/use-with-1password-cli/#get-started
         # This file should have permissions 400 (file owner read only)
@@ -224,12 +186,6 @@ in
         secrets = {
           # The 1Password Secret Reference in here (the `op://` URI)
           # will get replaced with the actual secret at runtime
-          searxKey = {
-            reference = "op://Infrastructure/searx/secret";
-            mode = "0600";
-            path = "/run/credentials/searx.service/env";
-            services = [ "searx" ];
-          };
         };
       };
 
@@ -261,15 +217,6 @@ in
         ];
       };
 
-      searx = {
-        enable = true;
-        environmentFile = /run/credentials/searx.service/env;
-        settings = {
-          server.port = 3002;
-          server.secret_key = "${config.services.onepassword-secrets.secretPaths.searxKey}";
-        };
-      };
-
       system76-scheduler = {
         enable = true;
         settings.processScheduler = {
@@ -284,12 +231,6 @@ in
         extraUpFlags = [ "--accept-routes" ];
         openFirewall = true;
         useRoutingFeatures = "client";
-      };
-
-      tika = {
-        enable = true;
-        package = pkgs.tika;
-        configFile = ./configuration/tika/tika-config.xml;
       };
 
       xserver = {
@@ -356,10 +297,6 @@ in
             in
             [ env ];
         };
-        open-webui.requires = [
-          "tika.service"
-          "searx.service"
-        ];
       };
 
       tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
