@@ -1,0 +1,315 @@
+{ inputs, lib, ... }:
+{
+  den.aspects.OK1EBF.nixos =
+    { pkgs, ... }:
+    {
+      imports = [
+        ../../../lib/nixos-base.nix
+        ../../../hosts/nixos/ok1ebf/hardware.nix
+        inputs.home-manager.nixosModules.home-manager
+        inputs.lanzaboote.nixosModules.lanzaboote
+        inputs.niri-flake.nixosModules.niri
+        inputs.opnix.nixosModules.default
+        inputs.stylix.nixosModules.stylix
+      ];
+
+      environment = {
+        gnome.excludePackages =
+          (with pkgs; [ gnome-console ])
+          ++ (with pkgs; [
+            epiphany
+            geary
+            gnome-music
+          ]);
+        systemPackages = with pkgs; [
+          cachix
+          neovim
+          opnix
+        ];
+      };
+
+      i18n.defaultLocale = "en_US.UTF-8";
+
+      networking = {
+        bridges = {
+          virbr1 = {
+            interfaces = [ "enp6s0" ];
+          };
+        };
+
+        hostId = "bbbd8ab0";
+        hostName = "OK1EBF";
+
+        firewall = {
+          allowedTCPPorts = [
+            25565
+          ];
+          allowedUDPPorts = [ ];
+          allowedUDPPortRanges = [
+            {
+              from = 1714;
+              to = 1764;
+            }
+          ];
+        };
+
+        nftables.enable = true;
+        networkmanager = {
+          enable = true;
+          settings.keyfile.unmanaged-devices = "interface-name:enp6s0;interface-name:virbr1";
+        };
+      };
+
+      nix.settings = {
+        experimental-features = [
+          "nix-command"
+          "flakes"
+        ];
+        trusted-users = [ "rcorrear" ];
+      };
+
+      programs = {
+        _1password = {
+          enable = true;
+        };
+
+        _1password-gui = {
+          enable = true;
+          polkitPolicyOwners = [ "rcorrear" ];
+        };
+
+        dconf.enable = true;
+
+        fish.enable = true;
+
+        hyprland.enable = true;
+
+        mtr.enable = true;
+
+        nh = {
+          enable = true;
+          clean.enable = true;
+          clean.extraArgs = "--keep-since 4d --keep 3";
+          flake = "/etc/nixos";
+        };
+
+        niri.enable = true;
+
+        nix-ld = {
+          enable = true;
+          libraries = with pkgs; [
+            icu
+            sqlite
+          ];
+        };
+
+        steam.enable = true;
+
+        xwayland.enable = true;
+      };
+
+      services = {
+        avahi = {
+          enable = true;
+          nssmdns4 = true;
+          nssmdns6 = true;
+          publish = {
+            enable = true;
+            addresses = true;
+            domain = true;
+            hinfo = true;
+            userServices = true;
+            workstation = true;
+          };
+        };
+
+        caddy = {
+          enable = true;
+          virtualHosts = {
+            "openwebui.home.arpa".extraConfig = ''
+              reverse_proxy 127.0.0.1:8080
+            '';
+            "search.home.arpa".extraConfig = ''
+              reverse_proxy 127.0.0.1:3002
+            '';
+          };
+        };
+
+        cpupower-gui.enable = true;
+
+        desktopManager.gnome.enable = true;
+
+        displayManager.gdm.enable = true;
+
+        fwupd.enable = true;
+
+        gnome = {
+          games.enable = true;
+        };
+
+        hardware.openrgb = {
+          enable = true;
+          motherboard = "amd";
+        };
+
+        locate = {
+          enable = true;
+          package = pkgs.plocate;
+        };
+
+        openssh = {
+          enable = true;
+          openFirewall = true;
+        };
+
+        onepassword-secrets = {
+          enable = false;
+          tokenFile = "/etc/opnix-token";
+          secrets = { };
+        };
+
+        pcscd.enable = true;
+
+        pipewire = {
+          enable = true;
+          alsa.enable = true;
+          alsa.support32Bit = true;
+          pulse.enable = true;
+        };
+
+        printing = {
+          enable = true;
+          drivers = with pkgs; [ hplip ];
+          openFirewall = true;
+        };
+
+        ratbagd.enable = true;
+
+        resolved = {
+          enable = true;
+          dnssec = "false";
+          dnsovertls = "opportunistic";
+          domains = [
+            "home.arpa"
+            "media.home.arpa"
+            "wifi.home.arpa"
+          ];
+        };
+
+        system76-scheduler = {
+          enable = true;
+          settings.processScheduler = {
+            enable = true;
+            foregroundBoost.enable = true;
+            pipewireBoost.enable = true;
+          };
+        };
+
+        tailscale = {
+          enable = true;
+          extraUpFlags = [ "--accept-routes" ];
+          openFirewall = true;
+          useRoutingFeatures = "client";
+        };
+
+        xserver = {
+          enable = true;
+          xkb.layout = "us";
+          screenSection = ''
+            Option "metamodes" "2560x1440_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
+          '';
+          videoDrivers = [ "nvidia" ];
+        };
+
+        zfs = {
+          autoScrub.enable = true;
+          autoSnapshot.enable = true;
+          trim.enable = true;
+        };
+
+        zookeeper = {
+          enable = true;
+          extraConf = ''
+            admin.serverPort=9876
+            initLimit=5
+            syncLimit=2
+            tickTime=2000
+          '';
+        };
+      };
+
+      security.polkit.enable = true;
+
+      stylix = {
+        enable = true;
+        base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
+        fonts.monospace = {
+          name = "CaskaydiaCove Nerd Font Mono";
+          package = pkgs.nerd-fonts.caskaydia-cove;
+        };
+        image = pkgs.fetchurl {
+          url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";
+          sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
+        };
+        targets.qt.enable = false;
+        polarity = "dark";
+      };
+
+      systemd = {
+        services = {
+          cpupower-gui.wantedBy = lib.mkForce [ ];
+          libvirtd = {
+            path =
+              let
+                env = pkgs.buildEnv {
+                  name = "qemu-hook-env";
+                  paths = with pkgs; [
+                    bash
+                    libvirt
+                    kmod
+                    systemd
+                    ripgrep
+                    sd
+                  ];
+                };
+              in
+              [ env ];
+          };
+        };
+
+        tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
+      };
+
+      time.timeZone = "America/New_York";
+
+      users.users.rcorrear = {
+        extraGroups = [
+          "input"
+          "kvm"
+          "libvirtd"
+          "render"
+          "systemd-journal"
+          "video"
+          "wheel"
+        ];
+      };
+
+      virtualisation = {
+        libvirtd = {
+          allowedBridges = [ "virbr1" ];
+          enable = true;
+          onBoot = "ignore";
+          onShutdown = "shutdown";
+        };
+      };
+
+      home-manager.users.rcorrear = {
+        imports = [
+          ../../../homes/linux/ok1ebf/rcorrear-niri.nix
+          ../../../homes/linux/ok1ebf/rcorrear.nix
+        ];
+      };
+
+      system.stateVersion = "21.05";
+    };
+}

@@ -2,9 +2,11 @@
 # Edit at https://www.toptal.com/developers/gitignore?templates=direnv,emacs,linux,macos,vim,windows
 
 ### custom ###
+closure-diffs/
+.codex/
+
 ### aider ###
 .aider*
-.codex/
 
 ### nix ###
 result

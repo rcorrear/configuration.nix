@@ -1,45 +1,39 @@
 # configuration.nix
 
-NixOS and Home Manager configurations for managing multiple Linux and macOS systems using Nix Flakes and [Snowfall Lib](https://github.com/snowfallorg/lib).
+NixOS and Home Manager configurations for multiple Linux and macOS systems using [den](https://github.com/vic/den) and [flake-parts](https://github.com/hercules-ci/flake-parts).
+
+## Quickstart
+
+- Inspect outputs: `nix flake show`
+- Regenerate flake.nix: `nix run .#write-flake`
+- NixOS rebuild: `sudo nixos-rebuild switch --flake .#ok1ebf`
+- nix-darwin rebuild: `darwin-rebuild switch --flake .#lion`
 
 ## Structure
 
-```
+```text
 .
-├── systems/          # Per-machine NixOS/nix-darwin configurations
-│   ├── x86_64-linux/     # Linux systems (OK1EBF workstation, media servers, etc.)
-│   └── aarch64-darwin/   # macOS systems
-├── homes/            # Home Manager user environment configs
-│   ├── x86_64-linux/
-│   ├── aarch64-darwin/
-│   └── all-platforms/    # Shared cross-platform config
-├── modules/          # Reusable NixOS and Home Manager modules
-├── packages/         # Custom package definitions
-├── overlays/         # Nix package overlays
-└── shells/           # Development shell configurations
+├── hosts/            # Per-machine configurations
+│   ├── all-platforms/    # Shared cross-platform config
+│   ├── lion/             # macOS (aarch64-darwin)
+│   └── ok1ebf/           # Primary workstation (x86_64-linux)
+├── modules/
+│   ├── aspects/      # Composable configuration aspects
+│   │   ├── hosts/        # Host-specific aspects
+│   │   ├── nixos/        # NixOS base configuration
+│   │   └── users/        # User configurations
+│   ├── den.nix       # Den configuration
+│   ├── dendritic.nix # Dendritic system builder
+│   ├── devshell.nix  # Development shell
+│   └── inputs.nix    # Flake inputs passthrough
+└── packages/         # Custom package definitions
 ```
-
-## Systems
-
-### Linux (`x86_64-linux`)
-
-- **OK1EBF** — Primary workstation with NVIDIA GPU passthrough (VFIO), Hyprland/Niri/GNOME, and ZFS
-- **files** — File server
-- **hass** — Home Assistant
-- **plex / sonarr / radarr / prowlarr** — Media stack
-- **tailscale** — VPN gateway
-
-### macOS (`aarch64-darwin`)
-
-- **ferrus**, **lion**
 
 ## Key Features
 
-- **Nix Flakes** with Snowfall Lib for project organization
+- **Nix Flakes** with den and flake-parts for project organization
 - **Home Manager** for declarative user environments
 - **Secureboot** via Lanzaboote
-- **GPU passthrough** with VFIO/libvirt/QEMU
-- **ZFS** with auto-scrub and snapshots
-- **Stylix** for consistent theming across desktop environments
+- **Stylix** for consistent theming
 - **1Password** secrets integration via opnix
 - **Tailscale** VPN across all systems
