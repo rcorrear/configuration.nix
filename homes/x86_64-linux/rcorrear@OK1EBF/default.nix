@@ -116,7 +116,7 @@ in
         p.nix-output-monitor
         p.nix-prefetch-git
         p.nixd
-        p.nixfmt-rfc-style
+        p.nixfmt
         p.nixos-generators
         p.nodePackages.bash-language-server
         p.nodejs
@@ -166,7 +166,7 @@ in
       ];
 
       sessionVariables = {
-        FLAKE = /etc/nixos;
+        NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
         SSH_AUTH_SOCK = "${config.home.homeDirectory}/.1password/agent.sock";
       };
 

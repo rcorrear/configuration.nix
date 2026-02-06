@@ -21,12 +21,12 @@ inputs.devenv.lib.mkShell {
           if pwd != "" then pwd else toString inputs.self;
         packages = [
           pkgs.devenv
-	  pkgs.uv
+          pkgs.uv
         ];
         git-hooks.hooks = {
           deadnix.enable = true;
           flake-checker.enable = true;
-          nixfmt-rfc-style.enable = true;
+          nixfmt.enable = true;
           shfmt.enable = true;
           statix.enable = true;
           trufflehog.enable = true;

@@ -23,7 +23,7 @@ NixOS and Home Manager configurations for managing multiple Linux and macOS syst
 
 ### Linux (`x86_64-linux`)
 
-- **OK1EBF** — Primary workstation with NVIDIA GPU passthrough (VFIO), Hyprland/Niri/GNOME, Ollama, and ZFS
+- **OK1EBF** — Primary workstation with NVIDIA GPU passthrough (VFIO), Hyprland/Niri/GNOME, and ZFS
 - **files** — File server
 - **hass** — Home Assistant
 - **plex / sonarr / radarr / prowlarr** — Media stack
@@ -42,5 +42,4 @@ NixOS and Home Manager configurations for managing multiple Linux and macOS syst
 - **ZFS** with auto-scrub and snapshots
 - **Stylix** for consistent theming across desktop environments
 - **1Password** secrets integration via opnix
-- **Ollama + Open WebUI** for local LLM inference
 - **Tailscale** VPN across all systems

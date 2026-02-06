@@ -20,8 +20,8 @@ in
         p.emacs-all-the-icons-fonts
         p.enchant
         p.exercism
-        (p.flix.override { jre = pkgs.jdk23; })
-        p.jdk23
+        (p.flix.override { jre = pkgs.jdk25; })
+        p.jdk25
         p.jetbrains.idea-community
         p.jetbrains.pycharm-community
         # p.maestral
@@ -31,7 +31,7 @@ in
         p.nix-output-monitor
         p.nix-prefetch-git
         p.nixd
-        p.nixfmt-rfc-style
+        p.nixfmt
         p.nixos-generators
         p.nodePackages.bash-language-server
         p.nodejs
