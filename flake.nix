@@ -1,93 +1,49 @@
+# DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
+# Use `nix run .#write-flake` to regenerate it.
 {
+
+  outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
+
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
-
     darwin = {
+      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:LnL7/nix-darwin";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    devenv.url = "github:cachix/devenv";
-
-    home-manager.url = "github:nix-community/home-manager";
-
+    den.url = "github:vic/den";
+    devenv = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:cachix/devenv";
+    };
+    flake-aspects.url = "github:vic/flake-aspects";
+    flake-file.url = "github:vic/flake-file";
+    flake-parts = {
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
+      url = "github:hercules-ci/flake-parts";
+    };
+    home-manager = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:nix-community/home-manager";
+    };
+    import-tree.url = "github:vic/import-tree";
     lanzaboote = {
+      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/lanzaboote/v0.4.3";
-
-      # Optional but recommended to limit the size of your system closure.
-      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    niri-flake.url = "github:sodiboo/niri-flake";
-
+    niri-flake = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:sodiboo/niri-flake";
+    };
+    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs-lib.follows = "nixpkgs";
     opnix = {
+      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:brizzbuzz/opnix";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
-
-    pre-commit-hooks.url = "github:cachix/pre-commit-hooks.nix";
-
-    # The name "snowfall-lib" is required due to how Snowfall Lib processes flake inputs.
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-
     stylix = {
-      url = "github:danth/stylix";
       inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:danth/stylix";
     };
-
-    zig2nix.url = "github:Cloudef/zig2nix/8b6ec85bccdf6b91ded19e9ef671205937e271e6";
-
-    zmx = {
-      url = "github:neurosnap/zmx/v0.1.1";
-      inputs.zig2nix.follows = "zig2nix";
-    };
+    systems.url = "github:nix-systems/default";
   };
 
-  # We will handle this in the next section.
-  outputs =
-    inputs:
-    inputs.snowfall-lib.mkFlake {
-      # You must provide our flake inputs to Snowfall Lib.
-      inherit inputs;
-
-      channels-config = {
-        allowUnfree = true;
-        permittedInsecurePackages = [
-          "dotnet-runtime-6.0.36"
-          "dotnet-sdk-6.0.136"
-          "dotnet-sdk-6.0.428"
-        ];
-      };
-
-      nixos.modules = [
-        inputs.devenv.flakeModule
-      ];
-
-      overlays = [
-        inputs.opnix.overlays.default
-        inputs.niri-flake.overlays.niri
-      ];
-
-      snowfall.namespace = "rcorrear";
-
-      # The `src` must be the root of the flake. See configuration
-      # in the next section for information on how you can move your
-      # Nix files to a separate directory.
-      src = builtins.path {
-        path = ./.;
-        name = "source";
-      };
-
-      # The outputs builder receives an attribute set of your available NixPkgs channels.
-      # These are every input that points to a NixPkgs instance (even forks). In this
-      # case, the only channel available in this flake is `channels.nixpkgs`.
-      outputs-builder = channels: {
-        # Outputs in the outputs builder are transformed to support each system. This
-        # entry will be turned into multiple different outputs like `formatter.x86_64-linux.*`.
-        formatter = channels.nixpkgs.nixfmt-tree;
-      };
-    };
 }
