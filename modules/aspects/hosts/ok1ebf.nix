@@ -1,304 +1,315 @@
-{ inputs, lib, ... }:
 {
-  den.aspects.OK1EBF.nixos =
-    { pkgs, ... }:
-    {
-      imports = [
-        ../../../lib/nixos-base.nix
-        ../../../hosts/nixos/ok1ebf/hardware.nix
-        ../../../lib/nh-cleanup.nix
-        ../../../lib/stylix-base.nix
-        inputs.home-manager.nixosModules.home-manager
-        inputs.lanzaboote.nixosModules.lanzaboote
-        inputs.niri-flake.nixosModules.niri
-        inputs.opnix.nixosModules.default
-        inputs.stylix.nixosModules.stylix
-      ];
+  den,
+  inputs,
+  lib,
+  ...
+}:
+{
+  flake-file.inputs.lanzaboote = {
+    url = "github:nix-community/lanzaboote/v0.4.3";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
-      environment = {
-        gnome.excludePackages =
-          (with pkgs; [ gnome-console ])
-          ++ (with pkgs; [
-            epiphany
-            geary
-            gnome-music
-          ]);
-        systemPackages = with pkgs; [
-          cachix
-          neovim
-          opnix
+  den.aspects.OK1EBF = {
+    includes = [
+      den.aspects.cachix
+      den.aspects.nix-caches
+      den.aspects.nh-cleanup
+      den.aspects.stylix-base
+    ];
+
+    nixos =
+      { pkgs, ... }:
+      {
+        imports = [
+          ../../../hosts/nixos/ok1ebf/hardware.nix
+          inputs.lanzaboote.nixosModules.lanzaboote
+          inputs.niri-flake.nixosModules.niri
+          inputs.opnix.nixosModules.default
         ];
-      };
 
-      i18n.defaultLocale = "en_US.UTF-8";
-
-      networking = {
-        bridges = {
-          virbr1 = {
-            interfaces = [ "enp6s0" ];
-          };
-        };
-
-        hostId = "bbbd8ab0";
-        hostName = "OK1EBF";
-
-        firewall = {
-          allowedTCPPorts = [
-            25565
+        environment = {
+          gnome.excludePackages = [
+            pkgs.gnome-console
+          ]
+          ++ [
+            pkgs.epiphany
+            pkgs.geary
+            pkgs.gnome-music
           ];
-          allowedUDPPorts = [ ];
-          allowedUDPPortRanges = [
-            {
-              from = 1714;
-              to = 1764;
-            }
+          systemPackages = [
+            pkgs.neovim
+            pkgs.opnix
           ];
         };
 
-        nftables.enable = true;
-        networkmanager = {
-          enable = true;
-          settings.keyfile.unmanaged-devices = "interface-name:enp6s0;interface-name:virbr1";
-        };
-      };
+        i18n.defaultLocale = "en_US.UTF-8";
 
-      nix.settings = {
-        experimental-features = [
-          "nix-command"
-          "flakes"
-        ];
-        trusted-users = [ "rcorrear" ];
-      };
-
-      programs = {
-        _1password = {
-          enable = true;
-        };
-
-        _1password-gui = {
-          enable = true;
-          polkitPolicyOwners = [ "rcorrear" ];
-        };
-
-        dconf.enable = true;
-
-        fish.enable = true;
-
-        hyprland.enable = true;
-
-        mtr.enable = true;
-
-        nh.flake = "/etc/nixos";
-
-        niri.enable = true;
-
-        nix-ld = {
-          enable = true;
-          libraries = with pkgs; [
-            icu
-            sqlite
-          ];
-        };
-
-        steam.enable = true;
-
-        xwayland.enable = true;
-      };
-
-      services = {
-        avahi = {
-          enable = true;
-          nssmdns4 = true;
-          nssmdns6 = true;
-          publish = {
-            enable = true;
-            addresses = true;
-            domain = true;
-            hinfo = true;
-            userServices = true;
-            workstation = true;
+        networking = {
+          bridges = {
+            virbr1 = {
+              interfaces = [ "enp6s0" ];
+            };
           };
-        };
 
-        caddy = {
-          enable = true;
-          virtualHosts = {
-            "openwebui.home.arpa".extraConfig = ''
-              reverse_proxy 127.0.0.1:8080
-            '';
-            "search.home.arpa".extraConfig = ''
-              reverse_proxy 127.0.0.1:3002
-            '';
-          };
-        };
+          hostId = "bbbd8ab0";
+          hostName = "OK1EBF";
 
-        cpupower-gui.enable = true;
-
-        desktopManager.gnome.enable = true;
-
-        displayManager.gdm.enable = true;
-
-        fwupd.enable = true;
-
-        gnome = {
-          games.enable = true;
-        };
-
-        hardware.openrgb = {
-          enable = true;
-          motherboard = "amd";
-        };
-
-        locate = {
-          enable = true;
-          package = pkgs.plocate;
-        };
-
-        openssh = {
-          enable = true;
-          openFirewall = true;
-        };
-
-        onepassword-secrets = {
-          enable = false;
-          tokenFile = "/etc/opnix-token";
-          secrets = { };
-        };
-
-        pcscd.enable = true;
-
-        pipewire = {
-          enable = true;
-          alsa.enable = true;
-          alsa.support32Bit = true;
-          pulse.enable = true;
-        };
-
-        printing = {
-          enable = true;
-          drivers = with pkgs; [ hplip ];
-          openFirewall = true;
-        };
-
-        ratbagd.enable = true;
-
-        resolved = {
-          enable = true;
-          settings.Resolve = {
-            DNSSEC = "false";
-            DNSOverTLS = "opportunistic";
-            Domains = [
-              "home.arpa"
-              "media.home.arpa"
-              "wifi.home.arpa"
+          firewall = {
+            allowedTCPPorts = [
+              25565
+            ];
+            allowedUDPPortRanges = [
+              {
+                from = 1714;
+                to = 1764;
+              }
             ];
           };
-        };
 
-        system76-scheduler = {
-          enable = true;
-          settings.processScheduler = {
+          nftables.enable = true;
+          networkmanager = {
             enable = true;
-            foregroundBoost.enable = true;
-            pipewireBoost.enable = true;
+            settings.keyfile.unmanaged-devices = "interface-name:enp6s0;interface-name:virbr1";
           };
         };
 
-        tailscale = {
-          enable = true;
-          extraUpFlags = [ "--accept-routes" ];
-          openFirewall = true;
-          useRoutingFeatures = "client";
+        nix.settings = {
+          trusted-users = [ "rcorrear" ];
         };
 
-        xserver = {
-          enable = true;
-          xkb.layout = "us";
-          screenSection = ''
-            Option "metamodes" "2560x1440_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
-          '';
-          videoDrivers = [ "nvidia" ];
+        programs = {
+          _1password = {
+            enable = true;
+          };
+
+          _1password-gui = {
+            enable = true;
+            polkitPolicyOwners = [ "rcorrear" ];
+          };
+
+          dconf.enable = true;
+
+          fish.enable = true;
+
+          hyprland.enable = true;
+
+          mtr.enable = true;
+
+          nh.flake = "/etc/nixos";
+
+          niri.enable = true;
+
+          nix-ld = {
+            enable = true;
+            libraries = with pkgs; [
+              icu
+              sqlite
+            ];
+          };
+
+          steam.enable = true;
+
+          xwayland.enable = true;
         };
 
-        zfs = {
-          autoScrub.enable = true;
-          autoSnapshot.enable = true;
-          trim.enable = true;
-        };
-
-        zookeeper = {
-          enable = true;
-          extraConf = ''
-            admin.serverPort=9876
-            initLimit=5
-            syncLimit=2
-            tickTime=2000
-          '';
-        };
-      };
-
-      security.polkit.enable = true;
-
-      aspects.stylix = {
-        theme = "catppuccin-mocha";
-        image = ../../../assets/wallhaven-yqxzqx.jpg;
-      };
-
-      stylix.targets.qt.enable = false;
-
-      systemd = {
         services = {
-          cpupower-gui.wantedBy = lib.mkForce [ ];
-          libvirtd = {
-            path =
-              let
-                env = pkgs.buildEnv {
-                  name = "qemu-hook-env";
-                  paths = with pkgs; [
-                    bash
-                    libvirt
-                    kmod
-                    systemd
-                    ripgrep
-                    sd
-                  ];
-                };
-              in
-              [ env ];
+          avahi = {
+            enable = true;
+            nssmdns4 = true;
+            nssmdns6 = true;
+            publish = {
+              enable = true;
+              addresses = true;
+              domain = true;
+              hinfo = true;
+              userServices = true;
+              workstation = true;
+            };
+          };
+
+          caddy = {
+            enable = true;
+            virtualHosts = {
+              "openwebui.home.arpa".extraConfig = ''
+                reverse_proxy 127.0.0.1:8080
+              '';
+              "search.home.arpa".extraConfig = ''
+                reverse_proxy 127.0.0.1:3002
+              '';
+            };
+          };
+
+          cpupower-gui.enable = true;
+
+          desktopManager.gnome.enable = true;
+
+          displayManager.gdm.enable = true;
+
+          fwupd.enable = true;
+
+          gnome = {
+            games.enable = true;
+          };
+
+          hardware.openrgb = {
+            enable = true;
+            motherboard = "amd";
+          };
+
+          locate = {
+            enable = true;
+            package = pkgs.plocate;
+          };
+
+          openssh = {
+            enable = true;
+            openFirewall = true;
+          };
+
+          onepassword-secrets = {
+            enable = false;
+            tokenFile = "/etc/opnix-token";
+            secrets = { };
+          };
+
+          pcscd.enable = true;
+
+          pipewire = {
+            enable = true;
+            alsa.enable = true;
+            alsa.support32Bit = true;
+            pulse.enable = true;
+          };
+
+          printing = {
+            enable = true;
+            drivers = with pkgs; [ hplip ];
+            openFirewall = true;
+          };
+
+          ratbagd.enable = true;
+
+          resolved = {
+            enable = true;
+            settings.Resolve = {
+              DNSSEC = "allow-downgrade";
+              DNSOverTLS = "opportunistic";
+              Domains = [
+                "home.arpa"
+                "media.home.arpa"
+                "wifi.home.arpa"
+              ];
+            };
+          };
+
+          system76-scheduler = {
+            enable = true;
+            settings.processScheduler = {
+              enable = true;
+              foregroundBoost.enable = true;
+              pipewireBoost.enable = true;
+            };
+          };
+
+          tailscale = {
+            enable = true;
+            extraUpFlags = [ "--accept-routes" ];
+            openFirewall = true;
+            useRoutingFeatures = "client";
+          };
+
+          xserver = {
+            enable = true;
+            xkb.layout = "us";
+            screenSection = ''
+              Option "metamodes" "2560x1440_144 +0+0 {ForceCompositionPipeline=On, ForceFullCompositionPipeline=On}"
+            '';
+            videoDrivers = [ "nvidia" ];
+          };
+
+          zfs = {
+            autoScrub.enable = true;
+            autoSnapshot.enable = true;
+            trim.enable = true;
+          };
+
+          zookeeper = {
+            enable = true;
+            extraConf = ''
+              admin.serverPort=9876
+              initLimit=5
+              syncLimit=2
+              tickTime=2000
+            '';
           };
         };
 
-        tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
-      };
+        security.polkit.enable = true;
 
-      users.users.rcorrear = {
-        extraGroups = [
-          "input"
-          "kvm"
-          "libvirtd"
-          "render"
-          "systemd-journal"
-          "video"
-          "wheel"
-        ];
-      };
-
-      virtualisation = {
-        libvirtd = {
-          allowedBridges = [ "virbr1" ];
-          enable = true;
-          onBoot = "ignore";
-          onShutdown = "shutdown";
+        aspects.stylix = {
+          theme = "catppuccin-mocha";
+          image = ../../../assets/wallhaven-yqxzqx.jpg;
         };
-      };
 
-      home-manager.users.rcorrear = {
-        imports = [
-          ../../../homes/linux/ok1ebf/rcorrear-niri.nix
-          ../../../homes/linux/ok1ebf/rcorrear.nix
-        ];
-      };
+        stylix.targets.qt.enable = false;
 
-      system.stateVersion = "21.05";
-    };
+        systemd = {
+          services = {
+            cpupower-gui.wantedBy = lib.mkForce [ ];
+            libvirtd = {
+              path =
+                let
+                  env = pkgs.buildEnv {
+                    name = "qemu-hook-env";
+                    paths = with pkgs; [
+                      bash
+                      libvirt
+                      kmod
+                      systemd
+                      ripgrep
+                      sd
+                    ];
+                  };
+                in
+                [ env ];
+            };
+          };
+
+          tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
+        };
+
+        time.timeZone = "America/New_York";
+
+        users.users.rcorrear = {
+          extraGroups = [
+            "input"
+            "kvm"
+            "libvirtd"
+            "render"
+            "systemd-journal"
+            "video"
+            "wheel"
+          ];
+        };
+
+        virtualisation = {
+          libvirtd = {
+            allowedBridges = [ "virbr1" ];
+            enable = true;
+            onBoot = "ignore";
+            onShutdown = "shutdown";
+          };
+        };
+
+        home-manager.users.rcorrear = {
+          imports = [
+            ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
+            ../../../homes/nixos/ok1ebf/rcorrear.nix
+          ];
+        };
+
+        system.stateVersion = "21.05";
+      };
+  };
 }

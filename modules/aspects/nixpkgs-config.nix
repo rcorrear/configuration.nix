@@ -33,7 +33,19 @@ let
   };
 in
 {
+  flake-file.inputs.opnix = {
+    url = "github:brizzbuzz/opnix";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
+  flake-file.inputs.niri-flake = {
+    url = "github:sodiboo/niri-flake";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
+
   den.aspects.nixpkgs-config = {
+    includes = [ ];
+
     nixos.nixpkgs = {
       config = nixpkgsConfigWithInsecureDotnet;
       overlays = overlaysFor (config._module.args.system or "");

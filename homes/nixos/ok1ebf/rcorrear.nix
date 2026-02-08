@@ -221,10 +221,6 @@ in
       enable = true;
       enableFishIntegration = true;
     };
-
-    ssh = {
-      enable = true;
-    };
   };
 
   services = {

@@ -125,6 +125,7 @@
     };
 
     ssh = {
+      enable = lib.mkDefault true;
       enableDefaultConfig = false;
       matchBlocks = {
         "*" = {
