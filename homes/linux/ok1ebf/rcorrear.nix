@@ -12,6 +12,8 @@ in
 {
   imports = [
     ../../all/rcorrear.nix
+    ../../modules/git-signing.nix
+    ../../modules/shell-tools.nix
   ];
 
   dconf = {
@@ -160,42 +162,9 @@ in
   };
 
   programs = {
-    bat = {
-      enable = true;
-      extraPackages = with pkgs.bat-extras; [
-        batdiff
-        batgrep
-        batman
-        batpipe
-        batwatch
-        prettybat
-      ];
-    };
-
-    bottom = {
-      enable = true;
-      settings = {
-        flags = {
-          avg_cpu = true;
-          temperature_type = "c";
-        };
-
-        colors = {
-          low_battery_color = "red";
-        };
-      };
-    };
-
     difftastic = {
       enable = true;
       git.enable = true;
-    };
-
-    direnv = {
-      enable = true;
-      nix-direnv = {
-        enable = true;
-      };
     };
 
     emacs = {
@@ -232,13 +201,6 @@ in
 
     git = {
       enable = true;
-      extraConfig = {
-        gpg."ssh".program = "${pkgs._1password-gui}/bin/op-ssh-sign";
-        commit.gpgsign = true;
-        gpg.format = "ssh";
-        safe.directory = "${config.home.homeDirectory}/Projects/nix/flake";
-        user.signingkey = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
-      };
     };
 
     go = {
@@ -248,16 +210,7 @@ in
       };
     };
 
-    jujutsu = {
-      enable = true;
-      settings = {
-        signing = {
-          behavior = "own";
-          backend = "ssh";
-          key = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAs0HUuftvwkh3IC+ilQ7mCjTBgXGquy0+VXoQDNPadE";
-        };
-      };
-    };
+    jujutsu.enable = true;
 
     obs-studio = {
       enable = true;

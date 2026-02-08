@@ -4,10 +4,10 @@
     { pkgs, ... }:
     {
       imports = [
-        ../../../lib/lxc-base.nix
-        ../../../lib/nixos-base.nix
+        ../../../lib/lxc-container-base.nix
         inputs.home-manager.nixosModules.home-manager
-        # Expects nixpkgs to expose nixos/modules/virtualisation/lxc-container.nix.
+        ../../../lib/nh-cleanup.nix
+        ../../../lib/tailscale-client.nix
         "${inputs.nixpkgs}/nixos/modules/virtualisation/lxc-container.nix"
       ];
 
@@ -54,12 +54,6 @@
         nftables.enable = true;
       };
 
-      programs.nh = {
-        enable = true;
-        clean.enable = true;
-        clean.extraArgs = "--keep-since 4d --keep 3";
-      };
-
       services = {
         nfs = {
           server = {
@@ -74,22 +68,9 @@
             statdPort = 4000; # fixed port for firewall
           };
         };
-
-        tailscale = {
-          enable = true;
-          extraUpFlags = [
-            "--accept-routes"
-            "--exit-node-allow-lan-access"
-            "--exit-node=tailscale"
-          ];
-          openFirewall = true;
-          useRoutingFeatures = "client";
-        };
       };
 
       system.stateVersion = "22.11";
-
-      systemd.suppressedSystemUnits = [ "sys-kernel-debug.mount" ];
 
       users.users.elizabethfeitof = {
         isNormalUser = true;
@@ -102,6 +83,5 @@
         programs.ssh.enable = true;
       };
 
-      virtualisation.lxc.enable = true;
     };
 }
