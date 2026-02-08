@@ -1,55 +1,15 @@
 { inputs, ... }:
 {
   den.aspects.lion.darwin =
-    { pkgs, ... }:
+    { ... }:
     {
       imports = [
         ../../../lib/darwin-base.nix
+        ../../../lib/darwin-workstation.nix
+        ../../../lib/stylix-base.nix
         inputs.home-manager.darwinModules.home-manager
         inputs.stylix.darwinModules.stylix
       ];
-
-      environment = {
-        extraOutputsToInstall = [
-          "doc"
-          "info"
-          "devdoc"
-        ];
-        shells = [
-          pkgs.bashInteractive
-          pkgs.zsh
-          pkgs.fish
-        ];
-        systemPackages = [ pkgs.neovim ];
-      };
-
-      homebrew = {
-        enable = true;
-        casks = [
-          "raycast"
-        ];
-        onActivation.cleanup = "zap";
-      };
-
-      networking = {
-        hostName = "lion";
-        knownNetworkServices = [
-          "Thunderbolt Bridge"
-          "USB 10/100/1000 LAN"
-          "Wi-Fi"
-          "iPhone USB"
-        ];
-        localHostName = "lion";
-        search = [ "home.arpa" ];
-      };
-
-      nix = {
-        enable = false;
-        channel.enable = false;
-        settings.trusted-users = [
-          "rcorrear"
-        ];
-      };
 
       home-manager = {
         users.rcorrear = {
@@ -60,37 +20,28 @@
         };
       };
 
-      programs = {
-        _1password = {
-          enable = true;
-        };
-
-        _1password-gui = {
-          enable = true;
-        };
+      networking = {
+        hostName = "lion";
+        localHostName = "lion";
+        knownNetworkServices = [
+          "Thunderbolt Bridge"
+          "USB 10/100/1000 LAN"
+          "Wi-Fi"
+          "iPhone USB"
+        ];
       };
 
-      security.pam.services.sudo_local.touchIdAuth = true;
-
-      stylix = {
-        enable = true;
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/rose-pine.yaml";
-        fonts.monospace = {
-          name = "CaskaydiaCove Nerd Font Mono";
-          package = pkgs.nerd-fonts.caskaydia-cove;
-        };
-        polarity = "dark";
+      nix = {
+        enable = false;
+        channel.enable = false;
+        settings.trusted-users = [
+          "rcorrear"
+        ];
       };
 
       system = {
-        keyboard = {
-          enableKeyMapping = true;
-          remapCapsLockToEscape = true;
-        };
-        primaryUser = "rcorrear";
         stateVersion = 4;
+        primaryUser = "rcorrear";
       };
-
-      time.timeZone = "America/New_York";
     };
 }

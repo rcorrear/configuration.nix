@@ -6,6 +6,8 @@
       imports = [
         ../../../lib/nixos-base.nix
         ../../../hosts/nixos/ok1ebf/hardware.nix
+        ../../../lib/nh-cleanup.nix
+        ../../../lib/stylix-base.nix
         inputs.home-manager.nixosModules.home-manager
         inputs.lanzaboote.nixosModules.lanzaboote
         inputs.niri-flake.nixosModules.niri
@@ -86,12 +88,7 @@
 
         mtr.enable = true;
 
-        nh = {
-          enable = true;
-          clean.enable = true;
-          clean.extraArgs = "--keep-since 4d --keep 3";
-          flake = "/etc/nixos";
-        };
+        nh.flake = "/etc/nixos";
 
         niri.enable = true;
 
@@ -187,13 +184,15 @@
 
         resolved = {
           enable = true;
-          dnssec = "false";
-          dnsovertls = "opportunistic";
-          domains = [
-            "home.arpa"
-            "media.home.arpa"
-            "wifi.home.arpa"
-          ];
+          settings.Resolve = {
+            DNSSEC = "false";
+            DNSOverTLS = "opportunistic";
+            Domains = [
+              "home.arpa"
+              "media.home.arpa"
+              "wifi.home.arpa"
+            ];
+          };
         };
 
         system76-scheduler = {
@@ -240,20 +239,12 @@
 
       security.polkit.enable = true;
 
-      stylix = {
-        enable = true;
-        base16Scheme = "${pkgs.base16-schemes}/share/themes/catppuccin-mocha.yaml";
-        fonts.monospace = {
-          name = "CaskaydiaCove Nerd Font Mono";
-          package = pkgs.nerd-fonts.caskaydia-cove;
-        };
-        image = pkgs.fetchurl {
-          url = "https://images.wallpaperscraft.com/image/single/sea_clouds_horizon_1324457_3840x2160.jpg";
-          sha256 = "sha256-zg/nnLtik5yHaHqd/cLl0SHkgBdTE5ouyFMPVEqzXKg=";
-        };
-        targets.qt.enable = false;
-        polarity = "dark";
+      aspects.stylix = {
+        theme = "catppuccin-mocha";
+        image = ../../../assets/wallhaven-yqxzqx.jpg;
       };
+
+      stylix.targets.qt.enable = false;
 
       systemd = {
         services = {
@@ -279,8 +270,6 @@
 
         tmpfiles.rules = [ "f /dev/shm/looking-glass 0660 root kvm -" ];
       };
-
-      time.timeZone = "America/New_York";
 
       users.users.rcorrear = {
         extraGroups = [

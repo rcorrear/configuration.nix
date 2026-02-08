@@ -23,10 +23,9 @@
     in
     {
       imports = [
-        ../../../lib/lxc-base.nix
-        ../../../lib/nixos-base.nix
+        ../../../lib/lxc-container-base.nix
         inputs.home-manager.nixosModules.home-manager
-        # Expects nixpkgs to expose nixos/modules/virtualisation/lxc-container.nix.
+        ../../../lib/nh-cleanup.nix
         "${inputs.nixpkgs}/nixos/modules/virtualisation/lxc-container.nix"
       ];
 
@@ -43,12 +42,6 @@
           net30.useDHCP = true;
         };
         nftables.enable = true;
-      };
-
-      programs.nh = {
-        enable = true;
-        clean.enable = true;
-        clean.extraArgs = "--keep-since 4d --keep 3";
       };
 
       home-manager.users.rcorrear = {
@@ -79,7 +72,5 @@
         );
         suppressedSystemUnits = [ "sys-kernel-debug.mount" ];
       };
-
-      virtualisation.lxc.enable = true;
     };
 }
