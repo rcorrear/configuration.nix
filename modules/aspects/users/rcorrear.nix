@@ -1,9 +1,11 @@
 { lib, ... }:
 {
   den.aspects.rcorrear = {
+    includes = [ ];
+
     # NixOS-specific system configuration
     nixos =
-      { pkgs, ... }:
+      { config, pkgs, ... }:
       {
         nix.settings.trusted-users = [ "rcorrear" ];
 
@@ -15,7 +17,7 @@
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOtdwHE6TetQ03CFr07piiViyG2YVPfwQg3n7rONOYeo 1password"
           ];
           shell = lib.mkOverride 900 pkgs.fish;
-          uid = lib.mkDefault 5000;
+          uid = config.den.userIds.rcorrear;
         };
       };
 

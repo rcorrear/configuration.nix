@@ -1,14 +1,16 @@
-{ inputs, ... }:
+{ den, inputs, ... }:
 {
-  den.aspects.lion.darwin =
-    { ... }:
-    {
+  den.aspects.lion = {
+    includes = [
+      den.aspects.cachix
+      den.aspects.darwin-workstation
+      den.aspects.nix-caches
+      den.aspects.stylix-base
+    ];
+
+    darwin = _: {
       imports = [
-        ../../../lib/darwin-base.nix
-        ../../../lib/darwin-workstation.nix
-        ../../../lib/stylix-base.nix
         inputs.home-manager.darwinModules.home-manager
-        inputs.stylix.darwinModules.stylix
       ];
 
       home-manager = {
@@ -40,8 +42,9 @@
       };
 
       system = {
-        stateVersion = 4;
         primaryUser = "rcorrear";
+        stateVersion = 4;
       };
     };
+  };
 }

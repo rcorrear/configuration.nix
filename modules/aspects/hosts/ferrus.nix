@@ -1,45 +1,50 @@
-{ inputs, ... }:
+{ inputs, den, ... }:
 {
-  den.aspects.ferrus.darwin = _: {
-    imports = [
-      ../../../lib/darwin-base.nix
-      ../../../lib/darwin-workstation.nix
-      ../../../lib/stylix-base.nix
-      inputs.home-manager.darwinModules.home-manager
-      inputs.stylix.darwinModules.stylix
+  den.aspects.ferrus = {
+    includes = [
+      den.aspects.cachix
+      den.aspects.darwin-workstation
+      den.aspects.nix-caches
+      den.aspects.stylix-base
     ];
 
-    home-manager = {
-      users.rcorrear = {
-        imports = [
-          ../../../homes/all/rcorrear.nix
-          ../../../homes/darwin/ferrus/rcorrear.nix
+    darwin = _: {
+      imports = [
+        inputs.home-manager.darwinModules.home-manager
+      ];
+
+      home-manager = {
+        users.rcorrear = {
+          imports = [
+            ../../../homes/all/rcorrear.nix
+            ../../../homes/darwin/ferrus/rcorrear.nix
+          ];
+        };
+      };
+
+      networking = {
+        hostName = "ferrus";
+        localHostName = "ferrus";
+        knownNetworkServices = [
+          "Thunderbolt Bridge"
+          "USB 10/100/1000 LAN"
+          "Wi-Fi"
+          "iPhone USB"
         ];
       };
-    };
 
-    networking = {
-      hostName = "ferrus";
-      localHostName = "ferrus";
-      knownNetworkServices = [
-        "Thunderbolt Bridge"
-        "USB 10/100/1000 LAN"
-        "Wi-Fi"
-        "iPhone USB"
-      ];
-    };
+      nix = {
+        enable = false;
+        channel.enable = false;
+        settings.trusted-users = [
+          "rcorrear"
+        ];
+      };
 
-    nix = {
-      enable = false;
-      channel.enable = false;
-      settings.trusted-users = [
-        "rcorrear"
-      ];
-    };
-
-    system = {
-      primaryUser = "rcorrear";
-      stateVersion = 4;
+      system = {
+        primaryUser = "rcorrear";
+        stateVersion = 4;
+      };
     };
   };
 }

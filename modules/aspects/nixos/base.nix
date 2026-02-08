@@ -1,29 +1,42 @@
 { inputs, lib, ... }:
-let
-  caches = import ../../../lib/nix-caches.nix;
-in
 {
-  den.aspects.nixos-base.nixos =
-    { pkgs, ... }:
-    {
-      imports = [
-        inputs.home-manager.nixosModules.home-manager
-      ];
+  den.aspects.nixos-base = {
+    includes = [ ];
 
-      documentation.dev.enable = lib.mkDefault true;
+    nixos =
+      { ... }:
+      {
+        imports =
+          let
+            ciModulePath = ../../ci-runtime.nix;
+          in
+          lib.optionals (builtins.pathExists ciModulePath) [ ciModulePath ]
+          ++ [
+            ../../nixos/user-ids.nix
+            inputs.home-manager.nixosModules.home-manager
+          ];
 
-      environment.systemPackages = [ pkgs.cachix ];
+        home-manager.useGlobalPkgs = true;
 
-      networking = {
-        search = [ "home.arpa" ];
-        domain = "home.arpa";
+        documentation.dev.enable = lib.mkDefault true;
+        documentation.man.generateCaches = lib.mkDefault true;
+
+        programs.fish.enable = lib.mkDefault true;
+
+        networking = {
+          search = lib.mkDefault [ "home.arpa" ];
+          domain = lib.mkDefault "home.arpa";
+          nftables.enable = lib.mkDefault true;
+        };
+
+        nix.settings = {
+          allow-import-from-derivation = lib.mkDefault true;
+          auto-optimise-store = lib.mkDefault true;
+          experimental-features = lib.mkDefault [
+            "nix-command"
+            "flakes"
+          ];
+        };
       };
-
-      nix.settings = {
-        allow-import-from-derivation = lib.mkDefault true;
-        auto-optimise-store = lib.mkDefault true;
-        substituters = lib.mkDefault caches.substituters;
-        trusted-public-keys = lib.mkDefault caches.trusted-public-keys;
-      };
-    };
+  };
 }

@@ -13,6 +13,11 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 
 ```text
 .
+├── homes/            # Home Manager configs
+│   ├── all/              # Shared home config
+│   ├── darwin/           # macOS home config
+│   ├── nixos/            # NixOS home config
+│   └── modules/          # Home Manager-only modules (used by homes/*)
 ├── hosts/            # Per-machine configurations
 │   ├── all-platforms/    # Shared cross-platform config
 │   ├── lion/             # macOS (aarch64-darwin)
@@ -24,10 +29,20 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 │   │   └── users/        # User configurations
 │   ├── den.nix       # Den configuration
 │   ├── dendritic.nix # Dendritic system builder
-│   ├── devshell.nix  # Development shell
-│   └── inputs.nix    # Flake inputs passthrough
+│   └── devshell.nix  # Development shell
 └── packages/         # Custom package definitions
 ```
+
+## Home modules vs aspects
+
+- Use `homes/modules/*` for Home Manager–only modules. These should only touch `home.*` / `programs.*` options under HM.
+- Use `modules/aspects/*` when the configuration should be attached to a host (NixOS/darwin) or shared across system scopes.
+
+## Modules vs aspects
+
+- Use **aspects** for composable host configuration (`den.aspects.<name>.{nixos,darwin}`), i.e., “what a host should include.”
+- Use **modules** (`modules/nixos/*`, `modules/*`) to define new options or `_module.args`, or for configuration that must always be present regardless of aspect includes.
+- `_module.args` is global and must be set only once; avoid setting it inside aspects.
 
 ## Key Features
 
