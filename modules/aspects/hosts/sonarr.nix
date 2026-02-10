@@ -22,11 +22,6 @@
           ];
         };
 
-        nixpkgs.config.permittedInsecurePackages = [
-          "aspnetcore-runtime-6.0.36"
-          "dotnet-sdk-6.0.428"
-        ];
-
         home-manager.users.rcorrear = {
           imports = [ ../../../homes/all/rcorrear.nix ];
           home.stateVersion = "22.05";

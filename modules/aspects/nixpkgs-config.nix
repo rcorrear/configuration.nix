@@ -23,13 +23,8 @@ let
       inputs.niri-flake.overlays.niri
     ];
 
-  nixpkgsConfigWithInsecureDotnet = {
+  nixpkgsConfigUnfree = {
     allowUnfree = true;
-    permittedInsecurePackages = [
-      "dotnet-runtime-6.0.36"
-      "dotnet-sdk-6.0.136"
-      "dotnet-sdk-6.0.428"
-    ];
   };
 in
 {
@@ -47,17 +42,17 @@ in
     includes = [ ];
 
     nixos.nixpkgs = {
-      config = nixpkgsConfigWithInsecureDotnet;
+      config = nixpkgsConfigUnfree;
       overlays = overlaysFor (config._module.args.system or "");
     };
 
     homeManager.nixpkgs = {
-      config = nixpkgsConfigWithInsecureDotnet;
+      config = nixpkgsConfigUnfree;
       overlays = overlaysFor (config._module.args.system or "");
     };
 
     darwin.nixpkgs = {
-      config = nixpkgsConfigWithInsecureDotnet;
+      config = nixpkgsConfigUnfree;
       overlays = overlaysFor (config._module.args.system or "");
     };
   };
