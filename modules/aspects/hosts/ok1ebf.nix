@@ -20,6 +20,12 @@
 
     nixos =
       { pkgs, ... }:
+      let
+        wallpaper = builtins.path {
+          name = "wallhaven-yqxzqx.jpg";
+          path = ../../../assets/wallhaven-yqxzqx.jpg;
+        };
+      in
       {
         imports = [
           ../../../hosts/nixos/ok1ebf/hardware.nix
@@ -249,7 +255,7 @@
 
         aspects.stylix = {
           theme = "catppuccin-mocha";
-          image = ../../../assets/wallhaven-yqxzqx.jpg;
+          image = wallpaper;
         };
 
         stylix.targets.qt.enable = false;
