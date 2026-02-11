@@ -78,11 +78,6 @@
           uid = config.den.userIds.elizabethfeitof;
         };
 
-        home-manager.users.rcorrear = {
-          imports = [ ../../../homes/all/rcorrear.nix ];
-          home.stateVersion = "22.05";
-        };
-
       };
   };
 }

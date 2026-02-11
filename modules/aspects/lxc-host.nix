@@ -1,7 +1,7 @@
-{ inputs, ... }:
+{ den, inputs, ... }:
 {
   den.aspects.lxc-host = {
-    includes = [ ];
+    includes = [ den.aspects.zmx ];
 
     nixos = {
       imports = [

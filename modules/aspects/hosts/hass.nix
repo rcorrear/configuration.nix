@@ -38,11 +38,6 @@
           };
         };
 
-        home-manager.users.rcorrear = {
-          imports = [ ../../../homes/all/rcorrear.nix ];
-          home.stateVersion = "22.05";
-        };
-
         services = {
           home-assistant = {
             config = {

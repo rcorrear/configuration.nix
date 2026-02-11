@@ -23,5 +23,10 @@
 
     # Darwin-specific system configuration
     darwin = _: { };
+
+    # Base home-manager configuration (static, no module args)
+    homeManager = {
+      imports = [ ../../../homes/all/rcorrear.nix ];
+    };
   };
 }

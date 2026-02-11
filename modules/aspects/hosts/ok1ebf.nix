@@ -18,6 +18,11 @@
       den.aspects.stylix-base
     ];
 
+    _.rcorrear.homeManager.imports = [
+      ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
+      ../../../homes/nixos/ok1ebf/rcorrear.nix
+    ];
+
     nixos =
       { pkgs, ... }:
       let
@@ -78,10 +83,6 @@
             enable = true;
             settings.keyfile.unmanaged-devices = "interface-name:enp6s0;interface-name:virbr1";
           };
-        };
-
-        nix.settings = {
-          trusted-users = [ "rcorrear" ];
         };
 
         programs = {
@@ -306,13 +307,6 @@
             onBoot = "ignore";
             onShutdown = "shutdown";
           };
-        };
-
-        home-manager.users.rcorrear = {
-          imports = [
-            ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
-            ../../../homes/nixos/ok1ebf/rcorrear.nix
-          ];
         };
 
         system.stateVersion = "21.05";

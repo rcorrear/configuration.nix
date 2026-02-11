@@ -1,4 +1,4 @@
-{ inputs, den, ... }:
+{ den, ... }:
 {
   den.aspects.ferrus = {
     includes = [
@@ -8,20 +8,9 @@
       den.aspects.stylix-base
     ];
 
+    _.rcorrear.homeManager.imports = [ ../../../homes/darwin/ferrus/rcorrear.nix ];
+
     darwin = _: {
-      imports = [
-        inputs.home-manager.darwinModules.home-manager
-      ];
-
-      home-manager = {
-        users.rcorrear = {
-          imports = [
-            ../../../homes/all/rcorrear.nix
-            ../../../homes/darwin/ferrus/rcorrear.nix
-          ];
-        };
-      };
-
       networking = {
         hostName = "ferrus";
         localHostName = "ferrus";

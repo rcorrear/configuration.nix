@@ -48,11 +48,6 @@
           "net.ipv6.conf.all.forwarding" = 1;
         };
 
-        home-manager.users.rcorrear = {
-          imports = [ ../../../homes/all/rcorrear.nix ];
-          home.stateVersion = "22.05";
-        };
-
         networking = {
           hostName = "tailscale";
           interfaces = dhcpInterfaces;

@@ -1,4 +1,4 @@
-{ den, inputs, ... }:
+{ den, ... }:
 {
   den.aspects.lion = {
     includes = [
@@ -8,20 +8,9 @@
       den.aspects.stylix-base
     ];
 
+    _.rcorrear.homeManager.imports = [ ../../../homes/darwin/lion/rcorrear.nix ];
+
     darwin = _: {
-      imports = [
-        inputs.home-manager.darwinModules.home-manager
-      ];
-
-      home-manager = {
-        users.rcorrear = {
-          imports = [
-            ../../../homes/all/rcorrear.nix
-            ../../../homes/darwin/lion/rcorrear.nix
-          ];
-        };
-      };
-
       networking = {
         hostName = "lion";
         localHostName = "lion";
