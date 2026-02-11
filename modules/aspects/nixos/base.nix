@@ -1,7 +1,12 @@
-{ inputs, lib, ... }:
+{
+  den,
+  inputs,
+  lib,
+  ...
+}:
 {
   den.aspects.nixos-base = {
-    includes = [ ];
+    includes = [ den.aspects.zmx ];
 
     nixos =
       { ... }:
@@ -16,10 +21,12 @@
             inputs.home-manager.nixosModules.home-manager
           ];
 
-        home-manager.useGlobalPkgs = true;
+        home-manager.useGlobalPkgs = lib.mkDefault false;
 
-        documentation.dev.enable = lib.mkDefault true;
-        documentation.man.generateCaches = lib.mkDefault true;
+        documentation = {
+          dev.enable = lib.mkDefault true;
+          man.generateCaches = lib.mkDefault true;
+        };
 
         programs.fish.enable = lib.mkDefault true;
 

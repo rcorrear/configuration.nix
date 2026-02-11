@@ -9,8 +9,6 @@
 
   home = {
     packages = with pkgs; [
-      # inputs.zmx.packages.${pkgs.stdenv.hostPlatform.system}.default
-
       any-nix-shell
       coreutils
       difftastic
@@ -140,17 +138,6 @@
           controlPath = "~/.ssh/master-%r@%n:%p";
           controlPersist = "no";
         };
-        # "z.*" = {
-        #   controlMaster = "auto";
-        #   controlPersist = "10m";
-        #   hostname = "%h";
-        #   proxyCommand = "sh -c 'hn=\${1#z.}; exec nc \"$hn\" %p' sh %n";
-        #   extraOptions = {
-        #     ConnectTimeout = "5";
-        #     RemoteCommand = "zmx attach %k";
-        #     RequestTTY = "yes";
-        #   };
-        # };
       };
     };
 
