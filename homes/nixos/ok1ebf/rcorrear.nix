@@ -46,22 +46,18 @@ in
       pkgs.xarcan
 
       pkgs.rcorrear.cider-3
-      pkgs.rcorrear.codex-acp
       pkgs.rcorrear.exiled-exchange2
 
       (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
       (pkgs.flix.override { jre = local.jdk25; })
 
-      pkgs.aider-chat
       pkgs.atlauncher
       pkgs.beancount
       pkgs.beancount-black
       pkgs.beancount-language-server
       pkgs.celluloid
       pkgs.clang
-      pkgs.claude-code
       pkgs.cmake
-      pkgs.codex
       pkgs.desktop-file-utils
       pkgs.discord
       pkgs.dotnetCorePackages.sdk_9_0_1xx-bin
