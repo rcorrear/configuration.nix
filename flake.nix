@@ -29,6 +29,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/lanzaboote/v0.4.3";
     };
+    llm-agents = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:numtide/llm-agents.nix";
+    };
     niri-flake = {
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:sodiboo/niri-flake";

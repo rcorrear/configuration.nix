@@ -8,6 +8,8 @@
       den.aspects.stylix-base
     ];
 
+    _.rcorrear.includes = [ den.aspects.llm-tools ];
+
     _.rcorrear.homeManager.imports = [ ../../../homes/darwin/lion/rcorrear.nix ];
 
     darwin = _: {
