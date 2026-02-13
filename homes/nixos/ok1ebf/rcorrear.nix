@@ -6,8 +6,6 @@
 {
   imports = [
     ../../all/rcorrear.nix
-    ../../modules/git-signing.nix
-    ../../modules/shell-tools.nix
   ];
 
   dconf = {
