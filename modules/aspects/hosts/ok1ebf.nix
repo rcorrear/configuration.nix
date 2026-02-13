@@ -18,7 +18,12 @@
       den.aspects.stylix-base
     ];
 
-    _.rcorrear.includes = [ den.aspects.llm-tools ];
+    _.rcorrear.includes = [
+      den.aspects.dev-lang
+      den.aspects.dev-tools
+      den.aspects.editors
+      den.aspects.llm-tools
+    ];
 
     _.rcorrear.homeManager.imports = [
       ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
@@ -134,18 +139,6 @@
               hinfo = true;
               userServices = true;
               workstation = true;
-            };
-          };
-
-          caddy = {
-            enable = true;
-            virtualHosts = {
-              "openwebui.home.arpa".extraConfig = ''
-                reverse_proxy 127.0.0.1:8080
-              '';
-              "search.home.arpa".extraConfig = ''
-                reverse_proxy 127.0.0.1:3002
-              '';
             };
           };
 

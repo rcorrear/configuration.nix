@@ -9,7 +9,9 @@
     ];
 
     _.rcorrear.includes = [
-      den.aspects.development
+      den.aspects.dev-lang
+      den.aspects.dev-tools
+      den.aspects.editors
       den.aspects.llm-tools
     ];
 
