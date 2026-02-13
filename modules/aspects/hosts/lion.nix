@@ -5,7 +5,7 @@
       den.aspects.cachix
       den.aspects.darwin-workstation
       den.aspects.nix-caches
-      den.aspects.stylix-base
+      den.aspects.stylix
     ];
 
     _.rcorrear.includes = [
