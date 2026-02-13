@@ -15,7 +15,7 @@
       den.aspects.cachix
       den.aspects.nix-caches
       den.aspects.nh-cleanup
-      den.aspects.stylix-base
+      den.aspects.stylix
     ];
 
     _.rcorrear.includes = [

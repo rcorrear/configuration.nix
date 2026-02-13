@@ -45,7 +45,7 @@ in
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
-  den.aspects.stylix-base = {
+  den.aspects.stylix = {
     includes = [ ];
 
     nixos =

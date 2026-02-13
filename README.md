@@ -6,7 +6,7 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 
 - Inspect outputs: `nix flake show`
 - Regenerate flake.nix: `nix run .#write-flake`
-- NixOS rebuild: `sudo nixos-rebuild switch --flake .#ok1ebf`
+- NixOS rebuild: `sudo nixos-rebuild switch --flake .#OK1EBF`
 - nix-darwin rebuild: `darwin-rebuild switch --flake .#lion`
 
 ## Structure
@@ -19,17 +19,19 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 │   ├── nixos/            # NixOS home config
 │   └── modules/          # Home Manager-only modules (used by homes/*)
 ├── hosts/            # Per-machine configurations
-│   ├── all-platforms/    # Shared cross-platform config
-│   ├── lion/             # macOS (aarch64-darwin)
-│   └── ok1ebf/           # Primary workstation (x86_64-linux)
+│   ├── darwin/           # Darwin host files
+│   └── nixos/            # NixOS host files
 ├── modules/
 │   ├── aspects/      # Composable configuration aspects
+│   │   ├── darwin/       # Darwin-related aspects
 │   │   ├── hosts/        # Host-specific aspects
 │   │   ├── nixos/        # NixOS base configuration
 │   │   └── users/        # User configurations
+│   ├── nixos/        # Shared NixOS modules
 │   ├── den.nix       # Den configuration
 │   ├── dendritic.nix # Dendritic system builder
-│   └── devshell.nix  # Development shell
+│   ├── devshell.nix  # Development shell
+│   └── namespace.nix # Namespace helpers
 └── packages/         # Custom package definitions
 ```
 
