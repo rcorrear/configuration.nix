@@ -13,6 +13,7 @@
       den.aspects.dev-tools
       den.aspects.editors
       den.aspects.llm-tools
+      den.aspects.rcorrear-workstation
     ];
 
     _.rcorrear.homeManager.imports = [ ../../../homes/darwin/ferrus/rcorrear.nix ];
