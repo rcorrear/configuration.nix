@@ -8,7 +8,12 @@
       den.aspects.stylix-base
     ];
 
-    _.rcorrear.includes = [ den.aspects.llm-tools ];
+    _.rcorrear.includes = [
+      den.aspects.dev-lang
+      den.aspects.dev-tools
+      den.aspects.editors
+      den.aspects.llm-tools
+    ];
 
     _.rcorrear.homeManager.imports = [ ../../../homes/darwin/lion/rcorrear.nix ];
 

@@ -3,12 +3,6 @@
   pkgs,
   ...
 }:
-let
-  local = rec {
-    jdk25 = pkgs.jdk25.override { enableJavaFX = false; };
-    clojure = pkgs.clojure.override { jdk = jdk25; };
-  };
-in
 {
   imports = [
     ../../all/rcorrear.nix
@@ -35,8 +29,6 @@ in
     };
 
     packages = [
-      local.clojure
-
       # arcan
       pkgs.arcan
       pkgs.cat9
@@ -49,7 +41,6 @@ in
       pkgs.rcorrear.exiled-exchange2
 
       (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
-      (pkgs.flix.override { jre = local.jdk25; })
 
       pkgs.atlauncher
       pkgs.beancount
@@ -60,11 +51,9 @@ in
       pkgs.cmake
       pkgs.desktop-file-utils
       pkgs.discord
-      pkgs.dotnetCorePackages.sdk_9_0_1xx-bin
       pkgs.editorconfig-checker
       pkgs.enchant
       pkgs.evolution
-      pkgs.exercism
       pkgs.fava
       pkgs.firefox
       pkgs.font-awesome
@@ -78,56 +67,39 @@ in
       pkgs.gnomeExtensions.tailscale-status
       pkgs.gnomeExtensions.vitals
       pkgs.gwe
-      pkgs.jdk25
-      pkgs.jetbrains.idea-oss
-      pkgs.jetbrains.rider
       pkgs.keybase-gui
       pkgs.lutris
       pkgs.maestral
       pkgs.mangohud
-      pkgs.metals
       pkgs.moonlight-qt
       pkgs.mpg123
       pkgs.mprime
       pkgs.msbuild
       pkgs.mtr-gui
       pkgs.multimarkdown
-      pkgs.nerd-fonts.blex-mono
-      pkgs.nerd-fonts.caskaydia-cove
-      pkgs.nerd-fonts.iosevka-term-slab
       pkgs.nfs-utils
       pkgs.nil
       pkgs.nix-output-monitor
       pkgs.nix-prefetch-git
       pkgs.nixd
-      pkgs.nixfmt
       pkgs.nixos-generators
-      pkgs.nodePackages.bash-language-server
-      pkgs.nodejs
       pkgs.ntfs3g
       pkgs.nvd
       pkgs.nvtopPackages.nvidia
       pkgs.pciutils
-      pkgs.pijul
-      pkgs.pipenv
       pkgs.piper
       pkgs.plexamp
       pkgs.podman
       pkgs.pre-commit
       pkgs.prismlauncher
       pkgs.psmisc
-      pkgs.python3
       pkgs.remmina
-      pkgs.shellcheck
-      pkgs.shfmt
       pkgs.simple-scan
       pkgs.slack
-      pkgs.sqlite
       pkgs.sshpass
       pkgs.sunshine
       pkgs.uhk-agent
       pkgs.umu-launcher
-      pkgs.unison-ucm
       pkgs.usbutils
       pkgs.virtiofsd
       pkgs.vorbis-tools
@@ -139,14 +111,7 @@ in
       pkgs.xclip
       pkgs.xfsprogs
       pkgs.yubioath-flutter
-      pkgs.zed
-      pkgs.zed-editor
       pkgs.zstd
-    ];
-
-    sessionPath = [
-      "${config.home.homeDirectory}/code/go/bin"
-      "${config.xdg.configHome}/emacs/bin"
     ];
 
     sessionVariables = {
@@ -161,20 +126,6 @@ in
     difftastic = {
       enable = true;
       git.enable = true;
-    };
-
-    emacs = {
-      enable = true;
-      extraPackages = epkgs: [
-        epkgs.emacsql
-        epkgs.vterm
-      ];
-      package = pkgs.emacs30.overrideAttrs (oldAttrs: {
-        propagatedUserEnvPkgs = (oldAttrs.propagatedUserEnvPkgs or [ ]) ++ [
-          pkgs.nodejs
-          pkgs.uv
-        ];
-      });
     };
 
     foot = {
@@ -195,19 +146,6 @@ in
       };
     };
 
-    git = {
-      enable = true;
-    };
-
-    go = {
-      enable = true;
-      env = {
-        GOPATH = "Projects/go";
-      };
-    };
-
-    jujutsu.enable = true;
-
     obs-studio = {
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [ obs-pipewire-audio-capture ];
@@ -222,13 +160,6 @@ in
   services = {
     easyeffects.enable = true;
 
-    emacs = {
-      client.enable = true;
-      defaultEditor = true;
-      enable = true;
-      startWithUserSession = true;
-    };
-
     kbfs = {
       enable = true;
       mountPoint = "Keybase";
@@ -241,5 +172,4 @@ in
       };
     };
   };
-
 }
