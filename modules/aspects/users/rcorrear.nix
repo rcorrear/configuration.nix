@@ -1,7 +1,11 @@
-{ lib, ... }:
+{
+  den,
+  lib,
+  ...
+}:
 {
   den.aspects.rcorrear = {
-    includes = [ ];
+    includes = [ den._.primary-user ];
 
     # NixOS-specific system configuration
     nixos =
