@@ -3,6 +3,8 @@
   den.aspects.lion = {
     includes = [
       den.aspects.cachix
+      den.aspects.darwin-network-services
+      den.aspects.darwin-nix-settings
       den.aspects.darwin-workstation
       den.aspects.nix-caches
       den.aspects.stylix
@@ -22,25 +24,12 @@
       networking = {
         hostName = "lion";
         localHostName = "lion";
-        knownNetworkServices = [
-          "Thunderbolt Bridge"
-          "USB 10/100/1000 LAN"
-          "Wi-Fi"
-          "iPhone USB"
-        ];
       };
 
       nix = {
-        enable = false;
-        channel.enable = false;
         settings.trusted-users = [
           "rcorrear"
         ];
-      };
-
-      system = {
-        primaryUser = "rcorrear";
-        stateVersion = 4;
       };
     };
   };
