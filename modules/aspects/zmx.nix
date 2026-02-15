@@ -2,13 +2,12 @@ _: {
   den.aspects.zmx = {
     includes = [ ];
     homeManager =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       let
         nc = "${pkgs.netcat}/bin/nc";
-        zmxPkg = pkgs.rcorrear.zmx;
       in
       {
-        home.packages = [ zmxPkg ];
+        home.packages = lib.optionals pkgs.stdenv.isLinux [ pkgs.rcorrear.zmx ];
         programs.ssh.matchBlocks."z.*" = {
           controlMaster = "auto";
           controlPersist = "10m";

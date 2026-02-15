@@ -25,7 +25,11 @@ in
 {
   options.den.sshAgentSocket = lib.mkOption {
     type = lib.types.str;
-    default = "${config.home.homeDirectory}/.1password/agent.sock";
+    default =
+      if pkgs.stdenv.isDarwin then
+        "${config.home.homeDirectory}/Library/Group Containers/2BUA8C4S2C.com.1password/t/agent.sock"
+      else
+        "${config.home.homeDirectory}/.1password/agent.sock";
     description = "Path to the SSH agent socket used for Git/Jujutsu signing.";
   };
 

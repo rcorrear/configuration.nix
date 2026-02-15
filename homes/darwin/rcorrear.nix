@@ -11,7 +11,6 @@
   home = {
     packages = [
       pkgs.discord
-      pkgs.maestral-gui
     ];
 
     sessionVariables = {

@@ -5,7 +5,7 @@
 
     darwin = {
       home-manager = {
-        useGlobalPkgs = true;
+        useGlobalPkgs = false;
         useUserPackages = false; # Packages are still installed into the home user profile dir via home-manager.
       };
 
