@@ -38,8 +38,6 @@
       pkgs.rcorrear.cider-3
       pkgs.rcorrear.exiled-exchange2
 
-      (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
-
       pkgs.atlauncher
       pkgs.beancount
       pkgs.beancount-black
@@ -50,7 +48,6 @@
       pkgs.desktop-file-utils
       pkgs.discord
       pkgs.editorconfig-checker
-      pkgs.enchant
       pkgs.evolution
       pkgs.fava
       pkgs.firefox
