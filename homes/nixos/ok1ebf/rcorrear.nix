@@ -76,7 +76,6 @@
       pkgs.pciutils
       pkgs.piper
       pkgs.plexamp
-      pkgs.podman
       pkgs.prismlauncher
       pkgs.psmisc
       pkgs.remmina
