@@ -39,15 +39,11 @@
       pkgs.rcorrear.exiled-exchange2
 
       pkgs.atlauncher
-      pkgs.beancount
-      pkgs.beancount-black
-      pkgs.beancount-language-server
       pkgs.celluloid
       pkgs.desktop-file-utils
       pkgs.discord
       pkgs.editorconfig-checker
       pkgs.evolution
-      pkgs.fava
       pkgs.firefox
       pkgs.font-awesome
       pkgs.fractal
