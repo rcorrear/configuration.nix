@@ -11,7 +11,6 @@
     packages = with pkgs; [
       any-nix-shell
       coreutils
-      difftastic
       fd
       file
       htop
