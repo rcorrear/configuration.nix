@@ -63,9 +63,7 @@
       pkgs.moonlight-qt
       pkgs.mpg123
       pkgs.mprime
-      pkgs.msbuild
       pkgs.mtr-gui
-      pkgs.multimarkdown
       pkgs.nfs-utils
       pkgs.nil
       pkgs.nix-output-monitor
@@ -79,7 +77,6 @@
       pkgs.piper
       pkgs.plexamp
       pkgs.podman
-      pkgs.pre-commit
       pkgs.prismlauncher
       pkgs.psmisc
       pkgs.remmina
