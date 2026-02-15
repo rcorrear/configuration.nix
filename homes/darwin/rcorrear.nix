@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }:
@@ -12,11 +11,6 @@
     packages = [
       pkgs.discord
     ];
-
-    sessionVariables = {
-      NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
-      SSH_AUTH_SOCK = config.den.sshAgentSocket;
-    };
   };
 
   programs = {
