@@ -16,7 +16,7 @@ jobs:
     runs-on: ${{matrix.os}}
     steps:
       # yamllint disable-line rule:line-length
-      - uses: wimpysworld/nothing-but-nix@dd6ef566962bfa4656301706035da97ebbe90e9b
+      - uses: wimpysworld/nothing-but-nix@687c797a730352432950c707ab493fcc951818d7
         if: matrix.os == 'ubuntu-latest'
       # yamllint disable-line rule:line-length
       - uses: DeterminateSystems/nix-installer-action@a4f499a84c7bd15903c67fa79a1d98dd9b6d8c84
