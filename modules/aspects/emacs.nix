@@ -65,6 +65,8 @@ _: {
           ];
           package = pkgs.emacs30.overrideAttrs (oldAttrs: {
             propagatedUserEnvPkgs = (oldAttrs.propagatedUserEnvPkgs or [ ]) ++ [
+              (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
+              pkgs.enchant
               pkgs.nodejs
               pkgs.uv
             ];
