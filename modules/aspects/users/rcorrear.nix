@@ -26,7 +26,9 @@
       };
 
     # Darwin-specific system configuration
-    darwin = _: { };
+    darwin = _: {
+      users.users.rcorrear.home = "/Users/rcorrear";
+    };
 
     # Base home-manager configuration (static, no module args)
     homeManager = {
