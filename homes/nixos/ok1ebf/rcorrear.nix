@@ -42,12 +42,10 @@
       pkgs.celluloid
       pkgs.desktop-file-utils
       pkgs.discord
-      pkgs.editorconfig-checker
       pkgs.evolution
       pkgs.firefox
       pkgs.font-awesome
       pkgs.fractal
-      pkgs.gg-jj
       pkgs.ghostty
       pkgs.gnome-terminal
       pkgs.gnome-tweaks
@@ -65,13 +63,7 @@
       pkgs.mprime
       pkgs.mtr-gui
       pkgs.nfs-utils
-      pkgs.nil
-      pkgs.nix-output-monitor
-      pkgs.nix-prefetch-git
-      pkgs.nixd
-      pkgs.nixos-generators
       pkgs.ntfs3g
-      pkgs.nvd
       pkgs.nvtopPackages.nvidia
       pkgs.pciutils
       pkgs.piper
@@ -83,7 +75,6 @@
       pkgs.slack
       pkgs.sshpass
       pkgs.sunshine
-      pkgs.uhk-agent
       pkgs.umu-launcher
       pkgs.usbutils
       pkgs.virtiofsd
@@ -101,18 +92,12 @@
 
     sessionVariables = {
       NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
-      SSH_AUTH_SOCK = "${config.home.homeDirectory}/.1password/agent.sock";
     };
 
     stateVersion = "21.05";
   };
 
   programs = {
-    difftastic = {
-      enable = true;
-      git.enable = true;
-    };
-
     foot = {
       enable = true;
       server.enable = true;
@@ -121,6 +106,7 @@
           border-width = 2;
           border-color = "ff404040";
         };
+
         main = {
           term = "xterm-256color";
         };
@@ -135,11 +121,6 @@
       enable = true;
       plugins = with pkgs.obs-studio-plugins; [ obs-pipewire-audio-capture ];
     };
-
-    nix-index = {
-      enable = true;
-      enableFishIntegration = true;
-    };
   };
 
   services = {
@@ -148,13 +129,6 @@
     kbfs = {
       enable = true;
       mountPoint = "Keybase";
-    };
-
-    podman = {
-      enable = true;
-      settings = {
-        policy = { };
-      };
     };
   };
 }
