@@ -43,8 +43,6 @@
       pkgs.beancount-black
       pkgs.beancount-language-server
       pkgs.celluloid
-      pkgs.clang
-      pkgs.cmake
       pkgs.desktop-file-utils
       pkgs.discord
       pkgs.editorconfig-checker

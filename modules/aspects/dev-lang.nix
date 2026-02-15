@@ -17,6 +17,8 @@ _: {
 
             (pkgs.flix.override { jre = local.jdk25; })
 
+            pkgs.clang
+            pkgs.cmake
             pkgs.exercism
             pkgs.jdk25
             pkgs.metals
