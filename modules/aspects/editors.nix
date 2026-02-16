@@ -3,13 +3,20 @@
   den.aspects.editors = {
     includes = [ den.aspects.emacs ];
 
+    darwin = _: {
+      homebrew = {
+        casks = [
+          "zed"
+        ];
+      };
+    };
+
     homeManager =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       {
-        home.packages = [
+        home.packages = lib.optionals pkgs.stdenv.isLinux [
           pkgs.jetbrains.idea-oss
           pkgs.jetbrains.rider
-          pkgs.zed-editor
         ];
       };
   };
