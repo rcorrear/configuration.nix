@@ -40,11 +40,9 @@
       pkgs.atlauncher
       pkgs.celluloid
       pkgs.desktop-file-utils
-      pkgs.discord
       pkgs.evolution
       pkgs.firefox
       pkgs.font-awesome
-      pkgs.fractal
       pkgs.ghostty
       pkgs.gnome-terminal
       pkgs.gnome-tweaks
@@ -53,7 +51,6 @@
       pkgs.gnomeExtensions.tailscale-status
       pkgs.gnomeExtensions.vitals
       pkgs.gwe
-      pkgs.keybase-gui
       pkgs.lutris
       pkgs.maestral
       pkgs.mangohud
@@ -71,16 +68,13 @@
       pkgs.psmisc
       pkgs.remmina
       pkgs.simple-scan
-      pkgs.slack
       pkgs.sshpass
-      pkgs.stoat-desktop
       pkgs.sunshine
       pkgs.umu-launcher
       pkgs.usbutils
       pkgs.virtiofsd
       pkgs.vorbis-tools
       pkgs.vulkan-tools
-      pkgs.wasistlos
       pkgs.wireguard-tools
       pkgs.xclip
       pkgs.xfsprogs
@@ -119,10 +113,5 @@
 
   services = {
     easyeffects.enable = true;
-
-    kbfs = {
-      enable = true;
-      mountPoint = "Keybase";
-    };
   };
 }

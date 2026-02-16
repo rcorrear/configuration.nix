@@ -19,6 +19,7 @@
     ];
 
     _.rcorrear.includes = [
+      den.aspects.comms
       den.aspects.dev-lang
       den.aspects.dev-tools
       den.aspects.editors
