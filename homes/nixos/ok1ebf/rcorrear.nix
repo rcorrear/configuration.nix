@@ -1,5 +1,4 @@
 {
-  config,
   pkgs,
   ...
 }:
@@ -74,6 +73,7 @@
       pkgs.simple-scan
       pkgs.slack
       pkgs.sshpass
+      pkgs.stoat-desktop
       pkgs.sunshine
       pkgs.umu-launcher
       pkgs.usbutils
@@ -81,18 +81,12 @@
       pkgs.vorbis-tools
       pkgs.vulkan-tools
       pkgs.wasistlos
-      pkgs.wineWowPackages.stagingFull
-      pkgs.winetricks
       pkgs.wireguard-tools
       pkgs.xclip
       pkgs.xfsprogs
       pkgs.yubioath-flutter
       pkgs.zstd
     ];
-
-    sessionVariables = {
-      NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
-    };
 
     stateVersion = "21.05";
   };

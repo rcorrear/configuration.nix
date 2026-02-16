@@ -21,9 +21,9 @@
     _.rcorrear.includes = [
       den.aspects.dev-lang
       den.aspects.dev-tools
-      den.aspects.plaintext-finances
       den.aspects.editors
       den.aspects.llm-tools
+      den.aspects.plaintext-finances
       den.aspects.rcorrear-workstation
     ];
 
