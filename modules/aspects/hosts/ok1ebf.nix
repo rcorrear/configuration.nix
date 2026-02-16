@@ -23,7 +23,9 @@
       den.aspects.dev-lang
       den.aspects.dev-tools
       den.aspects.editors
+      den.aspects.gaming
       den.aspects.llm-tools
+      den.aspects.multimedia
       den.aspects.plaintext-finances
       den.aspects.rcorrear-workstation
     ];
