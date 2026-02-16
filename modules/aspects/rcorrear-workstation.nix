@@ -29,6 +29,7 @@ _: {
 
         linuxWorkstationPackages = [
           pkgs.mpg123
+          pkgs.mprime
           pkgs.nfs-utils
           pkgs.pciutils
           pkgs.psmisc
@@ -63,13 +64,12 @@ _: {
         home = {
           packages = [
             pkgs.gg-jj
-            pkgs.mprime
             pkgs.mtr-gui
             pkgs.ntfs3g
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
           ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages
-          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.ghostty ];
+          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.ghostty-bin ];
 
           sessionVariables = {
             NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
