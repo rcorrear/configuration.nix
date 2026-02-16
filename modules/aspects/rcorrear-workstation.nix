@@ -3,19 +3,73 @@ _: {
     includes = [ ];
 
     homeManager =
-      { config, pkgs, ... }:
+      {
+        config,
+        lib,
+        pkgs,
+        ...
+      }:
+      let
+        linuxDesktopPackages = [
+          pkgs.desktop-file-utils
+          pkgs.evolution
+          pkgs.firefox
+          pkgs.ghostty
+          pkgs.gnome-terminal
+          pkgs.gnome-tweaks
+          pkgs.gnomeExtensions.caffeine
+          pkgs.gnomeExtensions.gsconnect
+          pkgs.gnomeExtensions.tailscale-status
+          pkgs.gnomeExtensions.vitals
+          pkgs.maestral
+          pkgs.simple-scan
+          pkgs.uhk-agent
+          pkgs.yubioath-flutter
+        ];
+
+        linuxWorkstationPackages = [
+          pkgs.mpg123
+          pkgs.nfs-utils
+          pkgs.pciutils
+          pkgs.psmisc
+          pkgs.remmina
+          pkgs.usbutils
+          pkgs.vulkan-tools
+          pkgs.wireguard-tools
+          pkgs.xclip
+          pkgs.xfsprogs
+          pkgs.zstd
+        ];
+      in
       {
         imports = [
           ../../homes/modules/git-signing.nix
           ../../homes/modules/shell-tools.nix
         ];
 
+        dconf = lib.mkIf pkgs.stdenv.isLinux {
+          enable = true;
+          settings."org/gnome/shell" = {
+            disable-user-extensions = false;
+            enabled-extensions = with pkgs.gnomeExtensions; [
+              caffeine.extensionUuid
+              gsconnect.extensionUuid
+              tailscale-status.extensionUuid
+              vitals.extensionUuid
+            ];
+          };
+        };
+
         home = {
           packages = [
             pkgs.gg-jj
-            pkgs.podman
-            pkgs.uhk-agent
-          ];
+            pkgs.mprime
+            pkgs.mtr-gui
+            pkgs.ntfs3g
+          ]
+          ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
+          ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages
+          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.ghostty ];
 
           sessionVariables = {
             NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
@@ -26,6 +80,25 @@ _: {
           nix-index = {
             enable = true;
             enableFishIntegration = true;
+          };
+
+          foot = lib.mkIf pkgs.stdenv.isLinux {
+            enable = true;
+            server.enable = true;
+            settings = {
+              csd = {
+                border-width = 2;
+                border-color = "ff404040";
+              };
+
+              main = {
+                term = "xterm-256color";
+              };
+
+              mouse = {
+                hide-when-typing = "yes";
+              };
+            };
           };
         };
 
