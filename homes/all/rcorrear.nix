@@ -30,6 +30,10 @@
     shellAliases = {
       jjd = "${pkgs.jujutsu}/bin/jj diff";
       jjl = "${pkgs.jujutsu}/bin/jj log";
+      jjt = "${pkgs.jujutsu}/bin/jj tug";
+      "jjt-" = "${pkgs.jujutsu}/bin/jj tug-";
+      jjgp = "${pkgs.jujutsu}/bin/jj git push";
+      jjgf = "${pkgs.jujutsu}/bin/jj git fetch";
     };
 
     stateVersion = lib.mkDefault "24.05";
@@ -97,6 +101,24 @@
 
     jujutsu = {
       settings = {
+        aliases = {
+          tug = [
+            "bookmark"
+            "move"
+            "--from"
+            "heads(::@- & bookmarks())"
+            "--to"
+            "@"
+          ];
+          "tug-" = [
+            "bookmark"
+            "move"
+            "--from"
+            "heads(::@- & bookmarks())"
+            "--to"
+            "@-"
+          ];
+        };
         fix.tools.nixfmt = {
           command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
           patterns = [ "glob:'**/*.nix'" ];
