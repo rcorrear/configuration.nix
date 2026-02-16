@@ -10,6 +10,24 @@ _: {
         ...
       }:
       let
+        baseEmacsPackage = if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
+
+        emacsRuntimePath = lib.makeBinPath [
+          (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
+          pkgs.enchant
+          pkgs.nodejs
+          pkgs.uv
+        ];
+
+        wrapEmacsRuntime =
+          emacsDrv:
+          emacsDrv.overrideAttrs (oldAttrs: {
+            nativeBuildInputs = (oldAttrs.nativeBuildInputs or [ ]) ++ [ pkgs.makeWrapper ];
+            postFixup = (oldAttrs.postFixup or "") + ''
+              wrapProgram "$out/bin/emacs" --prefix PATH : ${emacsRuntimePath}
+            '';
+          });
+
         emacsDaemonDarwinModule =
           {
             config,
@@ -59,18 +77,11 @@ _: {
 
         programs.emacs = {
           enable = true;
+          package = wrapEmacsRuntime baseEmacsPackage;
           extraPackages = epkgs: [
             epkgs.emacsql
             epkgs.vterm
           ];
-          package = pkgs.emacs30.overrideAttrs (oldAttrs: {
-            propagatedUserEnvPkgs = (oldAttrs.propagatedUserEnvPkgs or [ ]) ++ [
-              (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
-              pkgs.enchant
-              pkgs.nodejs
-              pkgs.uv
-            ];
-          });
         };
       };
   };
