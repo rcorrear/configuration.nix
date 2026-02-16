@@ -4,6 +4,7 @@
 ### custom ###
 closure-diffs/
 .codex/
+.pre-commit-config.yaml
 
 ### aider ###
 .aider*

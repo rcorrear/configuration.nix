@@ -4,12 +4,14 @@
     includes = [ den.aspects.emacs ];
 
     homeManager =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       {
         home.packages = [
+          pkgs.zed-editor
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
           pkgs.jetbrains.idea-oss
           pkgs.jetbrains.rider
-          pkgs.zed-editor
         ];
       };
   };
