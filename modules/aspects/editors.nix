@@ -7,8 +7,8 @@
       { pkgs, ... }:
       {
         home.packages = [
-          #pkgs.jetbrains.idea-oss
-          #pkgs.jetbrains.rider
+          pkgs.jetbrains.idea-oss
+          pkgs.jetbrains.rider
           pkgs.zed-editor
         ];
       };
