@@ -48,6 +48,27 @@
       enable = lib.mkDefault true;
       interactiveShellInit = ''
         any-nix-shell fish --info-right | source
+
+        # Auto-load completions from devenv profile (for direnv-managed projects).
+        # Tracks the path we added so only that path is cleaned up on directory change.
+        set -g __devenv_completion_path ""
+        function __devenv_update_completions --on-variable DEVENV_PROFILE
+            if test -n "$__devenv_completion_path"
+                set -l idx (contains -i "$__devenv_completion_path" $fish_complete_path)
+                and set -e fish_complete_path[$idx]
+                set -g __devenv_completion_path ""
+            end
+            if set -q DEVENV_PROFILE
+                set -l vendor "$DEVENV_PROFILE/share/fish/vendor_completions.d"
+                if test -d "$vendor"; and not contains "$vendor" $fish_complete_path
+                    set -gp fish_complete_path "$vendor"
+                    set -g __devenv_completion_path "$vendor"
+                end
+            end
+        end
+        if set -q DEVENV_PROFILE
+            __devenv_update_completions
+        end
       '';
       plugins = [
         {
