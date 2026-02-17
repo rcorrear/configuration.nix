@@ -12,7 +12,6 @@
         radarr.users.rcorrear = { };
         sonarr.users.rcorrear = { };
         tailscale.users.rcorrear = { };
-        files.users.rcorrear = { };
       };
       aarch64-darwin = {
         ferrus.users.rcorrear = { };
@@ -21,7 +20,6 @@
     };
     homes.x86_64-linux = {
       "rcorrear@OK1EBF" = { };
-      "rcorrear@files" = { };
       "rcorrear@hass" = { };
       "rcorrear@plex" = { };
       "rcorrear@prowlarr" = { };
