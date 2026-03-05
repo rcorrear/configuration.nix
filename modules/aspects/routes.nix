@@ -8,12 +8,11 @@
         {
           host,
           user,
-          OS,
           ...
         }@ctx:
-        # Require OS context so host<->user routes are only expanded once in HM assembly;
-        # assert also marks OS as used to pacify deadnix.
-        assert builtins.isAttrs OS;
+        # Keep host<->user routes available in HM internal contexts too.
+        # Requiring an `OS` arg here breaks HM propagation because those contexts
+        # don't provide it.
         parametric.fixedTo ctx {
           includes = [
             (mutual user host)
