@@ -1,4 +1,7 @@
+{ lib, ... }:
 {
+  den.base.user.classes = lib.mkDefault [ "homeManager" ];
+
   den = {
     hosts = {
       x86_64-linux = {
