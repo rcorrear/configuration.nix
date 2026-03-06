@@ -47,6 +47,10 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:danth/stylix";
     };
+    treefmt-nix = {
+      inputs.nixpkgs.follows = "nixpkgs";
+      url = "github:numtide/treefmt-nix";
+    };
   };
 
 }
