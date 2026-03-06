@@ -47,7 +47,6 @@
       inputs.nixpkgs.follows = "nixpkgs";
       url = "github:danth/stylix";
     };
-    systems.url = "github:nix-systems/default";
   };
 
 }

@@ -25,7 +25,7 @@
 
         documentation = {
           dev.enable = lib.mkDefault true;
-          man.generateCaches = lib.mkDefault true;
+          man.cache.enable = lib.mkDefault true;
         };
 
         programs.fish.enable = lib.mkDefault true;
