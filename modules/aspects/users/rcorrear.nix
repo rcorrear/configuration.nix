@@ -30,9 +30,13 @@
       users.users.rcorrear.home = "/Users/rcorrear";
     };
 
-    # Base home-manager configuration (static, no module args)
-    homeManager = {
-      imports = [ ../../../homes/all/rcorrear.nix ];
-    };
+    homeManager =
+      { pkgs, ... }:
+      {
+        home.username = "rcorrear";
+        home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/rcorrear" else "/home/rcorrear";
+
+        imports = [ ../../../homes/all/rcorrear.nix ];
+      };
   };
 }
