@@ -8,7 +8,6 @@ let
   rcorrearOverlay = final: _prev: {
     rcorrear = {
       cider-3 = final.callPackage ../../packages/cider-3 { };
-      codex-acp = final.callPackage ../../packages/codex-acp { };
       exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
       zmx = final.callPackage ../../packages/zmx { };
     };
