@@ -13,8 +13,6 @@ _: {
         baseEmacsPackage = if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
 
         emacsRuntimePath = lib.makeBinPath [
-          (pkgs.aspellWithDicts (dicts: [ dicts.en ]))
-          pkgs.enchant
           pkgs.nodejs
           pkgs.uv
         ];
