@@ -7,6 +7,7 @@ _: {
       {
         home.packages = [
           pkgs.editorconfig-checker
+          pkgs.gh
           pkgs.multimarkdown
           pkgs.nerd-fonts.blex-mono
           pkgs.nerd-fonts.caskaydia-cove
