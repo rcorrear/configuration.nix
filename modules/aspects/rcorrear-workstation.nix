@@ -63,6 +63,11 @@ _: {
 
         home = {
           packages = [
+            (pkgs.aspellWithDicts (dicts: [
+              dicts.en
+              dicts.en-computers
+            ]))
+
             pkgs.gg-jj
             pkgs.mtr-gui
             pkgs.ntfs3g
