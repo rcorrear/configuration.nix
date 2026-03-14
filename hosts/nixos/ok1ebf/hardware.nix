@@ -63,6 +63,8 @@
       "xfs"
       "zfs"
     ];
+
+    tmp.cleanOnBoot = true;
   };
 
   environment.systemPackages = with pkgs; [
@@ -116,6 +118,18 @@
       device = "/nix/store";
 
       options = [ "bind" ];
+    };
+
+    "/tmp" = {
+      device = "/dev/mapper/data-tmp";
+      fsType = "xfs";
+      options = [
+        "nodev"
+        "nosuid"
+        "noatime"
+        "nofail"
+        "x-systemd.device-timeout=10s"
+      ];
     };
   };
 
