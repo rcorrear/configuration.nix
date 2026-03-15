@@ -15,9 +15,17 @@
       in
       {
         home.packages = [
+          llmPkgs.agent-deck
+          llmPkgs.backlog-md
           llmPkgs.claude-code
-          llmPkgs.opencode
+          llmPkgs.coderabbit-cli
+          llmPkgs.code
           llmPkgs.codex
+          llmPkgs.droid
+          llmPkgs.opencode
+          llmPkgs.openspec
+
+          pkgs.tmux # agent-deck requires tmux
         ];
       };
   };
