@@ -1,6 +1,6 @@
 { lib, ... }:
 {
-  den.base.user.classes = lib.mkDefault [ "homeManager" ];
+  den.schema.user.classes = lib.mkDefault [ "homeManager" ];
 
   den = {
     hosts = {
