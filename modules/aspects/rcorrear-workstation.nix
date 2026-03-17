@@ -68,9 +68,14 @@ _: {
               dicts.en-computers
             ]))
 
-            pkgs.gg-jj
             pkgs.mtr-gui
+            pkgs.nix-output-monitor
+            pkgs.nix-prefetch-git
+            pkgs.nixd
+            pkgs.nixos-generators
             pkgs.ntfs3g
+            pkgs.nvd
+            pkgs.podman-compose
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
           ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages

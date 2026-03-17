@@ -7,18 +7,14 @@ _: {
       {
         home.packages = [
           pkgs.editorconfig-checker
+          pkgs.gg-jj
           pkgs.gh
           pkgs.multimarkdown
           pkgs.nerd-fonts.blex-mono
           pkgs.nerd-fonts.caskaydia-cove
           pkgs.nerd-fonts.iosevka-term-slab
           pkgs.nil
-          pkgs.nix-output-monitor
-          pkgs.nix-prefetch-git
-          pkgs.nixd
           pkgs.nixfmt
-          pkgs.nixos-generators
-          pkgs.nvd
           pkgs.pijul
           pkgs.pipenv
           pkgs.pre-commit
