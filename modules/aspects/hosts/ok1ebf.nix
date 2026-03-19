@@ -240,16 +240,6 @@
             autoSnapshot.enable = true;
             trim.enable = true;
           };
-
-          zookeeper = {
-            enable = true;
-            extraConf = ''
-              admin.serverPort=9876
-              initLimit=5
-              syncLimit=2
-              tickTime=2000
-            '';
-          };
         };
 
         security.polkit.enable = true;
