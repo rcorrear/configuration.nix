@@ -18,7 +18,7 @@ jobs:
       - uses: wimpysworld/nothing-but-nix@dd6ef566962bfa4656301706035da97ebbe90e9b
         if: matrix.os == 'ubuntu-latest'
       # yamllint disable-line rule:line-length
-      - uses: DeterminateSystems/nix-installer-action@a4f499a84c7bd15903c67fa79a1d98dd9b6d8c84
+      - uses: DeterminateSystems/nix-installer-action@9a59e15a74545c99a626ba594edcd0d02189e670
       # yamllint disable-line rule:line-length
       - uses: DeterminateSystems/magic-nix-cache-action@dfe3778ecdeec4fbe981f6e72aeeb2b6427a50e7
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
