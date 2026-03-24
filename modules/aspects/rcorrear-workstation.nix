@@ -21,6 +21,7 @@ _: {
           pkgs.gnomeExtensions.gsconnect
           pkgs.gnomeExtensions.tailscale-status
           pkgs.gnomeExtensions.vitals
+          pkgs.google-chrome
           pkgs.maestral
           pkgs.simple-scan
           pkgs.uhk-agent

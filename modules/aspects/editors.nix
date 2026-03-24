@@ -18,6 +18,7 @@
           pkgs.jetbrains.idea-oss
           pkgs.jetbrains.pycharm
           pkgs.jetbrains.rider
+          pkgs.jetbrains.webstorm
           pkgs.zed-editor
         ];
       };
