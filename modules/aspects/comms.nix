@@ -13,7 +13,6 @@ _: {
           "fractal"
           "keybase-gui"
           "slack"
-          "stoat-desktop"
           "wasistlos"
         ];
       in
