@@ -77,6 +77,7 @@ _: {
             pkgs.ntfs3g
             pkgs.nvd
             pkgs.podman-compose
+            pkgs.symbola
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
           ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages

@@ -3,6 +3,7 @@
 
 ### custom ###
 closure-diffs/
+.code/
 .codex/
 .pre-commit-config.yaml
 
