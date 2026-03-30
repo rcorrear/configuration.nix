@@ -12,6 +12,7 @@
 
   den.aspects.OK1EBF = {
     includes = [
+      den.aspects.agent-secrets
       den.aspects.cachix
       den.aspects.nix-caches
       den.aspects.nh-cleanup
@@ -175,9 +176,8 @@
           };
 
           onepassword-secrets = {
-            enable = false;
+            enable = true;
             tokenFile = "/etc/opnix-token";
-            secrets = { };
           };
 
           pcscd.enable = true;
