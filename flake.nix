@@ -1,56 +1,53 @@
 # DO-NOT-EDIT. This file was auto-generated using github:vic/flake-file.
 # Use `nix run .#write-flake` to regenerate it.
 {
-
   outputs = inputs: inputs.flake-parts.lib.mkFlake { inherit inputs; } (inputs.import-tree ./modules);
 
   inputs = {
     darwin = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:LnL7/nix-darwin";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     den.url = "github:vic/den";
     devenv = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:cachix/devenv";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
-    flake-aspects.url = "github:vic/flake-aspects";
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
-      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
       url = "github:hercules-ci/flake-parts";
+      inputs.nixpkgs-lib.follows = "nixpkgs-lib";
     };
     home-manager = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/home-manager";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
     lanzaboote = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:nix-community/lanzaboote/v0.4.3";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     llm-agents = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:numtide/llm-agents.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     niri-flake = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
     nixpkgs-lib.follows = "nixpkgs";
     opnix = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:brizzbuzz/opnix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     stylix = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:danth/stylix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     treefmt-nix = {
-      inputs.nixpkgs.follows = "nixpkgs";
       url = "github:numtide/treefmt-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
-
 }
