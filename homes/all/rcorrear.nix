@@ -46,8 +46,35 @@
 
     fish = {
       enable = lib.mkDefault true;
+      functions = {
+        sponge_filter_jj_revision_commands = ''
+          set -l jj_command $argv[1]
+
+          if not string match -rq '^jj(?:\s|$)' -- $jj_command
+              return 1
+          end
+
+          # Ignore revision-oriented jj commands so failed commit selectors and
+          # one-off history rewrites do not linger in shell history.
+          if string match -rq '^jj\s+(abandon|absorb|backout|diffedit|duplicate|edit|interdiff|metaedit|rebase|restore|revert|show|sign|simplify-parents|split|squash|unsign)(?:\s|$)' -- $jj_command
+              return 0
+          end
+
+          # Match only long-form revision selectors to avoid over-filtering
+          # commands that reuse short flags (for example: `jj git push -b main`).
+          if string match -rq '(^|\s)(--revision|--revisions|--source|--destination|--from|--to|--onto|--insert-after|--insert-before)(?:\s|=)' -- $jj_command
+              return 0
+          end
+
+          return 1
+        '';
+      };
       interactiveShellInit = ''
         any-nix-shell fish --info-right | source
+
+        if not contains sponge_filter_jj_revision_commands $sponge_filters
+            set --append sponge_filters sponge_filter_jj_revision_commands
+        end
 
         # Auto-load completions from devenv profile (for direnv-managed projects).
         # Tracks the path we added so only that path is cleaned up on directory change.
@@ -88,6 +115,10 @@
             rev = "d6950214b6b2392d3dbb2cb670f2a5f240090038";
             sha256 = "sha256-0uEKw+7EXkf5u3p3hfthSfQO/2rr3wl35ela7P2vB0Q=";
           };
+        }
+        {
+          name = "sponge";
+          src = pkgs.fishPlugins.sponge.src;
         }
       ];
     };
