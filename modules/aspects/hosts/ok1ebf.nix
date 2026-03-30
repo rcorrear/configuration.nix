@@ -12,8 +12,8 @@
 
   den.aspects.OK1EBF = {
     includes = [
-      den.aspects.agent-secrets
       den.aspects.cachix
+      den.aspects.hermes-agent
       den.aspects.nix-caches
       den.aspects.nh-cleanup
       den.aspects.stylix

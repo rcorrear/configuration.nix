@@ -25,6 +25,7 @@
           llmPkgs.opencode
           llmPkgs.openspec
 
+          pkgs.bubblewrap
           pkgs.tmux # agent-deck requires tmux
         ];
       };
