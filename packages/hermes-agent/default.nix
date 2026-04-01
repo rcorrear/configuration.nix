@@ -73,9 +73,7 @@ python312Packages.buildPythonApplication rec {
   ];
 
   pythonRemoveDeps = [
-    "exa-py"
     "parallel-web"
-    "fal-client"
   ];
 
   postPatch = ''
