@@ -31,13 +31,12 @@
     kernelModules = [
       "kvm-amd"
       "it87"
+      "ntsync"
       "vfio"
       "vfio_iommu_type1"
       "vfio_pci"
       "vfio_virqfd"
     ];
-
-    # kernelPackages = pkgs.linuxPackages_6_15;
 
     lanzaboote = {
       enable = true;
