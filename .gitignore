@@ -1,6 +1,3 @@
-# Created by https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
-# Edit at https://www.toptal.com/developers/gitignore?templates=direnv,emacs,linux,macos,vim,windows
-
 ### custom ###
 closure-diffs/
 .code/
@@ -18,6 +15,9 @@ result
 
 ### direnv ###
 .direnv
+
+# Created by https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
+# Edit at https://www.toptal.com/developers/gitignore?templates=direnv,emacs,linux,macos,vim,windows
 
 ### Emacs ###
 # -*- mode: gitignore; -*-
