@@ -18,15 +18,15 @@
         services.onepassword-secrets.secrets = {
           matrixBotEnv = {
             reference = "op://Infrastructure/matrix-bot/hermes";
-            owner = "hermes";
-            group = "hermes";
+            owner = config.services.hermes-agent.user;
+            group = config.services.hermes-agent.group;
             mode = "0600";
             services = [ "hermes-agent" ];
           };
           openrouterAgentEnv = {
             reference = "op://Infrastructure/openrouter-agent/hermes";
-            owner = "hermes";
-            group = "hermes";
+            owner = config.services.hermes-agent.user;
+            group = config.services.hermes-agent.group;
             mode = "0400";
             services = [ "hermes-agent" ];
           };
