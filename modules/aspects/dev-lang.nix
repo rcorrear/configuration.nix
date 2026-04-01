@@ -22,7 +22,7 @@ _: {
             pkgs.exercism
             pkgs.jdk25
             pkgs.metals
-            pkgs.nodePackages.bash-language-server
+            pkgs.bash-language-server
             pkgs.nodejs
             pkgs.python3
             pkgs.sqlite
