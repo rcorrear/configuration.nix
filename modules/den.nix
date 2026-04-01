@@ -19,7 +19,19 @@
         lion.users.rcorrear = { };
       };
     };
-    homes.x86_64-linux.rcorrear = { };
-    homes.aarch64-darwin.rcorrear = { };
+    homes.x86_64-linux = {
+      "rcorrear@OK1EBF" = { };
+      "rcorrear@files" = { };
+      "rcorrear@hass" = { };
+      "rcorrear@plex" = { };
+      "rcorrear@prowlarr" = { };
+      "rcorrear@radarr" = { };
+      "rcorrear@sonarr" = { };
+      "rcorrear@tailscale" = { };
+    };
+    homes.aarch64-darwin = {
+      "rcorrear@ferrus" = { };
+      "rcorrear@lion" = { };
+    };
   };
 }
