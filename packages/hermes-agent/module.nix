@@ -15,6 +15,7 @@ let
   };
 
   generatedConfigFile = (pkgs.formats.yaml { }).generate "hermes-config.yaml" cfg.settings;
+  envFile = "${cfg.stateDir}/.hermes/.env";
   envFileContent = lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment);
 in
 {
@@ -69,12 +70,7 @@ in
     };
 
     environmentFiles = mkOption {
-      type = types.listOf (
-        types.oneOf [
-          types.path
-          types.str
-        ]
-      );
+      type = types.listOf types.str;
       default = [ ];
       description = "Secret env files appended to Hermes .env.";
     };
@@ -131,25 +127,12 @@ in
     ];
 
     system.activationScripts.hermes-agent-setup = lib.stringAfter [ "users" ] ''
-            mkdir -p ${cfg.stateDir}/.hermes
-            mkdir -p ${cfg.workingDirectory}
-            chown ${cfg.user}:${cfg.group} ${cfg.stateDir} ${cfg.stateDir}/.hermes ${cfg.workingDirectory}
-            chmod 0750 ${cfg.stateDir} ${cfg.stateDir}/.hermes ${cfg.workingDirectory}
+      mkdir -p ${cfg.stateDir}/.hermes
+      mkdir -p ${cfg.workingDirectory}
+      chown ${cfg.user}:${cfg.group} ${cfg.stateDir} ${cfg.stateDir}/.hermes ${cfg.workingDirectory}
+      chmod 0750 ${cfg.stateDir} ${cfg.stateDir}/.hermes ${cfg.workingDirectory}
 
-            install -o ${cfg.user} -g ${cfg.group} -m 0640 ${generatedConfigFile} ${cfg.stateDir}/.hermes/config.yaml
-
-            ENV_FILE=${cfg.stateDir}/.hermes/.env
-            install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null "$ENV_FILE"
-            cat > "$ENV_FILE" <<'HERMES_ENV_EOF'
-      ${envFileContent}
-      HERMES_ENV_EOF
-
-            ${lib.concatMapStringsSep "\n" (f: ''
-              if [ -f "${f}" ]; then
-                echo "" >> "$ENV_FILE"
-                cat "${f}" >> "$ENV_FILE"
-              fi
-            '') cfg.environmentFiles}
+      install -o ${cfg.user} -g ${cfg.group} -m 0640 ${generatedConfigFile} ${cfg.stateDir}/.hermes/config.yaml
     '';
 
     systemd.services.hermes-agent = {
@@ -170,6 +153,21 @@ in
         pkgs.git
       ]
       ++ cfg.extraPackages;
+      preStart = ''
+                ENV_FILE=${lib.escapeShellArg envFile}
+                umask 0077
+                : > "$ENV_FILE"
+                cat > "$ENV_FILE" <<'HERMES_ENV_EOF'
+        ${envFileContent}
+        HERMES_ENV_EOF
+
+                ${lib.concatMapStringsSep "\n" (f: ''
+                  if [ -f ${lib.escapeShellArg f} ]; then
+                    echo "" >> "$ENV_FILE"
+                    cat ${lib.escapeShellArg f} >> "$ENV_FILE"
+                  fi
+                '') cfg.environmentFiles}
+      '';
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
