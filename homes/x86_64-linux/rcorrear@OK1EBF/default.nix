@@ -51,12 +51,6 @@ in
         p.pipeworld
         p.prio
         p.xarcan
-        p.arcan
-        p.cat9
-        p.durden
-        p.pipeworld
-        p.prio
-        p.xarcan
 
         p.rcorrear.cider-3
         p.rcorrear.codex-acp
@@ -154,7 +148,6 @@ in
         p.xclip
         p.xfsprogs
         p.yubioath-flutter
-        p.zed
         p.zed-editor
         p.zstd
       ];
@@ -165,7 +158,7 @@ in
       ];
 
       sessionVariables = {
-        FLAKE = /etc/nixos;
+        FLAKE = "/etc/nixos";
         SSH_AUTH_SOCK = "${config.home.homeDirectory}/.1password/agent.sock";
       };
 
@@ -310,7 +303,11 @@ in
               repeat = false;
             };
             "Alt+Shift+Grave" = {
-              action = spawn "${pkgs.niriswitcher}/bin/niriswitcherctl show --workspace";
+              action = spawn [
+                "${pkgs.niriswitcher}/bin/niriswitcherctl"
+                "show"
+                "--workspace"
+              ];
               repeat = false;
             };
 
