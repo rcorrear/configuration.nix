@@ -1,11 +1,16 @@
 {
+  inputs,
   pkgs,
   ...
 }:
 let
-  zmxFlake = builtins.getFlake "github:neurosnap/zmx/v0.4.2";
+  zmxFlake = inputs.zmx;
 in
 {
+  flake-file.inputs.zmx = {
+    url = "github:neurosnap/zmx/v0.4.2";
+  };
+
   config = {
     home.packages = [
       zmxFlake.packages.${pkgs.stdenv.hostPlatform.system}.default

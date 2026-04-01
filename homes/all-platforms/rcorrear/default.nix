@@ -7,7 +7,6 @@
 {
   config = {
     fonts.fontconfig.enable = true;
-    gtk.gtk4.theme = config.gtk.theme;
 
     home = {
       packages = with pkgs; [
