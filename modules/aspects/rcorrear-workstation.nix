@@ -78,6 +78,7 @@ _: {
             pkgs.nvd
             pkgs.podman-compose
             pkgs.symbola
+            pkgs.yt-dlp
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
           ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages
