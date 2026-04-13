@@ -19,11 +19,13 @@
 
         fileSystems."/exports/rcorrear" = {
           device = "/srv/files/rcorrear";
+          fsType = "none";
           options = [ "bind" ];
         };
 
         fileSystems."/exports/elizabethfeitof" = {
           device = "/srv/files/elizabethfeitof";
+          fsType = "none";
           options = [ "bind" ];
         };
 

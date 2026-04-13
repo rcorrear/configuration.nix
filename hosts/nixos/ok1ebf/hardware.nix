@@ -115,6 +115,7 @@
 
     "/nix/store" = {
       device = "/nix/store";
+      fsType = "none";
 
       options = [ "bind" ];
     };
