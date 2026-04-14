@@ -21,6 +21,7 @@
           llmPkgs.coderabbit-cli
           llmPkgs.code
           llmPkgs.codex
+          llmPkgs.codex-acp
           llmPkgs.droid
           llmPkgs.opencode
           llmPkgs.openspec

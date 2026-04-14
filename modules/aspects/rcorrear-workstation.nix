@@ -69,6 +69,7 @@ _: {
               dicts.en-computers
             ]))
 
+            pkgs.font-awesome
             pkgs.mtr-gui
             pkgs.nix-output-monitor
             pkgs.nix-prefetch-git
@@ -90,6 +91,27 @@ _: {
         };
 
         programs = {
+          direnv = {
+            enable = true;
+            nix-direnv = {
+              enable = true;
+            };
+          };
+
+          bottom = {
+            enable = true;
+            settings = {
+              flags = {
+                avg_cpu = true;
+                temperature_type = "c";
+              };
+
+              colors = {
+                low_battery_color = "red";
+              };
+            };
+          };
+
           nix-index = {
             enable = true;
             enableFishIntegration = true;
@@ -113,6 +135,8 @@ _: {
               };
             };
           };
+
+          ssh.enable = true;
         };
 
         services = {

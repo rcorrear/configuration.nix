@@ -1,5 +1,4 @@
 ### custom ###
-closure-diffs/
 .code/
 .codex/
 .pre-commit-config.yaml
@@ -163,3 +162,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
+/.agent-shell/

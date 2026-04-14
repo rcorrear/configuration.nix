@@ -1,11 +1,7 @@
 { den, ... }:
 {
   den.aspects.plex = {
-    includes = [
-      den.aspects.lxc-host
-      den.aspects.nh-cleanup
-      den.aspects.tailscale-client
-    ];
+    includes = [ den.aspects.media-lxc ];
 
     nixos =
       { ... }:
@@ -15,12 +11,9 @@
 
         networking = {
           hostName = "plex";
-          interfaces.net30.useDHCP = true;
-          search = [
-            "home.arpa"
-            "media.home.arpa"
-          ];
         };
+
+        system.stateVersion = "22.05";
 
         services = {
           plex = {
@@ -32,8 +25,6 @@
             openFirewall = true;
           };
         };
-
-        system.stateVersion = "22.05";
       };
   };
 }

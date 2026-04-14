@@ -10,6 +10,44 @@
     inputs.nixpkgs.follows = "nixpkgs";
   };
 
+  den.aspects.ok1ebf-pc = {
+    includes = [ ];
+
+    homeManager =
+      { pkgs, ... }:
+      {
+        home.packages = [
+          pkgs.gwe
+          pkgs.nvtopPackages.nvidia
+          pkgs.piper
+        ];
+      };
+  };
+
+  den.aspects."rcorrear@OK1EBF" = {
+    includes = [
+      den.aspects.arcan
+      den.aspects.comms
+      den.aspects.dev-lang
+      den.aspects.dev-tools
+      den.aspects.editors
+      den.aspects.gaming
+      den.aspects.llm-tools
+      den.aspects.multimedia
+      den.aspects.ok1ebf-pc
+      den.aspects.plaintext-finances
+      den.aspects.rcorrear-workstation
+    ];
+
+    homeManager = {
+      imports = [
+        ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
+      ];
+
+      home.stateVersion = "21.05";
+    };
+  };
+
   den.aspects.OK1EBF = {
     includes = [
       den.aspects.cachix
@@ -19,22 +57,7 @@
       den.aspects.stylix
     ];
 
-    _.rcorrear.includes = [
-      den.aspects.comms
-      den.aspects.dev-lang
-      den.aspects.dev-tools
-      den.aspects.editors
-      den.aspects.gaming
-      den.aspects.llm-tools
-      den.aspects.multimedia
-      den.aspects.plaintext-finances
-      den.aspects.rcorrear-workstation
-    ];
-
-    _.rcorrear.homeManager.imports = [
-      ../../../homes/nixos/ok1ebf/rcorrear-niri.nix
-      ../../../homes/nixos/ok1ebf/rcorrear.nix
-    ];
+    _.rcorrear.includes = [ den.aspects."rcorrear@OK1EBF" ];
 
     nixos =
       { pkgs, ... }:

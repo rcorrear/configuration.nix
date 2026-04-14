@@ -4,6 +4,14 @@
   ...
 }:
 {
+  den.aspects.rcorrear-darwin.includes = [
+    den.aspects.dev-lang
+    den.aspects.dev-tools
+    den.aspects.editors
+    den.aspects.llm-tools
+    den.aspects.rcorrear-workstation
+  ];
+
   den.aspects.rcorrear = {
     includes = [ den._.primary-user ];
 
@@ -27,16 +35,20 @@
 
     # Darwin-specific system configuration
     darwin = _: {
+      nix.settings.trusted-users = [ "rcorrear" ];
       users.users.rcorrear.home = "/Users/rcorrear";
     };
 
     homeManager =
-      { pkgs, ... }:
+      {
+        pkgs,
+        ...
+      }:
       {
         home.username = "rcorrear";
         home.homeDirectory = if pkgs.stdenv.isDarwin then "/Users/rcorrear" else "/home/rcorrear";
 
-        imports = [ ../../../homes/all/rcorrear.nix ];
+        imports = [ ../../../homes/all-platforms/rcorrear ];
       };
   };
 }
