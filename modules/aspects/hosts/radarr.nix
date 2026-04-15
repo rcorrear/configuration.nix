@@ -1,11 +1,7 @@
 { den, ... }:
 {
   den.aspects.radarr = {
-    includes = [
-      den.aspects.lxc-host
-      den.aspects.nh-cleanup
-      den.aspects.tailscale-client
-    ];
+    includes = [ den.aspects.media-lxc ];
 
     nixos =
       { ... }:
@@ -15,12 +11,9 @@
 
         networking = {
           hostName = "radarr";
-          interfaces.net30.useDHCP = true;
-          search = [
-            "home.arpa"
-            "media.home.arpa"
-          ];
         };
+
+        system.stateVersion = "22.05";
 
         services = {
           radarr = {
@@ -28,8 +21,6 @@
             openFirewall = true;
           };
         };
-
-        system.stateVersion = "22.05";
       };
   };
 }

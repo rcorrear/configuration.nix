@@ -115,6 +115,7 @@
 
     "/nix/store" = {
       device = "/nix/store";
+      fsType = "none";
 
       options = [ "bind" ];
     };
@@ -139,7 +140,8 @@
 
     nvidia = {
       modesetting.enable = true;
-      open = true;
+      nvidiaSettings = true;
+      open = false;
       powerManagement.enable = true;
     };
 

@@ -75,7 +75,14 @@ _: {
 
         programs.emacs = {
           enable = true;
-          package = wrapEmacsRuntime baseEmacsPackage;
+          package = wrapEmacsRuntime (
+            baseEmacsPackage.overrideAttrs (oldAttrs: {
+              propagatedUserEnvPkgs = (oldAttrs.propagatedUserEnvPkgs or [ ]) ++ [
+                pkgs.nodejs
+                pkgs.uv
+              ];
+            })
+          );
           extraPackages = epkgs: [
             epkgs.emacsql
             epkgs.vterm

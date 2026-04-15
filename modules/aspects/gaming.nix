@@ -16,7 +16,7 @@ _: {
           pkgs.prismlauncher
           pkgs.sunshine
           pkgs.umu-launcher
-          pkgs.wineWowPackages.stagingFull
+          pkgs.wineWow64Packages.waylandFull
           pkgs.winetricks
         ];
       };
