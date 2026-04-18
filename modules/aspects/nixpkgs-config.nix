@@ -9,6 +9,7 @@ let
     rcorrear = {
       cider-3 = final.callPackage ../../packages/cider-3 { };
       exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
+      headroom = final.callPackage ../../packages/headroom { };
       zmx = final.callPackage ../../packages/zmx { };
     };
   };

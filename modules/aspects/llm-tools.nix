@@ -26,6 +26,7 @@
           llmPkgs.opencode
           llmPkgs.openspec
 
+          pkgs.rcorrear.headroom
           pkgs.bubblewrap
           pkgs.tmux # agent-deck requires tmux
         ];
