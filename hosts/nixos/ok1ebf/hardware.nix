@@ -69,6 +69,7 @@
   environment.systemPackages = with pkgs; [
     hddtemp
     lm_sensors
+    nfs-utils
     sbctl
     thin-provisioning-tools
   ];
@@ -88,19 +89,6 @@
       device = "rpool/safe/home";
       fsType = "zfs";
       options = [ "zfsutil" ];
-    };
-
-    "/home/rcorrear/Documents" = {
-      device = "files:/rcorrear/Documents";
-      fsType = "nfs4";
-      options = [
-        "bg"
-        "noauto"
-        "sec=sys"
-        "soft"
-        "x-systemd.automount"
-        "x-systemd.idle-timeout=600"
-      ];
     };
 
     "/home/rcorrear/Games" = {
@@ -131,6 +119,31 @@
         "x-systemd.device-timeout=10s"
       ];
     };
+  };
+
+  systemd = {
+    automounts = [
+      {
+        where = "/home/rcorrear/Documents";
+        wantedBy = [ "multi-user.target" ];
+
+        automountConfig = {
+          TimeoutIdleSec = "10min";
+        };
+      }
+    ];
+
+    mounts = [
+      {
+        what = "pve01.home.arpa:/documents/rcorrear";
+        where = "/home/rcorrear/Documents";
+        type = "nfs";
+
+        mountConfig = {
+          Options = "nfsvers=4.2,sec=sys,resvport,hard,timeo=600,retrans=5,nosuid,nodev,noexec,_netdev";
+        };
+      }
+    ];
   };
 
   hardware = {
