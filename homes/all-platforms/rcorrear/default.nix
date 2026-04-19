@@ -50,23 +50,34 @@
       fish = {
         enable = lib.mkDefault true;
         functions = {
+          sponge_filter_jj_message_commands = ''
+            set -l jj_command $argv[1]
+
+            if string match -rq '^jj\s+(commit|describe|desc|new|squash)(?:\s|$)' -- $jj_command
+                if string match -rq '(^|\s)(-m|--message)(?:\s|=)' -- $jj_command
+                    return 0
+                end
+            end
+
+            return 1
+          '';
           sponge_filter_jj_revision_commands = ''
             set -l jj_command $argv[1]
 
-            if not string match -rq '^jj(?:\s|$)' -- $jj_command
-                return 1
-            end
-
-            # Ignore revision-oriented jj commands so failed commit selectors and
-            # one-off history rewrites do not linger in shell history.
-            if string match -rq '^jj\s+(abandon|absorb|backout|diffedit|duplicate|edit|interdiff|metaedit|rebase|restore|revert|show|sign|simplify-parents|split|squash|unsign)(?:\s|$)' -- $jj_command
-                return 0
-            end
-
-            # Match only long-form revision selectors to avoid over-filtering
-            # commands that reuse short flags (for example: `jj git push -b main`).
-            if string match -rq '(^|\s)(--revision|--revisions|--source|--destination|--from|--to|--onto|--insert-after|--insert-before)(?:\s|=)' -- $jj_command
-                return 0
+            # Ignore revision-oriented jj commands while keeping bare invocations
+            # like `jj new` and `jj describe` in history.
+            if string match -rq '^jj(?:\s|$)' -- $jj_command
+                if string match -rq '^jj\s+(abandon|arrange|backout|diffedit|duplicate|edit|interdiff|metaedit|parallelize|show|sign|simplify-parents|split|squash|unsign)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
+                    or string match -rq '^jj\s+(describe|desc|new)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
+                    or string match -rq '^jj\s+bookmark\s+(new|track)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
+                    # Match only long-form revision selectors to avoid over-filtering commands that reuse short flags (for example: `jj git push -b main`).
+                    or string match -rq '(^|\s)(--revision|--revisions|--source|--destination|--from|--to|--onto|--insert-after|--insert-before)(?:\s|=)' -- $jj_command
+                    # Match short revision selectors, including attached values like `-slqp` and separated forms like `-s   lqp`.
+                    or string match -rq '^jj\s+(abandon|arrange|describe|desc|diff|duplicate|edit|evolog|evolution-log|interdiff|log|metaedit|new|show|sign|simplify-parents|split|squash|unsign)(?:\s+[^\s]+)*\s+-r(?:\s+[^\s]+|[^\s]+)' -- $jj_command
+                    or string match -rq '^jj\s+rebase(?:\s+[^\s]+)*\s+-s(?:\s+[^\s]+|[^\s]+)' -- $jj_command
+                    or string match -rq '^jj\s+(rebase|revert)(?:\s+[^\s]+)*\s+-d(?:\s+[^\s]+|[^\s]+)' -- $jj_command
+                    return 0
+                end
             end
 
             return 1
@@ -74,6 +85,10 @@
         };
         interactiveShellInit = ''
           any-nix-shell fish --info-right | source
+
+          if not contains sponge_filter_jj_message_commands $sponge_filters
+              set --append sponge_filters sponge_filter_jj_message_commands
+          end
 
           if not contains sponge_filter_jj_revision_commands $sponge_filters
               set --append sponge_filters sponge_filter_jj_revision_commands
