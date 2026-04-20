@@ -45,7 +45,17 @@ python312Packages.buildPythonApplication rec {
 
   pythonRelaxDeps = [ "litellm" ];
 
-  pythonImportsCheck = [ "headroom" ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        'headroom = "headroom.cli:main"' \
+        $'headroom = "headroom.cli:main"\nheadroom-memory-mcp = "headroom.memory.mcp_server:main"'
+  '';
+
+  pythonImportsCheck = [
+    "headroom"
+    "headroom.memory.mcp_server"
+  ];
 
   meta = {
     description = "Context optimization layer for LLM applications";
