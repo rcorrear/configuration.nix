@@ -5,41 +5,39 @@ _: {
     homeManager =
       { pkgs, ... }:
       {
-        home = {
-          packages = [
-            pkgs.editorconfig-checker
-            pkgs.gg-jj
-            pkgs.gh
-            pkgs.multimarkdown
-            pkgs.nerd-fonts.blex-mono
-            pkgs.nerd-fonts.caskaydia-cove
-            pkgs.nerd-fonts.iosevka-term-slab
-            pkgs.nil
-            pkgs.nixfmt
-            pkgs.pijul
-            pkgs.pipenv
-            pkgs.pre-commit
-            pkgs.shellcheck
-            pkgs.shfmt
-            pkgs.watchman
-            pkgs.zed
-          ];
-
-          shellAliases = {
-            "jjt-" = "${pkgs.jujutsu}/bin/jj tug-";
-            jjd = "${pkgs.jujutsu}/bin/jj diff";
-            jjgf = "${pkgs.jujutsu}/bin/jj git fetch";
-            jjgp = "${pkgs.jujutsu}/bin/jj git push";
-            jjl = "${pkgs.jujutsu}/bin/jj log";
-            jjs = "${pkgs.jujutsu}/bin/jj squash";
-            jjt = "${pkgs.jujutsu}/bin/jj tug";
-          };
-        };
+        home.packages = [
+          pkgs.editorconfig-checker
+          pkgs.gg-jj
+          pkgs.gh
+          pkgs.multimarkdown
+          pkgs.nerd-fonts.blex-mono
+          pkgs.nerd-fonts.caskaydia-cove
+          pkgs.nerd-fonts.iosevka-term-slab
+          pkgs.nil
+          pkgs.nixfmt
+          pkgs.pijul
+          pkgs.pipenv
+          pkgs.pre-commit
+          pkgs.shellcheck
+          pkgs.shfmt
+          pkgs.watchman
+          pkgs.zed
+        ];
 
         programs = {
           difftastic = {
             enable = true;
             git.enable = true;
+          };
+          fish.shellAbbrs = {
+            jjd = "jj diff";
+            jjgf = "jj git fetch";
+            jjgp = "jj git push";
+            jjl = "jj log";
+            jjrb = "jj rebase";
+            jjsq = "jj squash";
+            jjt = "jj tug";
+            "jjt-" = "jj tug-";
           };
           git.enable = true;
           jujutsu = {
