@@ -1,18 +1,19 @@
 {
+  ast-grep,
   fetchFromGitHub,
   lib,
   python312Packages,
 }:
 python312Packages.buildPythonApplication rec {
   pname = "headroom-ai";
-  version = "unstable-2026-04-17";
+  version = "0.9.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chopratejas";
     repo = "headroom";
-    rev = "1039f66f67945998eac32940afdbeb5c9bd0297d";
-    hash = "sha256-ciPjhveVlBKyWiLwm7SuKRaQ9/ddhcUmj1RTvJR5dj8=";
+    rev = "5738339524fe1455d325adce87b2edbd1fa0ba5a";
+    hash = "sha256-wW8lNaW52br9XMzpNBKwOYfSLVxT5/iozfSiyNM0usk=";
   };
 
   build-system = [ python312Packages.hatchling ];
@@ -41,9 +42,18 @@ python312Packages.buildPythonApplication rec {
     zstandard
   ];
 
-  nativeBuildInputs = [ python312Packages.pythonRelaxDepsHook ];
+  nativeBuildInputs = [
+    python312Packages.pythonRelaxDepsHook
+  ];
 
   pythonRelaxDeps = [ "litellm" ];
+  pythonRemoveDeps = [ "ast-grep-cli" ];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ ast-grep ])
+  ];
 
   postPatch = ''
     substituteInPlace pyproject.toml \

@@ -16,6 +16,9 @@
       }:
       let
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+        headroomMemoryDir = "${config.xdg.stateHome}/headroom";
+        headroomMemoryDbPath = "${headroomMemoryDir}/memory.db";
+        huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
       in
       {
         home.packages = [
@@ -32,9 +35,15 @@
 
           pkgs.rcorrear.rtk
           pkgs.rcorrear.headroom
-          pkgs.bubblewrap
+          pkgs.python3Packages.huggingface-hub
           pkgs.tmux # agent-deck requires tmux
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [
+          pkgs.bubblewrap
         ];
+        home.sessionVariables = {
+          HF_HOME = huggingFaceDir;
+        };
         systemd.user.services = lib.optionalAttrs pkgs.stdenv.isLinux {
           headroom-proxy = {
             Unit = {
@@ -44,9 +53,10 @@
 
             Service = {
               Environment = [
-                "HEADROOM_WORKSPACE_DIR=${config.xdg.stateHome}/headroom"
+                "HF_HOME=${huggingFaceDir}"
               ];
-              ExecStart = "${lib.getExe pkgs.rcorrear.headroom} proxy";
+              ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p ${headroomMemoryDir} ${huggingFaceDir}";
+              ExecStart = "${lib.getExe pkgs.rcorrear.headroom} proxy --memory --memory-db-path ${headroomMemoryDbPath}";
               Restart = "on-failure";
               RestartSec = 5;
             };
