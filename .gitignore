@@ -13,6 +13,7 @@ result
 .devenv
 
 ### direnv ###
+.envrc.local
 .direnv
 
 # Created by https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
