@@ -24,6 +24,9 @@
         home.packages = [
           llmPkgs.agent-deck
           llmPkgs.backlog-md
+          llmPkgs.beads
+          llmPkgs.beads-rust
+          llmPkgs.beads-viewer
           llmPkgs.claude-code
           llmPkgs.coderabbit-cli
           llmPkgs.code
