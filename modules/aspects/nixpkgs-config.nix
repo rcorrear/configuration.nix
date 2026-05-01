@@ -5,7 +5,7 @@
   ...
 }:
 let
-  rcorrearOverlay = final: _prev: {
+  rcorrearOverlay = final: prev: {
     rcorrear = {
       cider-3 = final.callPackage ../../packages/cider-3 { };
       exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
@@ -13,6 +13,12 @@ let
       rtk = final.callPackage ../../packages/rtk { };
       zmx = final.callPackage ../../packages/zmx { };
     };
+
+    # Work around an upstream OpenLDAP 2.6.13 syncrepl test failure that
+    # currently blocks Lutris through its transitive dependency chain.
+    openldap = prev.openldap.overrideAttrs (_: {
+      doCheck = false;
+    });
   };
 
   overlaysFor =
