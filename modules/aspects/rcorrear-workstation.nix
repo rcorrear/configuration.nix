@@ -77,6 +77,7 @@ _: {
             pkgs.nixos-generators
             pkgs.ntfs3g
             pkgs.nvd
+            pkgs.obsidian
             pkgs.podman-compose
             pkgs.symbola
             pkgs.yt-dlp
@@ -139,14 +140,20 @@ _: {
           ssh.enable = true;
         };
 
-        services = {
-          podman = {
-            enable = true;
-            settings = {
-              policy = { };
+        services = lib.mkMerge [
+          {
+            podman = {
+              enable = true;
+              settings = {
+                policy = { };
+              };
             };
-          };
-        };
+          }
+
+          (lib.mkIf pkgs.stdenv.isLinux {
+            dropbox.enable = true;
+          })
+        ];
       };
   };
 }
