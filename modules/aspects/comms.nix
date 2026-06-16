@@ -11,9 +11,9 @@ _: {
           "element-call"
           "element-desktop"
           "fractal"
+          "karere"
           "keybase-gui"
           "slack"
-          "wasistlos"
         ];
       in
       {

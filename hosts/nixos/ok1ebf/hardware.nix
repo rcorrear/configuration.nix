@@ -74,6 +74,8 @@
     thin-provisioning-tools
   ];
 
+  services.lvm.boot.thin.enable = true;
+
   fileSystems = {
     "/" = {
       device = "rpool/safe/root/nixos";
@@ -137,6 +139,15 @@
       {
         what = "pve01.home.arpa:/documents/rcorrear";
         where = "/home/rcorrear/Documents";
+        type = "nfs";
+
+        mountConfig = {
+          Options = "nfsvers=4.2,sec=sys,resvport,hard,timeo=600,retrans=5,nosuid,nodev,noexec,_netdev";
+        };
+      }
+      {
+        what = "pve01.home.arpa:/media";
+        where = "/home/rcorrear/Media";
         type = "nfs";
 
         mountConfig = {

@@ -10,9 +10,11 @@ _: {
           pkgs.rcorrear.exiled-exchange2
 
           pkgs.atlauncher
+          pkgs.gamescope
           pkgs.lutris
           pkgs.mangohud
           pkgs.moonlight-qt
+          pkgs.nero-umu
           pkgs.prismlauncher
           pkgs.sunshine
           pkgs.umu-launcher
