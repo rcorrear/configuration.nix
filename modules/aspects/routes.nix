@@ -2,7 +2,6 @@
 {
   den.aspects.routes =
     let
-      inherit (den.lib) parametric;
       aspectRef =
         entity:
         let
@@ -35,11 +34,11 @@
           host,
           user,
           ...
-        }@ctx:
+        }:
         # Keep host<->user routes available in HM internal contexts too.
         # Requiring an `OS` arg here breaks HM propagation because those contexts
         # don't provide it.
-        parametric.fixedTo ctx {
+        {
           includes = [
             (mutual user host)
             (mutual host user)
