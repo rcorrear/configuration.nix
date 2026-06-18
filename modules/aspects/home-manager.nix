@@ -7,5 +7,5 @@
 
   # Keep an explicit HM aspect and attach it to HM-capable hosts via the new context.
   den.aspects.home-manager = { };
-  den.ctx.hm-host.includes = [ den.aspects.home-manager ];
+  den.schema.hm-host.includes = [ den.aspects.home-manager ];
 }

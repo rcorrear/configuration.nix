@@ -19,7 +19,6 @@
       };
     };
     homes.x86_64-linux = {
-      "rcorrear@OK1EBF" = { };
       "rcorrear@hass" = { };
       "rcorrear@plex" = { };
       "rcorrear@prowlarr" = { };
