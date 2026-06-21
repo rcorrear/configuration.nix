@@ -7,6 +7,7 @@
       { config, ... }:
       let
         cfg = config.aspects.tailscale;
+        tailscale = config.services.tailscale;
       in
       {
         options.aspects.tailscale = {
@@ -18,15 +19,36 @@
           };
         };
 
-        config.services.tailscale = {
-          enable = true;
-          extraUpFlags = [
-            "--accept-routes"
-            "--exit-node-allow-lan-access"
-            "--exit-node=${cfg.exitNode}"
-          ];
-          openFirewall = true;
-          useRoutingFeatures = "client";
+        config = {
+          boot.initrd.systemd.network.wait-online.enable = false;
+
+          networking = {
+            firewall = {
+              enable = true;
+              allowedUDPPorts = [ tailscale.port ];
+              trustedInterfaces = [ tailscale.interfaceName ];
+            };
+            nftables.enable = true;
+            search = [
+              "pig-duckbill.ts.net"
+            ];
+          };
+
+          services.tailscale = {
+            enable = true;
+            extraUpFlags = [
+              "--accept-routes"
+              "--exit-node-allow-lan-access"
+              "--exit-node=${cfg.exitNode}"
+            ];
+            openFirewall = true;
+            useRoutingFeatures = "client";
+          };
+
+          systemd = {
+            network.wait-online.enable = false;
+            services.tailscaled.serviceConfig.Environment = [ "TS_DEBUG_FIREWALL_MODE=nftables" ];
+          };
         };
       };
   };
