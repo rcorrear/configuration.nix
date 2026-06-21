@@ -13,7 +13,6 @@
         networking = {
           interfaces.net30.useDHCP = true;
           search = [
-            "home.arpa"
             "media.home.arpa"
           ];
         };

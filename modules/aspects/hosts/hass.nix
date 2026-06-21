@@ -10,15 +10,6 @@
     nixos =
       { pkgs, ... }:
       {
-        imports = [
-        ];
-
-        boot.kernel.sysctl = {
-          "net.ipv6.conf.all.forwarding" = false;
-          "net.ipv6.conf.net0.accept_ra" = true;
-          "net.ipv6.conf.net0.accept_ra_rt_info_max_plen" = 64;
-        };
-
         environment.systemPackages = with pkgs; [ home-assistant-cli ];
 
         networking = {
@@ -33,8 +24,7 @@
             ];
           };
           interfaces = {
-            net0.useDHCP = true;
-            net3.useDHCP = true;
+            net1.useDHCP = true;
           };
         };
 
@@ -49,6 +39,15 @@
                 temperature_unit = "C";
                 time_zone = "America/New_York";
                 unit_system = "metric";
+              };
+              http = {
+                use_x_forwarded_for = true;
+                trusted_proxies = [
+                  "127.0.0.1"
+                  "::1"
+                  "100.64.0.0/10" # Tailscale CGNAT IPv4 Range
+                  "fd7a:115c:a1e0::/48" # Tailscale IPv6 Range
+                ];
               };
             };
             enable = true;
