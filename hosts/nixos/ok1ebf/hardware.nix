@@ -195,5 +195,10 @@
   #   pciIDs = "10de:2206,10de:1aef";
   # };
 
-  swapDevices = [ ];
+  swapDevices = [
+    {
+      label = "ok1ebf-swap";
+      priority = 10;
+    }
+  ];
 }
