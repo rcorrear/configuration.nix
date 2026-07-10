@@ -1,7 +1,7 @@
-{ ... }:
+{ den, ... }:
 {
   den.aspects.hermes-agent = {
-    includes = [ ];
+    includes = [ den.aspects.opnix ];
 
     nixos =
       {
@@ -15,20 +15,28 @@
       {
         imports = [ ../../../packages/hermes-agent/module.nix ];
 
-        services.onepassword-secrets.secrets = {
-          matrixBotEnv = {
-            reference = "op://Infrastructure/matrix-bot/hermes";
-            owner = config.services.hermes-agent.user;
-            group = config.services.hermes-agent.group;
-            mode = "0600";
-            services = [ "hermes-agent" ];
-          };
-          openrouterAgentEnv = {
-            reference = "op://Infrastructure/openrouter-agent/hermes";
-            owner = config.services.hermes-agent.user;
-            group = config.services.hermes-agent.group;
-            mode = "0400";
-            services = [ "hermes-agent" ];
+        nixpkgs.config.permittedInsecurePackages = [
+          # libolm is used by the Hermes Matrix client.
+          "olm-3.2.16"
+        ];
+
+        services.onepassword-secrets = {
+          enable = true;
+          secrets = {
+            matrixBotEnv = {
+              reference = "op://Infrastructure/matrix-bot/hermes";
+              owner = config.services.hermes-agent.user;
+              group = config.services.hermes-agent.group;
+              mode = "0600";
+              services = [ "hermes-agent" ];
+            };
+            openrouterAgentEnv = {
+              reference = "op://Infrastructure/openrouter-agent/hermes";
+              owner = config.services.hermes-agent.user;
+              group = config.services.hermes-agent.group;
+              mode = "0400";
+              services = [ "hermes-agent" ];
+            };
           };
         };
 
