@@ -54,6 +54,7 @@
       den.aspects.hermes-agent
       den.aspects.nix-caches
       den.aspects.nh-cleanup
+      den.aspects.opnix
       den.aspects.stylix
     ];
 
@@ -72,7 +73,6 @@
           ../../../hosts/nixos/ok1ebf/hardware.nix
           inputs.lanzaboote.nixosModules.lanzaboote
           inputs.niri-flake.nixosModules.niri
-          inputs.opnix.nixosModules.default
         ];
 
         environment = {
@@ -86,7 +86,6 @@
           ];
           systemPackages = [
             pkgs.neovim
-            pkgs.opnix
           ];
         };
 
@@ -196,11 +195,6 @@
           openssh = {
             enable = true;
             openFirewall = true;
-          };
-
-          onepassword-secrets = {
-            enable = true;
-            tokenFile = "/etc/opnix-token";
           };
 
           pcscd.enable = true;

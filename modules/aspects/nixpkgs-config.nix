@@ -23,10 +23,7 @@ let
 
   overlaysFor =
     system:
-    [
-      rcorrearOverlay
-      inputs.opnix.overlays.default
-    ]
+    [ rcorrearOverlay ]
     ++ lib.optionals (lib.hasInfix "linux" system) [
       inputs.niri-flake.overlays.niri
     ];
@@ -40,10 +37,6 @@ let
 in
 {
   flake-file.inputs = {
-    opnix = {
-      url = "github:brizzbuzz/opnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     niri-flake = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
