@@ -4,6 +4,10 @@
     url = "github:numtide/llm-agents.nix";
     inputs.nixpkgs.follows = "nixpkgs";
   };
+  flake-file.inputs.herdr = {
+    url = "github:ogulcancelik/herdr";
+    inputs.nixpkgs.follows = "nixpkgs";
+  };
 
   den.aspects.llm-tools = {
     includes = [ ];
@@ -15,12 +19,15 @@
         ...
       }:
       let
+        herdrPkgs = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system};
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
         headroomMemoryDir = "${config.xdg.stateHome}/headroom";
         headroomMemoryDbPath = "${headroomMemoryDir}/memory.db";
         huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
       in
       {
+        imports = [ ../../homes/modules/herdr.nix ];
+
         home.packages = [
           llmPkgs.agent-deck
           llmPkgs.backlog-md
@@ -44,6 +51,14 @@
         ++ lib.optionals pkgs.stdenv.isLinux [
           pkgs.bubblewrap
         ];
+        programs.herdr = {
+          enable = true;
+          package = herdrPkgs.default;
+          plugins = with pkgs.rcorrear.herdrPlugins; [
+            jj-workspace
+            worktree-setup
+          ];
+        };
         home.sessionVariables = {
           HF_HOME = huggingFaceDir;
         };
