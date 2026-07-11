@@ -9,6 +9,7 @@ _: {
           pkgs.editorconfig-checker
           pkgs.gg-jj
           pkgs.gh
+          pkgs.rcorrear.jj-waltz
           pkgs.multimarkdown
           pkgs.nerd-fonts.blex-mono
           pkgs.nerd-fonts.caskaydia-cove

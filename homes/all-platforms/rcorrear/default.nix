@@ -91,6 +91,16 @@
 
             return 1
           '';
+          sponge_filter_jw_workspace_commands = ''
+            set -l jw_command $argv[1]
+
+            # Ignore jw commands that name throwaway workspaces.
+            if string match -rq '^jw\s+(add|switch|path|remove)(?:\s+[^\s]+)*\s+[^-\s][^\s]*(?:\s|$)' -- $jw_command
+                return 0
+            end
+
+            return 1
+          '';
         };
         interactiveShellInit = ''
           any-nix-shell fish --info-right | source
@@ -101,6 +111,10 @@
 
           if not contains sponge_filter_jj_revision_commands $sponge_filters
               set --append sponge_filters sponge_filter_jj_revision_commands
+          end
+
+          if not contains sponge_filter_jw_workspace_commands $sponge_filters
+              set --append sponge_filters sponge_filter_jw_workspace_commands
           end
 
           # Auto-load completions from devenv profile (for direnv-managed projects).
