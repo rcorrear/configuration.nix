@@ -36,6 +36,7 @@ python3Packages.buildPythonApplication rec {
       tree-sitter-c
       tree-sitter-c-sharp
       tree-sitter-cpp
+      tree-sitter-clojure
       tree-sitter-elixir
       tree-sitter-fortran
       tree-sitter-go
@@ -67,6 +68,46 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "graphify" ];
+
+  postPatch = ''
+        cp ${./clojure.py} graphify/extractors/clojure.py
+        cp ${./clojure_resolution.py} graphify/clojure_resolution.py
+
+        substituteInPlace graphify/extract.py \
+          --replace-fail \
+            'from graphify.extractors.csharp import (' \
+            'from graphify.extractors.clojure import extract_clojure  # noqa: F401
+    from graphify.extractors.csharp import (' \
+          --replace-fail \
+            'from .ruby_resolution import resolve_ruby_member_calls' \
+            'from .ruby_resolution import resolve_ruby_member_calls
+    from .clojure_resolution import resolve_clojure_calls' \
+          --replace-fail \
+            '".java": "jvm", ".kt": "jvm", ".kts": "jvm",' \
+            '".java": "jvm", ".kt": "jvm", ".kts": "jvm",
+        ".clj": "clojure", ".cljs": "clojure", ".cljc": "clojure",' \
+          --replace-fail \
+            '".go": extract_go,' \
+            '".go": extract_go,
+        ".clj": extract_clojure,
+        ".cljs": extract_clojure,
+        ".cljc": extract_clojure,' \
+          --replace-fail \
+            'register_language_resolver(
+        LanguageResolver("java_member_calls", frozenset({".java"}), _resolve_java_member_calls)
+    )' \
+            'register_language_resolver(
+        LanguageResolver("java_member_calls", frozenset({".java"}), _resolve_java_member_calls)
+    )
+    register_language_resolver(
+        LanguageResolver("clojure_calls", frozenset({".clj", ".cljs", ".cljc"}), resolve_clojure_calls)
+    )'
+
+        substituteInPlace graphify/detect.py \
+          --replace-fail \
+            "CODE_EXTENSIONS = {'.py'," \
+            "CODE_EXTENSIONS = {'.clj', '.cljs', '.cljc', '.py',"
+  '';
 
   meta = {
     description = "AI coding assistant skill that turns folders into queryable knowledge graphs";
