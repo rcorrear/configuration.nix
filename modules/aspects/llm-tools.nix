@@ -43,6 +43,7 @@
 
           pkgs.rcorrear.rtk
           pkgs.rcorrear.headroom
+          pkgs.rcorrear.graphify
           pkgs.python3Packages.huggingface-hub
           pkgs.tmux # agent-deck requires tmux
         ]

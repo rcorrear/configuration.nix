@@ -85,6 +85,7 @@ let
       rcorrear = {
         cider-3 = final.callPackage ../../packages/cider-3 { };
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
+        graphify = final.callPackage ../../packages/graphify { };
         headroom = final.callPackage ../../packages/headroom { };
         inherit herdrPlugins;
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
