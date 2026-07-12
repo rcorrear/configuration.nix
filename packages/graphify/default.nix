@@ -47,6 +47,7 @@ python3Packages.buildPythonApplication rec {
       tree-sitter-julia
       tree-sitter-kotlin
       tree-sitter-lua
+      tree-sitter-nix
       tree-sitter-objc
       tree-sitter-php
       tree-sitter-powershell
@@ -72,11 +73,13 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
         cp ${./clojure.py} graphify/extractors/clojure.py
         cp ${./clojure_resolution.py} graphify/clojure_resolution.py
+        cp ${./nix.py} graphify/extractors/nix.py
 
         substituteInPlace graphify/extract.py \
           --replace-fail \
             'from graphify.extractors.csharp import (' \
             'from graphify.extractors.clojure import extract_clojure  # noqa: F401
+    from graphify.extractors.nix import extract_nix  # noqa: F401
     from graphify.extractors.csharp import (' \
           --replace-fail \
             'from .ruby_resolution import resolve_ruby_member_calls' \
@@ -91,7 +94,12 @@ python3Packages.buildPythonApplication rec {
             '".go": extract_go,
         ".clj": extract_clojure,
         ".cljs": extract_clojure,
-        ".cljc": extract_clojure,' \
+        ".cljc": extract_clojure,
+        ".nix": extract_nix,' \
+          --replace-fail \
+            '".go": "go",' \
+            '".go": "go",
+        ".nix": "nix",' \
           --replace-fail \
             'register_language_resolver(
         LanguageResolver("java_member_calls", frozenset({".java"}), _resolve_java_member_calls)
@@ -106,7 +114,7 @@ python3Packages.buildPythonApplication rec {
         substituteInPlace graphify/detect.py \
           --replace-fail \
             "CODE_EXTENSIONS = {'.py'," \
-            "CODE_EXTENSIONS = {'.clj', '.cljs', '.cljc', '.py',"
+            "CODE_EXTENSIONS = {'.clj', '.cljs', '.cljc', '.nix', '.py',"
   '';
 
   meta = {
