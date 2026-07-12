@@ -21,8 +21,6 @@
       let
         herdrPkgs = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system};
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
-        headroomMemoryDir = "${config.xdg.stateHome}/headroom";
-        headroomMemoryDbPath = "${headroomMemoryDir}/memory.db";
         huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
       in
       {
@@ -71,10 +69,9 @@
 
             Service = {
               Environment = [
-                "HF_HOME=${huggingFaceDir}"
+                "HEADROOM_WORKSPACE_DIR=${config.xdg.stateHome}/headroom"
               ];
-              ExecStartPre = "${lib.getExe' pkgs.coreutils "mkdir"} -p ${headroomMemoryDir} ${huggingFaceDir}";
-              ExecStart = "${lib.getExe pkgs.rcorrear.headroom} proxy --memory --memory-db-path ${headroomMemoryDbPath}";
+              ExecStart = "${lib.getExe pkgs.rcorrear.headroom} proxy --port 8787";
               Restart = "on-failure";
               RestartSec = 5;
             };

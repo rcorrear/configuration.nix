@@ -164,3 +164,4 @@ $RECYCLE.BIN/
 
 # End of https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
 /.agent-shell/
+.tokensave

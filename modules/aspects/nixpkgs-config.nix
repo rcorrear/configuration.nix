@@ -87,6 +87,7 @@ let
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
         headroom = final.callPackage ../../packages/headroom { };
         inherit herdrPlugins;
+        jj-waltz = final.callPackage ../../packages/jj-waltz { };
         rtk = final.callPackage ../../packages/rtk { };
         zmx = final.callPackage ../../packages/zmx { };
       };
