@@ -218,12 +218,15 @@ def _ns_require_specs(ns_node, source: bytes) -> list[dict[str, Any]]:
     return specs
 
 
-def _iter_lists(node):
+def _iter_lists(node, source: bytes):
     if node.type == "list_lit":
         yield node
+        head = _form_head(node, source)
+        if head == "quote":
+            return
     for child in node.children:
         if child.is_named:
-            yield from _iter_lists(child)
+            yield from _iter_lists(child, source)
 
 
 def _raw_call(
@@ -368,7 +371,7 @@ def extract_clojure(path: Path) -> dict:
 
     seen_calls: set[tuple[str, str, int]] = set()
     for caller_nid, body in definition_bodies:
-        for form in _iter_lists(body):
+        for form in _iter_lists(body, source):
             if form is body:
                 continue
             callee = _form_head(form, source)
@@ -382,7 +385,7 @@ def extract_clojure(path: Path) -> dict:
 
             if "/" in callee:
                 receiver, call_name = callee.rsplit("/", 1)
-                target_namespace = aliases.get(receiver, receiver if "." in receiver else None)
+                target_namespace = aliases.get(receiver, receiver)
                 import_kind = "alias" if receiver in aliases else "qualified"
             elif callee in refers:
                 target_namespace = refers[callee]
@@ -392,7 +395,7 @@ def extract_clojure(path: Path) -> dict:
                 import_kind = "refer-all"
 
             target_nid = definitions.get(call_name) if target_namespace in (None, namespace) else None
-            if target_nid and target_nid != caller_nid:
+            if target_nid:
                 key = (caller_nid, target_nid, line)
                 if key not in seen_calls:
                     seen_calls.add(key)

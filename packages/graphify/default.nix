@@ -68,7 +68,12 @@ python3Packages.buildPythonApplication rec {
     "tree-sitter-kotlin"
   ];
 
-  pythonImportsCheck = [ "graphify" ];
+  pythonImportsCheck = [
+    "graphify"
+    "graphify.extractors.clojure"
+    "graphify.clojure_resolution"
+    "graphify.extractors.nix"
+  ];
 
   postPatch = ''
         cp ${./clojure.py} graphify/extractors/clojure.py

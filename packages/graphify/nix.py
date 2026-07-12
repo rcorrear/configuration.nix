@@ -180,7 +180,6 @@ def extract_nix(path: Path) -> dict:
         label = f"{attrpath}()" if node_type == "function" else attrpath
         _add_unique_node(nodes, seen_nodes, _node(nid, label, node_type, _line(item), str_path))
         _add_unique_edge(edges, seen_edges, _edge(file_nid, nid, "contains", _line(item), str_path))
-        bindings[attrpath.rsplit(".", 1)[-1]] = nid
         bindings[attrpath] = nid
         if node_type == "function":
             function_bodies.append((nid, expression))
@@ -213,7 +212,7 @@ def extract_nix(path: Path) -> dict:
                 continue
             callee = _read_text(function, source).strip()
             target = bindings.get(callee)
-            if not target or target == caller_nid:
+            if not target:
                 continue
             _add_unique_edge(edges, seen_edges, _edge(caller_nid, target, "calls", _line(item), str_path, "call"))
 

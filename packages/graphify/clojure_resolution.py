@@ -9,8 +9,8 @@ _CLJ_SUFFIXES = (".clj", ".cljs", ".cljc")
 
 def _symbol_key(label: object) -> str:
     text = str(label or "").strip()
-    text = text.strip("()").lstrip(".")
-    return re.sub(r"\s+", "", text).lower()
+    text = text.strip("()")
+    return re.sub(r"\s+", "", text)
 
 
 def _clojure_raw_calls(per_file: list[dict]) -> list[dict]:
