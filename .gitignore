@@ -2,6 +2,7 @@
 .code/
 .codex/
 .pre-commit-config.yaml
+graphify-out/
 
 ### aider ###
 .aider*
