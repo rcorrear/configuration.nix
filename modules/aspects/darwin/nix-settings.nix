@@ -7,7 +7,12 @@ _: {
       {
         ids.gids.nixbld = 350;
         nix = {
-          enable = true;
+          # `mkDefault` so hosts using Determinate Nix (which manages its
+          # own daemon and requires `nix.enable = false;` or
+          # `determinateNix.enable = true;`, see
+          # modules/aspects/hosts/ferrus.nix) can override this without a
+          # definition conflict.
+          enable = lib.mkDefault true;
           channel.enable = false;
           settings = {
             experimental-features = lib.mkDefault [

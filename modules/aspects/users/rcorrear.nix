@@ -43,11 +43,6 @@
         };
       };
 
-    # Darwin-specific system configuration
-    darwin = _: {
-      nix.settings.trusted-users = [ "rcorrear" ];
-    };
-
     homeManager = {
       imports = [ ../../../homes/all-platforms/rcorrear ];
     };
