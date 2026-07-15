@@ -3,7 +3,6 @@
   den.aspects.hass = {
     includes = [
       den.aspects.lxc-host
-      den.aspects.nh-cleanup
       den.aspects.tailscale-client
     ];
 

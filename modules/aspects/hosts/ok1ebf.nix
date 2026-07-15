@@ -53,7 +53,6 @@
       den.aspects.cachix
       den.aspects.hermes-agent
       den.aspects.nix-caches
-      den.aspects.nh-cleanup
       den.aspects.opnix
       den.aspects.stylix
     ];

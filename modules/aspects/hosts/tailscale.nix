@@ -7,7 +7,6 @@
   den.aspects.tailscale = {
     includes = [
       den.aspects.lxc-host
-      den.aspects.nh-cleanup
     ];
 
     nixos =
