@@ -1,7 +1,17 @@
 _: {
   den.aspects.timezone = {
     includes = [ ];
-    darwin.time.timeZone = "America/New_York";
-    nixos.time.timeZone = "America/New_York";
+    # Defaults to the flake author's timezone; override per-host, e.g. in
+    # your host's aspect file: `darwin.time.timeZone = lib.mkForce "...";`.
+    darwin =
+      { lib, ... }:
+      {
+        time.timeZone = lib.mkDefault "America/New_York";
+      };
+    nixos =
+      { lib, ... }:
+      {
+        time.timeZone = lib.mkDefault "America/New_York";
+      };
   };
 }
