@@ -5,6 +5,11 @@
   ...
 }:
 {
+  imports = [
+    ./ghostty.nix
+    ./starship.nix
+  ];
+
   config = {
     fonts.fontconfig.enable = true;
 
