@@ -54,6 +54,24 @@
 
       fish = {
         enable = lib.mkDefault true;
+        completions = {
+          # opencode's own `opencode completion <shell>` command ignores the
+          # shell argument entirely and always emits a bash-specific yargs
+          # completion script (verified: `opencode completion fish` and
+          # `opencode completion bash` produce byte-identical output), so it
+          # cannot be sourced directly by fish. Instead, drive fish's native
+          # completion system with the same `--get-yargs-completions` hook
+          # that the bash script itself calls under the hood.
+          opencode.body = ''
+            function __opencode_yargs_complete
+                set -l tokens (commandline -opc)
+                set -l cur (commandline -ct)
+                opencode --get-yargs-completions $tokens $cur
+            end
+
+            complete -c opencode -f -a "(__opencode_yargs_complete)"
+          '';
+        };
         functions = {
           # Keep sponge history focused on commands worth re-running. These
           # filters drop jj invocations whose effect is already consumed, so
@@ -78,7 +96,9 @@
                 if string match -rq '^jj\s+(abandon|arrange|backout|diffedit|duplicate|edit|interdiff|metaedit|parallelize|show|sign|simplify-parents|split|squash|unsign)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
                     or string match -rq '^jj\s+(describe|desc|new)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
                     or string match -rq '^jj\s+bookmark\s+(create|delete|forget|move|rename|set|track|untrack)\s+[^-\s][^\s]*(?:\s|$)' -- $jj_command
-                    # Match only long-form revision selectors to avoid over-filtering commands that reuse short flags (for example: `jj git push -b main`).
+                    # Drop one-off bookmark pushes (for example: `jj git push --bookmark multiple-github-runners`).
+                    or string match -rq '^jj\s+git\s+push(?:\s+[^\s]+)*\s+(?:--bookmark|-b)(?:\s+|=)[^\s]+' -- $jj_command
+                    # Match only long-form revision selectors here; short flags are matched per-command below to avoid over-filtering.
                     or string match -rq '(^|\s)(--revision|--revisions|--source|--destination|--from|--to|--onto|--into|--insert-after|--insert-before)(?:\s|=)' -- $jj_command
                     # Match short revision selectors, including attached values like `-slqp` and separated forms like `-s   lqp`.
                     or string match -rq '^jj\s+(abandon|arrange|describe|desc|duplicate|edit|evolog|evolution-log|interdiff|log|metaedit|show|sign|simplify-parents|unsign)(?:\s+[^\s]+)*\s+-r(?:\s+[^\s]+|[^\s]+)' -- $jj_command
