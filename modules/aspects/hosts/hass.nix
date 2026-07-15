@@ -13,7 +13,6 @@
         environment.systemPackages = with pkgs; [ home-assistant-cli ];
 
         networking = {
-          hostName = "hass";
           firewall = {
             allowedTCPPorts = [
               21063 # HASS HomeKit

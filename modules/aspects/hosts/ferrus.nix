@@ -8,10 +8,10 @@
     _.rcorrear.homeManager.imports = [ ../../../homes/darwin/ferrus/rcorrear.nix ];
 
     darwin = _: {
-      networking = {
-        hostName = "ferrus";
-        localHostName = "ferrus";
-      };
+      # `networking.hostName` comes from `den.batteries.hostname` (see
+      # modules/aspects/defaults.nix); the battery doesn't cover the
+      # Bonjour/local name, so it is still set manually here.
+      networking.localHostName = "ferrus";
     };
   };
 }

@@ -49,7 +49,6 @@
         };
 
         networking = {
-          hostName = "tailscale";
           interfaces = dhcpInterfaces;
         };
 

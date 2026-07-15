@@ -99,7 +99,6 @@
           };
 
           hostId = "bbbd8ab0";
-          hostName = "OK1EBF";
 
           firewall = {
             allowedTCPPorts = [

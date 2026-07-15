@@ -6,5 +6,6 @@
     den.aspects.nixos-base
     den.aspects.nixpkgs-config
     den.aspects.timezone
+    den.batteries.hostname
   ];
 }
