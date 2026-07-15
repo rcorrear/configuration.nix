@@ -17,6 +17,14 @@
       # boilerplate that used to live in the class configs below.
       den.batteries.define-user
       (den.batteries.user-shell "fish")
+      # Home-manager theming for every `homeManager`-class target of this
+      # user: the embedded instances on each host *and* the standalone
+      # `homeConfigurations."rcorrear@<host>"` entities (host-level aspect
+      # includes don't reach either — see modules/aspects/stylix.nix). Only
+      # the `provides.home` sub-aspect is included, so the stylix OS
+      # classes don't get dragged onto every (headless) host this user is
+      # declared on.
+      den.aspects.stylix._.home
     ];
 
     # NixOS-specific system configuration
