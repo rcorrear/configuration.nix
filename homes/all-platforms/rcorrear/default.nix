@@ -14,16 +14,16 @@
     fonts.fontconfig.enable = true;
 
     home = {
-      packages = with pkgs; [
-        any-nix-shell
-        coreutils
-        fd
-        file
-        htop
-        jq
-        neovim
-        ripgrep
-        tree
+      packages = [
+        pkgs.any-nix-shell
+        pkgs.coreutils
+        pkgs.fd
+        pkgs.file
+        pkgs.htop
+        pkgs.jq
+        pkgs.neovim
+        pkgs.ripgrep
+        pkgs.tree
       ];
 
       sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
@@ -36,18 +36,6 @@
     };
 
     programs = {
-      bat = {
-        enable = true;
-        extraPackages = with pkgs.bat-extras; [
-          batdiff
-          batgrep
-          batman
-          batpipe
-          batwatch
-          prettybat
-        ];
-      };
-
       dircolors = {
         enable = lib.mkDefault true;
       };
