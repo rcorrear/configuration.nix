@@ -13,7 +13,7 @@
       { pkgs, ... }:
       let
         interfaces = [
-          "net0"
+          "net1"
           "net3"
           "net30"
         ];
