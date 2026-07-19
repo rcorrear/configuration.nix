@@ -20,7 +20,7 @@ jobs:
       # yamllint disable-line rule:line-length
       - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25
       # yamllint disable-line rule:line-length
-      - uses: DeterminateSystems/magic-nix-cache-action@76aaf8814cdb385b86597c32b8c51b66b69b0839
+      - uses: DeterminateSystems/magic-nix-cache-action@55718cd9ebf1737a061487d5ada21abf31e99a98
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
       - run: nix flake metadata
       - run: |
