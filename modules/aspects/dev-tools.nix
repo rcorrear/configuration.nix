@@ -7,6 +7,7 @@ _: {
       {
         home.packages = [
           pkgs.devcontainer
+          pkgs.devenv
           pkgs.editorconfig-checker
           pkgs.gg-jj
           pkgs.gh
@@ -17,9 +18,9 @@ _: {
           pkgs.nerd-fonts.iosevka-term-slab
           pkgs.nixd
           pkgs.nixfmt
-          pkgs.pijul
           pkgs.pipenv
           pkgs.pre-commit
+          pkgs.secretspec
           pkgs.shellcheck
           pkgs.shfmt
           pkgs.watchman
@@ -32,6 +33,9 @@ _: {
             git.enable = true;
           };
           fish = {
+            interactiveShellInit = ''
+              ${pkgs.devenv}/bin/devenv hook fish | source
+            '';
             shellAbbrs = {
               jjd = "jj diff";
               jjdd = "jj edit";
