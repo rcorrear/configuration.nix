@@ -9,10 +9,6 @@
         imports = [
         ];
 
-        networking = {
-          hostName = "prowlarr";
-        };
-
         system.stateVersion = "22.05";
 
         services = {

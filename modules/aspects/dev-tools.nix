@@ -14,7 +14,7 @@ _: {
           pkgs.nerd-fonts.blex-mono
           pkgs.nerd-fonts.caskaydia-cove
           pkgs.nerd-fonts.iosevka-term-slab
-          pkgs.nil
+          pkgs.nixd
           pkgs.nixfmt
           pkgs.pijul
           pkgs.pipenv

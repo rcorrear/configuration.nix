@@ -4,6 +4,12 @@
   lib,
   ...
 }:
+let
+  wallpaper = builtins.path {
+    name = "wallhaven-yqxzqx.jpg";
+    path = ../../../assets/wallhaven-yqxzqx.jpg;
+  };
+in
 {
   flake-file.inputs.lanzaboote = {
     url = "github:nix-community/lanzaboote";
@@ -45,6 +51,16 @@
       ];
 
       home.stateVersion = "21.05";
+
+      # Keep the home-manager stylix instance (imported via
+      # `den.aspects.stylix._.home`, see modules/aspects/stylix.nix) on the
+      # same theme as the OS-level one below: with
+      # `stylix.homeManagerIntegration.autoImport = false;`, host theme
+      # overrides no longer propagate into home-manager automatically.
+      aspects.stylix = {
+        theme = "catppuccin-mocha";
+        image = wallpaper;
+      };
     };
   };
 
@@ -53,7 +69,6 @@
       den.aspects.cachix
       den.aspects.hermes-agent
       den.aspects.nix-caches
-      den.aspects.nh-cleanup
       den.aspects.opnix
       den.aspects.stylix
     ];
@@ -62,12 +77,6 @@
 
     nixos =
       { pkgs, ... }:
-      let
-        wallpaper = builtins.path {
-          name = "wallhaven-yqxzqx.jpg";
-          path = ../../../assets/wallhaven-yqxzqx.jpg;
-        };
-      in
       {
         imports = [
           ../../../hosts/nixos/ok1ebf/hardware.nix
@@ -97,9 +106,7 @@
               interfaces = [ "enp6s0" ];
             };
           };
-
           hostId = "bbbd8ab0";
-          hostName = "OK1EBF";
 
           firewall = {
             allowedTCPPorts = [

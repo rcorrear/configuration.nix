@@ -3,7 +3,6 @@
   den.aspects.hass = {
     includes = [
       den.aspects.lxc-host
-      den.aspects.nh-cleanup
       den.aspects.tailscale-client
     ];
 
@@ -13,7 +12,6 @@
         environment.systemPackages = with pkgs; [ home-assistant-cli ];
 
         networking = {
-          hostName = "hass";
           firewall = {
             allowedTCPPorts = [
               21063 # HASS HomeKit

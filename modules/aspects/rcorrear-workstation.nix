@@ -4,7 +4,6 @@ _: {
 
     homeManager =
       {
-        config,
         lib,
         pkgs,
         ...
@@ -86,9 +85,10 @@ _: {
           ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages
           ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.ghostty-bin ];
 
-          sessionVariables = {
-            NH_FLAKE = "${config.home.homeDirectory}/Projects/nix/configuration.nix";
-          };
+          # NH_FLAKE is set by `programs.nh.flake` via den.aspects.nh-cleanup
+          # (see modules/aspects/nh-cleanup.nix); override
+          # `den.flakeCheckoutPath` per-host/per-user if the checkout lives
+          # somewhere other than ~/Projects/nix/configuration.nix.
         };
 
         programs = {
