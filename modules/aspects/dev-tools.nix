@@ -6,6 +6,7 @@ _: {
       { pkgs, ... }:
       {
         home.packages = [
+          pkgs.devcontainer
           pkgs.editorconfig-checker
           pkgs.gg-jj
           pkgs.gh
@@ -40,6 +41,9 @@ _: {
             jjt = "jj tug";
             "jjt-" = "jj tug-";
           };
+          fish.interactiveShellInit = ''
+            ${pkgs.devenv}/bin/devenv hook fish | source
+          '';
           git.enable = true;
           jujutsu = {
             enable = true;

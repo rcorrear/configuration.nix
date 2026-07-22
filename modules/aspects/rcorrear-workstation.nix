@@ -73,7 +73,6 @@ _: {
             pkgs.nix-output-monitor
             pkgs.nix-prefetch-git
             pkgs.nixd
-            pkgs.nixos-generators
             pkgs.ntfs3g
             pkgs.nvd
             pkgs.obsidian
