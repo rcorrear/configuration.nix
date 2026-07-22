@@ -129,27 +129,6 @@
           if not contains sponge_filter_jw_workspace_commands $sponge_filters
               set --append sponge_filters sponge_filter_jw_workspace_commands
           end
-
-          # Auto-load completions from devenv profile (for direnv-managed projects).
-          # Tracks the path we added so only that path is cleaned up on directory change.
-          set -g __devenv_completion_path ""
-          function __devenv_update_completions --on-variable DEVENV_PROFILE
-              if test -n "$__devenv_completion_path"
-                  set -l idx (contains -i "$__devenv_completion_path" $fish_complete_path)
-                  and set -e fish_complete_path[$idx]
-                  set -g __devenv_completion_path ""
-              end
-              if set -q DEVENV_PROFILE
-                  set -l vendor "$DEVENV_PROFILE/share/fish/vendor_completions.d"
-                  if test -d "$vendor"; and not contains "$vendor" $fish_complete_path
-                      set -gp fish_complete_path "$vendor"
-                      set -g __devenv_completion_path "$vendor"
-                  end
-              end
-          end
-          if set -q DEVENV_PROFILE
-              __devenv_update_completions
-          end
         '';
         plugins = [
           {
@@ -207,6 +186,53 @@
 
       jujutsu = {
         settings = {
+          aliases = {
+            rebase-onto = [
+              "util"
+              "exec"
+              "--"
+              "${pkgs.coreutils}/bin/env"
+              "sh"
+              "-c"
+              "jj rebase -s \"roots(mutable() ~ ::$0)\" -o \"$0\""
+            ];
+            rebase-trunk = [
+              "rebase"
+              "-s"
+              "roots(mutable() ~ ::trunk())"
+              "-o"
+              "trunk()"
+            ];
+            tug = [
+              "bookmark"
+              "move"
+              "--from"
+              "heads(::@- & bookmarks())"
+              "--to"
+              "@"
+            ];
+            "tug-" = [
+              "bookmark"
+              "move"
+              "--from"
+              "heads(::@- & bookmarks())"
+              "--to"
+              "@-"
+            ];
+          };
+          fix.tools.nixfmt = {
+            command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
+            patterns = [ "glob:'**/*.nix'" ];
+          };
+          ui = {
+            default-command = "status";
+            diff-formatter = [
+              "${pkgs.difftastic}/bin/difft"
+              "--color=always"
+              "$left"
+              "$right"
+            ];
+          };
           user = {
             email = "r.correa.r@gmail.com";
             name = "Ricardo Correa";

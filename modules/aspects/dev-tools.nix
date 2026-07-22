@@ -31,19 +31,20 @@ _: {
             enable = true;
             git.enable = true;
           };
-          fish.shellAbbrs = {
-            jjd = "jj diff";
-            jjgf = "jj git fetch";
-            jjgp = "jj git push";
-            jjl = "jj log";
-            jjrb = "jj rebase";
-            jjsq = "jj squash";
-            jjt = "jj tug";
-            "jjt-" = "jj tug-";
+          fish = {
+            shellAbbrs = {
+              jjd = "jj diff";
+              jjdd = "jj edit";
+              jjgf = "jj git fetch";
+              jjgp = "jj git push";
+              jjl = "jj log";
+              jjn = "jj new";
+              jjrb = "jj rebase";
+              jjsq = "jj squash";
+              jjt = "jj tug";
+              "jjt-" = "jj tug-";
+            };
           };
-          fish.interactiveShellInit = ''
-            ${pkgs.devenv}/bin/devenv hook fish | source
-          '';
           git.enable = true;
           jujutsu = {
             enable = true;
@@ -82,22 +83,9 @@ _: {
                   "@-"
                 ];
               };
-              fix.tools.nixfmt = {
-                command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
-                patterns = [ "glob:'**/*.nix'" ];
-              };
               fsmonitor = {
                 backend = "watchman";
                 watchman.register-snapshot-trigger = true;
-              };
-              ui = {
-                default-command = "status";
-                diff-formatter = [
-                  "${pkgs.difftastic}/bin/difft"
-                  "--color=always"
-                  "$left"
-                  "$right"
-                ];
               };
             };
           };
