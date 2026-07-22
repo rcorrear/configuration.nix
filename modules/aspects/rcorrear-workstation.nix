@@ -77,6 +77,7 @@ _: {
             pkgs.nvd
             pkgs.obsidian
             pkgs.podman-compose
+            pkgs.podman-desktop
             pkgs.symbola
             pkgs.yt-dlp
           ]

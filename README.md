@@ -30,7 +30,6 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 │   ├── nixos/        # Shared NixOS modules
 │   ├── den.nix       # Den configuration
 │   ├── dendritic.nix # Dendritic system builder
-│   ├── devshell.nix  # Development shell
 │   └── namespace.nix # Namespace helpers
 └── packages/         # Custom package definitions
 ```

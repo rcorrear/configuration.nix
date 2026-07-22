@@ -33,9 +33,6 @@ _: {
             git.enable = true;
           };
           fish = {
-            interactiveShellInit = ''
-              ${pkgs.devenv}/bin/devenv hook fish | source
-            '';
             shellAbbrs = {
               jjd = "jj diff";
               jjdd = "jj edit";
