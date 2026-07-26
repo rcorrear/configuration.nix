@@ -20,7 +20,6 @@ _: {
           pkgs.nixfmt
           pkgs.pipenv
           pkgs.pre-commit
-          pkgs.secretspec
           pkgs.shellcheck
           pkgs.shfmt
           pkgs.watchman
@@ -50,40 +49,6 @@ _: {
           jujutsu = {
             enable = true;
             settings = {
-              aliases = {
-                rebase-onto = [
-                  "util"
-                  "exec"
-                  "--"
-                  "${pkgs.coreutils}/bin/env"
-                  "sh"
-                  "-c"
-                  "jj rebase -s \"roots(mutable() ~ ::$0)\" -o \"$0\""
-                ];
-                rebase-trunk = [
-                  "rebase"
-                  "-s"
-                  "roots(mutable() ~ ::trunk())"
-                  "-o"
-                  "trunk()"
-                ];
-                tug = [
-                  "bookmark"
-                  "move"
-                  "--from"
-                  "heads(::@- & bookmarks())"
-                  "--to"
-                  "@"
-                ];
-                "tug-" = [
-                  "bookmark"
-                  "move"
-                  "--from"
-                  "heads(::@- & bookmarks())"
-                  "--to"
-                  "@-"
-                ];
-              };
               fsmonitor = {
                 backend = "watchman";
                 watchman.register-snapshot-trigger = true;

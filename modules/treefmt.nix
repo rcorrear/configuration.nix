@@ -7,7 +7,6 @@
 {
   flake-file.inputs.treefmt-nix = {
     url = "github:numtide/treefmt-nix";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   imports = lib.optionals (inputs ? treefmt-nix) [ inputs.treefmt-nix.flakeModule ];

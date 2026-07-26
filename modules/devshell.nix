@@ -2,7 +2,6 @@
 {
   flake-file.inputs.devenv = {
     url = "github:cachix/devenv";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   perSystem =

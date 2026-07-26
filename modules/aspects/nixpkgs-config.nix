@@ -85,6 +85,7 @@ let
       rcorrear = {
         cider-3 = final.callPackage ../../packages/cider-3 { };
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
+        finzytrack = final.callPackage ../../packages/finzytrack { };
         graphify = final.callPackage ../../packages/graphify { };
         headroom = final.callPackage ../../packages/headroom { };
         inherit herdrPlugins;
@@ -115,7 +116,6 @@ in
   flake-file.inputs = {
     niri-flake = {
       url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

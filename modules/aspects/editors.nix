@@ -15,10 +15,7 @@
       { lib, pkgs, ... }:
       {
         home.packages = lib.optionals pkgs.stdenv.isLinux [
-          pkgs.jetbrains.idea-oss
-          pkgs.jetbrains.pycharm
-          pkgs.jetbrains.rider
-          pkgs.jetbrains.webstorm
+          pkgs.jetbrains.idea
           pkgs.zed-editor
         ];
       };
