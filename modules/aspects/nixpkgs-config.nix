@@ -90,6 +90,7 @@ let
         headroom = final.callPackage ../../packages/headroom { };
         inherit herdrPlugins;
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
+        orca = final.callPackage ../../packages/orca { };
         rtk = final.callPackage ../../packages/rtk { };
         zmx = final.callPackage ../../packages/zmx { };
       };

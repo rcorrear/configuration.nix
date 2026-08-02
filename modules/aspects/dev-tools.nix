@@ -2,8 +2,10 @@ _: {
   den.aspects.dev-tools = {
     includes = [ ];
 
+    darwin.homebrew.casks = [ "stablyai/orca/orca" ];
+
     homeManager =
-      { pkgs, ... }:
+      { lib, pkgs, ... }:
       {
         home.packages = [
           pkgs.devcontainer
@@ -24,7 +26,8 @@ _: {
           pkgs.shfmt
           pkgs.watchman
           pkgs.zed
-        ];
+        ]
+        ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.rcorrear.orca ];
 
         programs = {
           difftastic = {
