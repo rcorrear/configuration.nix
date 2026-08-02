@@ -39,6 +39,7 @@
           openssh.authorizedKeys.keys = [
             "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOtdwHE6TetQ03CFr07piiViyG2YVPfwQg3n7rONOYeo 1password"
           ];
+          autoSubUidGidRange = true;
           uid = config.den.userIds.rcorrear;
         };
       };
