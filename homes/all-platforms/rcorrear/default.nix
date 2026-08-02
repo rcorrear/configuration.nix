@@ -35,6 +35,26 @@
       stateVersion = lib.mkDefault "24.05";
     };
 
+    # OpenSSH rejects the Home Manager symlink chain on Linux because the
+    # resolved Nix-store file is not owned by this user or root. Keep the
+    # config declarative, then materialize a private user-owned copy after
+    # each Home Manager link-generation phase.
+    # home.file = lib.mkIf (pkgs.stdenv.isLinux && config.programs.ssh.enable) {
+    #   ".ssh/config".force = true;
+    # };
+
+    # home.activation.materializeSshConfig = lib.mkIf (pkgs.stdenv.isLinux && config.programs.ssh.enable) (
+    #   lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    #     ssh_config="$HOME/.ssh/config"
+
+    #     if [ -L "$ssh_config" ]; then
+    #       ssh_config_source="$(${pkgs.coreutils}/bin/readlink -f "$ssh_config")"
+    #       ${pkgs.coreutils}/bin/rm -- "$ssh_config"
+    #       ${pkgs.coreutils}/bin/install -Dm600 "$ssh_config_source" "$ssh_config"
+    #     fi
+    #   ''
+    # );
+
     programs = {
       dircolors = {
         enable = lib.mkDefault true;
@@ -241,6 +261,7 @@
       };
 
       ssh = {
+        enable = true;
         enableDefaultConfig = false;
         matchBlocks = {
           "*" = {
