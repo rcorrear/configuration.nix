@@ -8,7 +8,7 @@
 
 ## 0. Validation Commands
 
-Use `lint` for linting and validation checks. Do not use `rtk nix fmt`,
+Use `check` for linting and validation checks. Do not use `rtk nix fmt`,
 `nix fmt`, or similar formatter commands as a substitute for linting.
 
 ---
