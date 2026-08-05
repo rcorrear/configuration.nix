@@ -25,7 +25,7 @@
           enable = true;
           runtimePackages = [ pkgs.nix ];
           # environment.LOG_LEVEL = "debug";
-          schedule = "*-*-* 00/6:00:00";
+          schedule = "*-*-* *:00/30:00";
           credentials = {
             RENOVATE_GITHUB_APP_PRIVATE_KEY =
               config.services.onepassword-secrets.secretPaths.renovateGithubAppPrivateKey;
