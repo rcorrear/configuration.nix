@@ -10,7 +10,7 @@
 }:
 python312Packages.buildPythonApplication rec {
   pname = "headroom-ai";
-  version = "0.31.0";
+  version = "0.34.0";
   pyproject = true;
 
   src = fetchFromGitHub {
