@@ -17,33 +17,46 @@
         ...
       }:
       let
+        codexMultiHomeDir = "${config.xdg.stateHome}/codex-multi-home";
+        huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
+
         herdrPkgs = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system};
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
-        huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
       in
       {
         imports = [ ../../homes/modules/herdr.nix ];
 
-        home.packages = [
-          llmPkgs.agent-deck
-          llmPkgs.beads
-          llmPkgs.beads-viewer
-          llmPkgs.coderabbit-cli
-          llmPkgs.code
-          llmPkgs.codex
-          llmPkgs.codex-acp
-          llmPkgs.opencode
-          llmPkgs.openspec
+        home = {
+          packages = [
+            llmPkgs.agent-deck
+            llmPkgs.beads
+            llmPkgs.beads-viewer
+            llmPkgs.coderabbit-cli
+            llmPkgs.codex
+            llmPkgs.codex-acp
+            llmPkgs.opencode
+            llmPkgs.openspec
 
-          pkgs.rcorrear.rtk
-          # pkgs.rcorrear.headroom
-          # pkgs.rcorrear.graphify
-          pkgs.python3Packages.huggingface-hub
-          pkgs.tmux # agent-deck requires tmux
-        ]
-        ++ lib.optionals pkgs.stdenv.isLinux [
-          pkgs.bubblewrap
-        ];
+            pkgs.tmux # agent-deck requires tmux
+
+            pkgs.rcorrear.codex-multi-auth
+            # pkgs.rcorrear.headroom
+            # pkgs.rcorrear.graphify
+            pkgs.rcorrear.rtk
+            # pkgs.python3Packages.huggingface-hub
+          ]
+          ++ lib.optionals pkgs.stdenv.isLinux [
+            pkgs.bubblewrap
+          ];
+
+          sessionVariables = {
+            CODEX_MULTI_AUTH_DIR = codexMultiHomeDir;
+            HF_HOME = huggingFaceDir;
+            HUGGINGFACE_HUB_CACHE = "${config.home.sessionVariables.HF_HOME}/hub";
+            TRANSFORMERS_CACHE = "${config.home.sessionVariables.HF_HOME}/transformers";
+          };
+        };
+
         programs.herdr = {
           enable = true;
           package = herdrPkgs.default;
@@ -52,9 +65,7 @@
             worktree-setup
           ];
         };
-        home.sessionVariables = {
-          HF_HOME = huggingFaceDir;
-        };
+
         systemd.user.services = lib.optionalAttrs pkgs.stdenv.isLinux {
           # headroom-proxy = {
           #   Unit = {

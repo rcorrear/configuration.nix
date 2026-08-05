@@ -84,6 +84,7 @@ let
     {
       rcorrear = {
         cider-3 = final.callPackage ../../packages/cider-3 { };
+        codex-multi-auth = final.callPackage ../../packages/codex-multi-auth { };
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
         finzytrack = final.callPackage ../../packages/finzytrack { };
         graphify = final.callPackage ../../packages/graphify { };
