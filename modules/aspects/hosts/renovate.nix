@@ -59,7 +59,10 @@
                 registryUrls = [ "https://nexus.redplanetlabs.com/repository/maven-public-releases/" ];
               }
             ];
-            repositories = [ "rcorrear/omni" ];
+            repositories = [
+              "rcorrear/omni"
+              "rcorrear/configuration.nix"
+            ];
           };
         };
 
