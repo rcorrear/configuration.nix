@@ -34,6 +34,7 @@
             llmPkgs.coderabbit-cli
             llmPkgs.codex
             llmPkgs.codex-acp
+            llmPkgs.crit
             llmPkgs.opencode
             llmPkgs.openspec
 
