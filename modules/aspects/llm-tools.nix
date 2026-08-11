@@ -37,6 +37,7 @@
             llmPkgs.crit
             llmPkgs.opencode
             llmPkgs.openspec
+            llmPkgs."open-code-review"
 
             pkgs.tmux # agent-deck requires tmux
 
