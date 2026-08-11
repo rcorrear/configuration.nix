@@ -77,6 +77,8 @@ in
     nixos =
       { pkgs, ... }:
       {
+        system.autoUpgrade.enable = false;
+
         imports = [
           ../../../hosts/nixos/ok1ebf/hardware.nix
           inputs.lanzaboote.nixosModules.lanzaboote
