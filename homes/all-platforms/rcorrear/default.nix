@@ -178,16 +178,20 @@
 
       fzf = {
         enable = lib.mkDefault true;
-        changeDirWidgetCommand = "fd --type d";
-        changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
+        changeDirWidget = {
+          command = "fd --type d";
+          options = [ "--preview 'tree -C {} | head -200'" ];
+        };
         defaultCommand = "fd --type f";
         defaultOptions = [
           "--height 40%"
           "--border"
         ];
-        fileWidgetCommand = "fd --type f";
-        fileWidgetOptions = [ "--preview 'head {}'" ];
-        historyWidgetOptions = [
+        fileWidget = {
+          command = "fd --type f";
+          options = [ "--preview 'head {}'" ];
+        };
+        historyWidget.options = [
           "--sort"
           "--exact"
         ];
@@ -263,18 +267,18 @@
       ssh = {
         enable = true;
         enableDefaultConfig = false;
-        matchBlocks = {
+        settings = {
           "*" = {
-            forwardAgent = false;
-            addKeysToAgent = "no";
-            compression = false;
-            serverAliveInterval = 0;
-            serverAliveCountMax = 3;
-            hashKnownHosts = false;
-            userKnownHostsFile = "~/.ssh/known_hosts";
-            controlMaster = "no";
-            controlPath = "~/.ssh/master-%r@%n:%p";
-            controlPersist = "no";
+            ForwardAgent = false;
+            AddKeysToAgent = "no";
+            Compression = false;
+            ServerAliveInterval = 0;
+            ServerAliveCountMax = 3;
+            HashKnownHosts = false;
+            UserKnownHostsFile = "~/.ssh/known_hosts";
+            ControlMaster = "no";
+            ControlPath = "~/.ssh/master-%r@%n:%p";
+            ControlPersist = "no";
           };
         };
       };

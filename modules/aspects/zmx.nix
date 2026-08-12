@@ -8,15 +8,13 @@ _: {
       in
       {
         home.packages = lib.optionals pkgs.stdenv.isLinux [ pkgs.rcorrear.zmx ];
-        programs.ssh.matchBlocks."z.*" = {
-          controlMaster = "auto";
-          controlPersist = "10m";
-          proxyCommand = "sh -c 'hn=\${1#z.}; exec ${nc} \"$hn\" %p' sh %n";
-          extraOptions = {
-            ConnectTimeout = "5";
-            RemoteCommand = "zmx attach %k";
-            RequestTTY = "yes";
-          };
+        programs.ssh.settings."z.*" = {
+          ControlMaster = "auto";
+          ControlPersist = "10m";
+          ProxyCommand = "sh -c 'hn=\${1#z.}; exec ${nc} \"$hn\" %p' sh %n";
+          ConnectTimeout = "5";
+          RemoteCommand = "zmx attach %k";
+          RequestTTY = "yes";
         };
       };
   };
