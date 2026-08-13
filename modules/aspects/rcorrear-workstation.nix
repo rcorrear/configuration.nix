@@ -13,7 +13,6 @@ _: {
           pkgs.desktop-file-utils
           pkgs.evolution
           pkgs.firefox
-          pkgs.ghostty
           pkgs.gnome-terminal
           pkgs.gnome-tweaks
           pkgs.gnomeExtensions.caffeine
@@ -73,22 +72,16 @@ _: {
             pkgs.nix-output-monitor
             pkgs.nix-prefetch-git
             pkgs.nixd
-            pkgs.nixos-generators
             pkgs.ntfs3g
             pkgs.nvd
             pkgs.obsidian
             pkgs.podman-compose
+            pkgs.podman-desktop
             pkgs.symbola
             pkgs.yt-dlp
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
-          ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages
-          ++ lib.optionals pkgs.stdenv.isDarwin [ pkgs.ghostty-bin ];
-
-          # NH_FLAKE is set by `programs.nh.flake` via den.aspects.nh-cleanup
-          # (see modules/aspects/nh-cleanup.nix); override
-          # `den.flakeCheckoutPath` per-host/per-user if the checkout lives
-          # somewhere other than ~/Projects/nix/configuration.nix.
+          ++ lib.optionals pkgs.stdenv.isLinux linuxWorkstationPackages;
         };
 
         programs = {

@@ -13,7 +13,6 @@ in
 {
   flake-file.inputs.lanzaboote = {
     url = "github:nix-community/lanzaboote";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   den.aspects.ok1ebf-pc = {
@@ -67,7 +66,7 @@ in
   den.aspects.OK1EBF = {
     includes = [
       den.aspects.cachix
-      den.aspects.hermes-agent
+      # den.aspects.hermes-agent
       den.aspects.nix-caches
       den.aspects.opnix
       den.aspects.stylix
@@ -78,6 +77,8 @@ in
     nixos =
       { pkgs, ... }:
       {
+        system.autoUpgrade.enable = false;
+
         imports = [
           ../../../hosts/nixos/ok1ebf/hardware.nix
           inputs.lanzaboote.nixosModules.lanzaboote

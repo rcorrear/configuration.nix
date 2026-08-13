@@ -1,4 +1,5 @@
-_: {
+{ pkgs, ... }:
+{
   programs.ghostty = {
     enable = true;
     # The actual binary is already installed elsewhere (see
@@ -6,7 +7,7 @@ _: {
     # `ghostty-bin`, the prebuilt macOS app, on Darwin), so don't install a
     # second copy here — this module is only used to manage
     # `~/.config/ghostty/config`.
-    package = null;
+    package = if pkgs.stdenv.isLinux then pkgs.ghostty else pkgs.ghostty-bin;
 
     enableFishIntegration = true;
 
@@ -16,7 +17,12 @@ _: {
     systemd.enable = false;
 
     settings = {
-      font-size = 14;
+      # Deal with TERM problems
+      shell-integration-features = [
+        "ssh-env"
+        "ssh-terminfo"
+        "sudo"
+      ];
 
       # Give the text some breathing room instead of hugging the window
       # border.

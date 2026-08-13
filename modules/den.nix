@@ -10,6 +10,7 @@
         plex.users.rcorrear = { };
         prowlarr.users.rcorrear = { };
         radarr.users.rcorrear = { };
+        renovate.users.rcorrear = { };
         sonarr.users.rcorrear = { };
         tailscale.users.rcorrear = { };
       };
@@ -23,6 +24,7 @@
       "rcorrear@plex" = { };
       "rcorrear@prowlarr" = { };
       "rcorrear@radarr" = { };
+      "rcorrear@renovate" = { };
       "rcorrear@sonarr" = { };
       "rcorrear@tailscale" = { };
     };

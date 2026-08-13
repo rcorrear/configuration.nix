@@ -6,7 +6,6 @@
 {
   flake-file.inputs.opnix = {
     url = "github:brizzbuzz/opnix";
-    inputs.nixpkgs.follows = "nixpkgs";
   };
 
   den.aspects.opnix = {

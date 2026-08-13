@@ -14,16 +14,16 @@
     fonts.fontconfig.enable = true;
 
     home = {
-      packages = with pkgs; [
-        any-nix-shell
-        coreutils
-        fd
-        file
-        htop
-        jq
-        neovim
-        ripgrep
-        tree
+      packages = [
+        pkgs.any-nix-shell
+        pkgs.coreutils
+        pkgs.fd
+        pkgs.file
+        pkgs.htop
+        pkgs.jq
+        pkgs.neovim
+        pkgs.ripgrep
+        pkgs.tree
       ];
 
       sessionPath = [ "${config.home.homeDirectory}/.local/bin" ];
@@ -35,19 +35,27 @@
       stateVersion = lib.mkDefault "24.05";
     };
 
-    programs = {
-      bat = {
-        enable = true;
-        extraPackages = with pkgs.bat-extras; [
-          batdiff
-          batgrep
-          batman
-          batpipe
-          batwatch
-          prettybat
-        ];
-      };
+    # OpenSSH rejects the Home Manager symlink chain on Linux because the
+    # resolved Nix-store file is not owned by this user or root. Keep the
+    # config declarative, then materialize a private user-owned copy after
+    # each Home Manager link-generation phase.
+    # home.file = lib.mkIf (pkgs.stdenv.isLinux && config.programs.ssh.enable) {
+    #   ".ssh/config".force = true;
+    # };
 
+    # home.activation.materializeSshConfig = lib.mkIf (pkgs.stdenv.isLinux && config.programs.ssh.enable) (
+    #   lib.hm.dag.entryAfter [ "linkGeneration" ] ''
+    #     ssh_config="$HOME/.ssh/config"
+
+    #     if [ -L "$ssh_config" ]; then
+    #       ssh_config_source="$(${pkgs.coreutils}/bin/readlink -f "$ssh_config")"
+    #       ${pkgs.coreutils}/bin/rm -- "$ssh_config"
+    #       ${pkgs.coreutils}/bin/install -Dm600 "$ssh_config_source" "$ssh_config"
+    #     fi
+    #   ''
+    # );
+
+    programs = {
       dircolors = {
         enable = lib.mkDefault true;
       };
@@ -141,27 +149,6 @@
           if not contains sponge_filter_jw_workspace_commands $sponge_filters
               set --append sponge_filters sponge_filter_jw_workspace_commands
           end
-
-          # Auto-load completions from devenv profile (for direnv-managed projects).
-          # Tracks the path we added so only that path is cleaned up on directory change.
-          set -g __devenv_completion_path ""
-          function __devenv_update_completions --on-variable DEVENV_PROFILE
-              if test -n "$__devenv_completion_path"
-                  set -l idx (contains -i "$__devenv_completion_path" $fish_complete_path)
-                  and set -e fish_complete_path[$idx]
-                  set -g __devenv_completion_path ""
-              end
-              if set -q DEVENV_PROFILE
-                  set -l vendor "$DEVENV_PROFILE/share/fish/vendor_completions.d"
-                  if test -d "$vendor"; and not contains "$vendor" $fish_complete_path
-                      set -gp fish_complete_path "$vendor"
-                      set -g __devenv_completion_path "$vendor"
-                  end
-              end
-          end
-          if set -q DEVENV_PROFILE
-              __devenv_update_completions
-          end
         '';
         plugins = [
           {
@@ -191,16 +178,20 @@
 
       fzf = {
         enable = lib.mkDefault true;
-        changeDirWidgetCommand = "fd --type d";
-        changeDirWidgetOptions = [ "--preview 'tree -C {} | head -200'" ];
+        changeDirWidget = {
+          command = "fd --type d";
+          options = [ "--preview 'tree -C {} | head -200'" ];
+        };
         defaultCommand = "fd --type f";
         defaultOptions = [
           "--height 40%"
           "--border"
         ];
-        fileWidgetCommand = "fd --type f";
-        fileWidgetOptions = [ "--preview 'head {}'" ];
-        historyWidgetOptions = [
+        fileWidget = {
+          command = "fd --type f";
+          options = [ "--preview 'head {}'" ];
+        };
+        historyWidget.options = [
           "--sort"
           "--exact"
         ];
@@ -219,6 +210,53 @@
 
       jujutsu = {
         settings = {
+          aliases = {
+            rebase-onto = [
+              "util"
+              "exec"
+              "--"
+              "${pkgs.coreutils}/bin/env"
+              "sh"
+              "-c"
+              "jj rebase -s \"roots(mutable() ~ ::$0)\" -o \"$0\""
+            ];
+            rebase-trunk = [
+              "rebase"
+              "-s"
+              "roots(mutable() ~ ::trunk())"
+              "-o"
+              "trunk()"
+            ];
+            tug = [
+              "bookmark"
+              "move"
+              "--from"
+              "heads(::@- & bookmarks())"
+              "--to"
+              "@"
+            ];
+            "tug-" = [
+              "bookmark"
+              "move"
+              "--from"
+              "heads(::@- & bookmarks())"
+              "--to"
+              "@-"
+            ];
+          };
+          fix.tools.nixfmt = {
+            command = [ "${pkgs.nixfmt}/bin/nixfmt" ];
+            patterns = [ "glob:'**/*.nix'" ];
+          };
+          ui = {
+            default-command = "status";
+            diff-formatter = [
+              "${pkgs.difftastic}/bin/difft"
+              "--color=always"
+              "$left"
+              "$right"
+            ];
+          };
           user = {
             email = "r.correa.r@gmail.com";
             name = "Ricardo Correa";
@@ -227,19 +265,20 @@
       };
 
       ssh = {
+        enable = true;
         enableDefaultConfig = false;
-        matchBlocks = {
+        settings = {
           "*" = {
-            forwardAgent = false;
-            addKeysToAgent = "no";
-            compression = false;
-            serverAliveInterval = 0;
-            serverAliveCountMax = 3;
-            hashKnownHosts = false;
-            userKnownHostsFile = "~/.ssh/known_hosts";
-            controlMaster = "no";
-            controlPath = "~/.ssh/master-%r@%n:%p";
-            controlPersist = "no";
+            ForwardAgent = false;
+            AddKeysToAgent = "no";
+            Compression = false;
+            ServerAliveInterval = 0;
+            ServerAliveCountMax = 3;
+            HashKnownHosts = false;
+            UserKnownHostsFile = "~/.ssh/known_hosts";
+            ControlMaster = "no";
+            ControlPath = "~/.ssh/master-%r@%n:%p";
+            ControlPersist = "no";
           };
         };
       };

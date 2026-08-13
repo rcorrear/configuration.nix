@@ -13,48 +13,23 @@
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    devenv = {
-      url = "github:cachix/devenv";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     flake-file.url = "github:vic/flake-file";
     flake-parts = {
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    herdr = {
-      url = "github:ogulcancelik/herdr";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    herdr.url = "github:ogulcancelik/herdr";
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     import-tree.url = "github:vic/import-tree";
-    lanzaboote = {
-      url = "github:nix-community/lanzaboote";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    llm-agents = {
-      url = "github:numtide/llm-agents.nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    niri-flake = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    lanzaboote.url = "github:nix-community/lanzaboote";
+    llm-agents.url = "github:numtide/llm-agents.nix";
+    niri-flake.url = "github:sodiboo/niri-flake";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
-    opnix = {
-      url = "github:brizzbuzz/opnix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    stylix = {
-      url = "github:danth/stylix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    treefmt-nix = {
-      url = "github:numtide/treefmt-nix";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
+    opnix.url = "github:brizzbuzz/opnix";
+    stylix.url = "github:danth/stylix";
+    treefmt-nix.url = "github:numtide/treefmt-nix";
   };
 }

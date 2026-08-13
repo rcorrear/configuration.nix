@@ -27,16 +27,14 @@ in
       };
     };
 
-    programs.ssh.matchBlocks."z.*" = {
-      controlMaster = "auto";
-      controlPersist = "10m";
-      hostname = "%h";
-      proxyCommand = "sh -c 'hn=\${1#z.}; exec nc \"$hn\" %p' sh %n";
-      extraOptions = {
-        ConnectTimeout = "5";
-        RemoteCommand = "zmx attach %k";
-        RequestTTY = "yes";
-      };
+    programs.ssh.settings."z.*" = {
+      ControlMaster = "auto";
+      ControlPersist = "10m";
+      HostName = "%h";
+      ProxyCommand = "sh -c 'hn=\${1#z.}; exec nc \"$hn\" %p' sh %n";
+      ConnectTimeout = "5";
+      RemoteCommand = "zmx attach %k";
+      RequestTTY = "yes";
     };
   };
 }

@@ -8,36 +8,14 @@
 
 ## 0. Validation Commands
 
-Use `lint` for linting and validation checks. Do not use `rtk nix fmt`,
+Use `check` for linting and validation checks. Do not use `rtk nix fmt`,
 `nix fmt`, or similar formatter commands as a substitute for linting.
 
 ---
 
 ## 1. Mandatory Source Consultation
 
-**Always read the source on an as-needed basis.** Do not guess at API shapes or option names. Instead, look them up directly in the repository. The following directories are your primary references:
-
-| Directory | What it contains |
-|-----------|-----------------|
-| `./docs/src/content/docs/` | Full user-facing documentation (explanation, guides, reference, tutorials) |
-| `./nix/` | Core Den library (`parametric`, `canTake`, `take`, `__findFile`, context types, etc.) |
-| `./modules/` | OS framework (schema options, aspect definition, batteries, context wiring, output) |
-
-**Key source files to consult on demand:**
-
-- `docs/src/content/docs/explanation/core-principles.mdx` — Design philosophy
-- `docs/src/content/docs/explanation/aspects.mdx` — Aspect & functor pattern
-- `docs/src/content/docs/explanation/parametric.mdx` — Parametric dispatch mechanics
-- `docs/src/content/docs/explanation/context-pipeline.mdx` — Host → user → home pipeline
-- `docs/src/content/docs/explanation/context-system.mdx` — `den.ctx` architecture
-- `docs/src/content/docs/explanation/library-vs-framework.mdx` — Using Den without NixOS
-- `docs/src/content/docs/reference/lib.mdx` — Full `den.lib` API
-- `docs/src/content/docs/reference/ctx.mdx` — Full `den.ctx` API
-- `docs/src/content/docs/reference/schema.mdx` — `den.hosts`, `den.homes`, `den.schema`
-- `docs/src/content/docs/reference/aspects.mdx` — `den.aspects`, `den.provides`, `den.ful`
-- `docs/src/content/docs/reference/batteries.mdx` — All `den.provides.*` batteries
-- `docs/src/content/docs/reference/output.mdx` — Flake output generation
-- `docs/src/content/docs/guides/` — Practical cookbooks (batteries, custom classes, namespaces, migration, debugging)
+**Always inspect the source on an as-needed basis.** Do not guess at Den API shapes or option names. This repository consumes Den as the pinned `inputs.den` flake input; consult that input's source at the revision in `flake.lock`, together with the project's `modules/` configuration, before writing Den configuration. Do not rely on copied or unpinned upstream documentation.
 
 ---
 
@@ -56,8 +34,6 @@ An aspect is an attrset containing:
 - **`includes`**: a list of other aspects, static attrsets, or parametric functions to include as dependencies.
 - **`provides`**: named sub-aspects scoped to this aspect, accessible via `den.aspects.foo.provides.bar` or the shorthand `den.aspects.foo._.bar`.
 
-Read: `docs/src/content/docs/explanation/aspects.mdx`, `docs/src/content/docs/guides/configure-aspects.mdx`  
-CI examples: `templates/ci/modules/features/parametric.nix`, `templates/ci/modules/features/top-level-parametric.nix`, `templates/ci/modules/features/auto-parametric.nix`
 
 ### 3.2 Parametric Dispatch
 
@@ -70,8 +46,6 @@ Den uses `builtins.functionArgs` to inspect a function's declared arguments. A f
 
 `den.lib.parametric` wraps an aspect with this dispatch logic. `den.lib.canTake`, `den.lib.take.atLeast`, `den.lib.take.exactly` are the underlying primitives.
 
-Read: `docs/src/content/docs/explanation/parametric.mdx`, `docs/src/content/docs/reference/lib.mdx`  
-CI examples: `templates/ci/modules/features/parametric.nix`
 
 **Parametric variants:**
 
@@ -88,13 +62,11 @@ CI examples: `templates/ci/modules/features/parametric.nix`
 - `den.lib.perUser aspect` — runs only in `{ host, user }` contexts
 - `den.lib.perHome aspect` — runs only in `{ home }` contexts
 
-CI example: `templates/ci/modules/features/perUser-perHost.nix`
 
 ### 3.3 Aspects are Auto-Generated
 
 Den automatically creates a parametric aspect for every declared host, user, and home. You do not need to declare `den.aspects.igloo` from scratch — you just extend it. Any module file may contribute to any aspect.
 
-Read: `docs/src/content/docs/guides/configure-aspects.mdx`
 
 ### 3.4 `includes` Three Kinds
 
@@ -130,8 +102,6 @@ Host options (all have defaults):
 | `*` | from `den.schema.host` | Schema-defined options |
 | `*` | | Freeform attributes (read from aspects via `host.myAttr`) |
 
-Read: `docs/src/content/docs/guides/declare-hosts.mdx`, `docs/src/content/docs/reference/schema.mdx`  
-CI examples: `templates/ci/modules/features/host-options.nix`
 
 ### 4.2 Users
 
@@ -153,7 +123,6 @@ User options:
 | `*` | from `den.schema.user` | Schema options |
 | `*` | | Freeform (accessible via `user.myAttr`) |
 
-CI examples: `templates/ci/modules/features/user-classes.nix`, `templates/ci/modules/features/host-options.nix`
 
 ### 4.3 Standalone Homes
 
@@ -166,8 +135,6 @@ When `"alice@laptop"` is declared **and** `den.hosts.x86_64-linux.laptop` exists
 
 Home options: `name`, `userName`, `system`, `class` (`"homeManager"`), `aspect`, `pkgs`, `instantiate`, `intoAttr`.
 
-Read: `docs/src/content/docs/guides/home-manager.mdx`, `docs/src/content/docs/guides/declare-hosts.mdx`  
-CI examples: `templates/ci/modules/features/homes.nix`, `templates/ci/modules/features/special-args-custom-instantiate.nix`
 
 ---
 
@@ -191,7 +158,6 @@ den.default = {
 
 > Owned configs in `den.default` are deduplicated across pipeline stages. Parametric functions in `den.default.includes` run at every stage — use `den.lib.perHost` / `den.lib.perUser` to restrict.
 
-CI examples: `templates/ci/modules/features/default-includes.nix`, `templates/ci/modules/features/context/den-default.nix`
 
 ### 5.3 `provides` (Sub-Aspects)
 
@@ -205,7 +171,6 @@ den.aspects.alice.includes = [ den.aspects.tools._.editors ];
 
 `provides` can also be parametric functions.
 
-CI examples: `templates/ci/modules/features/provides-parametric.nix`
 
 ---
 
@@ -231,8 +196,6 @@ den.schema.conf = { lib, ... }: {
 - `den.schema.user` → all users (imports `conf`)
 - `den.schema.home` → all homes (imports `conf`)
 
-Read: `docs/src/content/docs/reference/schema.mdx`  
-CI examples: `templates/ci/modules/features/schema-base-modules.nix`
 
 ---
 
@@ -253,8 +216,6 @@ den.hosts.x86_64-linux.laptop
     → into.wsl-host  (if host.wsl.enable = true)
 ```
 
-Read: `docs/src/content/docs/explanation/context-pipeline.mdx`, `docs/src/content/docs/explanation/context-system.mdx`, `docs/src/content/docs/reference/ctx.mdx`  
-CI examples: `templates/ci/modules/features/context/`
 
 ### 7.2 Context Type Anatomy
 
@@ -282,7 +243,6 @@ Each `den.ctx.<name>` has:
 
 You can define entirely new `den.ctx.<name>` entries and wire them into the pipeline via `den.ctx.host.into.<name>`. See `templates/ci/modules/features/context/custom-ctx.nix` and the `templates/microvm` template for real examples.
 
-CI examples: `templates/ci/modules/features/context/custom-ctx.nix`, `templates/ci/modules/features/context/cross-provider.nix`
 
 ### 7.5 Extending `den.ctx` with `includes`
 
@@ -296,10 +256,10 @@ den.ctx.user.includes = [ den._.mutual-provider ];
 
 ## 8. Batteries (`den.provides.*` / `den._.*`)
 
-`den.provides` and `den._` are aliases. All batteries live in `modules/aspects/provides/`. Always consult the source file for a battery to understand its exact behavior.
+`den.provides` and `den._` are aliases. Batteries are provided by the pinned
+`inputs.den` flake. Always consult the corresponding source there to understand
+their exact behavior.
 
-Read: `docs/src/content/docs/guides/batteries.mdx`, `docs/src/content/docs/reference/batteries.mdx`  
-Source: `modules/aspects/provides/`
 
 ### System Batteries
 
@@ -318,7 +278,6 @@ Source: `modules/aspects/provides/`
 | `den._.import-tree` | see migration | Auto-imports directories of non-dendritic modules |
 | `den._.unfree` | `den.aspects.laptop.includes = [ (den._.unfree [ "nvidia-x11" ]) ]` | Allows specific unfree packages |
 
-CI examples: `templates/ci/modules/features/batteries/`
 
 ### Flake-Parts Batteries
 
@@ -327,7 +286,6 @@ CI examples: `templates/ci/modules/features/batteries/`
 | `den._.inputs'` | Exposes system-specialized `inputs'` as module arg |
 | `den._.self'` | Exposes system-specialized `self'` as module arg |
 
-CI example: `templates/ci/modules/features/batteries/flake-parts.nix`
 
 ---
 
@@ -374,9 +332,7 @@ den.schema.user.classes = lib.mkDefault [ "homeManager" ];
 - Forwards to both `nixos` and `darwin` simultaneously.
 - Useful for cross-platform settings that apply to all OS types.
 
-CI examples: `templates/ci/modules/features/hjem-class.nix`, `templates/ci/modules/features/maid-class.nix`, `templates/ci/modules/features/os-class.nix`, `templates/ci/modules/features/os-user-class.nix`
 
-Read: `docs/src/content/docs/guides/home-manager.mdx`
 
 ---
 
@@ -403,8 +359,6 @@ den.aspects.laptop.provides.to-users = { user, ... }: { ... };
 den.aspects.laptop._.to-users.homeManager.programs.direnv.enable = true;
 ```
 
-Read: `docs/src/content/docs/guides/mutual.mdx`  
-CI examples: `templates/ci/modules/features/user-host-mutual-config.nix`
 
 ---
 
@@ -425,9 +379,6 @@ Parameters:
 | `adaptArgs` | (optional) Transform module arguments before forwarding |
 | `adapterModule` | (optional) Custom submodule type for the forwarded submodule |
 
-Source: `modules/aspects/provides/forward.nix`  
-Read: `docs/src/content/docs/guides/custom-classes.mdx`  
-CI examples: `templates/ci/modules/features/forward-alias-class.nix`, `templates/ci/modules/features/forward-from-custom-class.nix`, `templates/ci/modules/features/guarded-forward.nix`
 
 ### Guarded Forwarding
 
@@ -436,7 +387,6 @@ The `guard` function allows conditional class activation:
 - `guard = { options, ... }: options ? environment.persistence` — forward only when the option exists
 - `guard = { config, ... }: _item: lib.mkIf config.programs.vim.enable` — forward only when a config value is true
 
-CI example: `templates/ci/modules/features/guarded-forward.nix`
 
 ---
 
@@ -462,10 +412,7 @@ After importing:
 
 Each namespace has its own independent `aspects`, `ctx`, and `schema` sub-namespaces.
 
-Read: `docs/src/content/docs/guides/namespaces.mdx`, `docs/src/content/docs/reference/aspects.mdx`  
-CI examples: `templates/ci/modules/features/namespaces.nix`, `templates/ci/modules/features/namespace-schemas.nix`, `templates/ci/modules/features/namespace-provider.nix`
 
-Source: `nix/lib/namespace.nix`
 
 ---
 
@@ -490,16 +437,11 @@ The `/` separator maps to `.provides.` in the lookup path.
 
 To use angle brackets in a specific file, add `__findFile` to the module arguments attrset.
 
-Read: `docs/src/content/docs/guides/angle-brackets.mdx`  
-Source: `nix/lib/den-brackets.nix`  
-CI examples: `templates/ci/modules/features/angle-brackets.nix`
 
 ---
 
 ## 14. `den.lib` API
 
-Full reference: `docs/src/content/docs/reference/lib.mdx`  
-Source: `nix/lib/default.nix`
 
 | Function | Purpose |
 |----------|---------|
@@ -546,8 +488,7 @@ den-lib = import inputs.den.outPath { inherit lib config inputs; };
 
 The library module has empty `den.ctx` and `den.aspects` — you populate them for your custom domain.
 
-Read: `docs/src/content/docs/explanation/library-vs-framework.mdx`  
-CI example: `templates/ci/modules/features/den-as-lib.nix`
+Consult the pinned `inputs.den` source for the complete library API.
 
 ---
 

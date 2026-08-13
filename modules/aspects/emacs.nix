@@ -11,7 +11,7 @@ _: {
       }:
       let
         baseEmacsPackage = if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
-
+        emacsPackage = wrapEmacsRuntime (baseEmacsPackage);
         emacsRuntimePath = lib.makeBinPath [
           pkgs.nodejs
           pkgs.uv
@@ -75,14 +75,7 @@ _: {
 
         programs.emacs = {
           enable = true;
-          package = wrapEmacsRuntime (
-            baseEmacsPackage.overrideAttrs (oldAttrs: {
-              propagatedUserEnvPkgs = (oldAttrs.propagatedUserEnvPkgs or [ ]) ++ [
-                pkgs.nodejs
-                pkgs.uv
-              ];
-            })
-          );
+          package = emacsPackage;
           extraPackages = epkgs: [
             epkgs.emacsql
             epkgs.vterm

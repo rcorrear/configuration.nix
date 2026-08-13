@@ -84,11 +84,14 @@ let
     {
       rcorrear = {
         cider-3 = final.callPackage ../../packages/cider-3 { };
+        codex-multi-auth = final.callPackage ../../packages/codex-multi-auth { };
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
+        finzytrack = final.callPackage ../../packages/finzytrack { };
         graphify = final.callPackage ../../packages/graphify { };
         headroom = final.callPackage ../../packages/headroom { };
         inherit herdrPlugins;
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
+        orca = final.callPackage ../../packages/orca { };
         rtk = final.callPackage ../../packages/rtk { };
         zmx = final.callPackage ../../packages/zmx { };
       };
@@ -115,7 +118,6 @@ in
   flake-file.inputs = {
     niri-flake = {
       url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 

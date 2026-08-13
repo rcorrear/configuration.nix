@@ -9,7 +9,7 @@
     includes = [ den.aspects.zmx ];
 
     nixos =
-      { ... }:
+      { host, ... }:
       {
         imports =
           let
@@ -22,6 +22,13 @@
           ];
 
         home-manager.useGlobalPkgs = lib.mkDefault false;
+
+        system.autoUpgrade = {
+          enable = lib.mkDefault true;
+          dates = "hourly";
+          randomizedDelaySec = "30m";
+          flake = "github:rcorrear/configuration.nix#${host.name}";
+        };
 
         documentation = {
           dev.enable = lib.mkDefault true;
