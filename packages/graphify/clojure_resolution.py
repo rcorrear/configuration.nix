@@ -3,7 +3,6 @@ from __future__ import annotations
 import re
 from typing import Any
 
-
 _CLJ_SUFFIXES = (".clj", ".cljs", ".cljc")
 
 
@@ -33,14 +32,17 @@ def resolve_clojure_calls(
     all_nodes: list[dict],
     all_edges: list[dict],
 ) -> None:
-    namespace_files: dict[str, set[str]] = {}
     file_namespaces: dict[str, str] = {}
+    namespace_nodes: dict[str, list[str]] = {}
     for result in per_file:
         if not isinstance(result, dict):
             continue
         namespace = result.get("clojure_namespace")
         if not namespace:
             continue
+        namespace_node = result.get("clojure_namespace_node")
+        if namespace_node:
+            namespace_nodes.setdefault(str(namespace), []).append(str(namespace_node))
         files = {
             str(node.get("source_file", ""))
             for node in result.get("nodes", [])
@@ -48,30 +50,61 @@ def resolve_clojure_calls(
         }
         for source_file in files:
             file_namespaces[source_file] = str(namespace)
-            namespace_files.setdefault(str(namespace), set()).add(source_file)
+
+    unique_namespace_nodes = {
+        namespace: nodes[0]
+        for namespace, raw_nodes in namespace_nodes.items()
+        if len(nodes := sorted(set(raw_nodes))) == 1
+    }
+    import_edges: set[tuple[str, str]] = set()
+    for result in per_file:
+        if not isinstance(result, dict):
+            continue
+        source = result.get("clojure_file_node")
+        source_file = result.get("clojure_source_file", "")
+        if not source:
+            continue
+        for required in result.get("clojure_requires", []):
+            if not isinstance(required, dict):
+                continue
+            target = unique_namespace_nodes.get(str(required.get("namespace", "")))
+            pair = (str(source), str(target))
+            if not target or pair in import_edges:
+                continue
+            import_edges.add(pair)
+            all_edges.append(
+                {
+                    "source": str(source),
+                    "target": target,
+                    "relation": "imports",
+                    "context": "require",
+                    "confidence": "EXTRACTED",
+                    "confidence_score": 1.0,
+                    "source_file": source_file,
+                    "source_location": f"L{required.get('line', 1)}",
+                    "weight": 1.0,
+                }
+            )
 
     definitions_by_namespace: dict[str, dict[str, list[str]]] = {}
     definitions_global: dict[str, list[str]] = {}
     for node in all_nodes:
         source_file = str(node.get("source_file", ""))
         namespace = file_namespaces.get(source_file)
-        if not namespace:
-            continue
-        node_type = node.get("type")
-        if node_type not in {"function", "symbol", "class"}:
+        if not namespace or node.get("type") not in {"function", "symbol", "class"}:
             continue
         node_id = node.get("id")
-        if not node_id:
-            continue
         key = _symbol_key(node.get("label"))
-        if not key:
+        if not node_id or not key:
             continue
         definitions_by_namespace.setdefault(namespace, {}).setdefault(key, []).append(str(node_id))
         definitions_global.setdefault(key, []).append(str(node_id))
 
     for namespace in list(definitions_by_namespace):
         for key in list(definitions_by_namespace[namespace]):
-            definitions_by_namespace[namespace][key] = sorted(set(definitions_by_namespace[namespace][key]))
+            definitions_by_namespace[namespace][key] = sorted(
+                set(definitions_by_namespace[namespace][key])
+            )
     for key in list(definitions_global):
         definitions_global[key] = sorted(set(definitions_global[key]))
 
@@ -118,14 +151,16 @@ def resolve_clojure_calls(
                 edge["confidence_score"] = 1.0
                 edge["context"] = edge.get("context") or "call"
             continue
-        all_edges.append({
-            "source": caller,
-            "target": target,
-            "relation": "calls",
-            "context": "call",
-            "confidence": "EXTRACTED" if imported else "INFERRED",
-            "confidence_score": 1.0 if imported else 0.8,
-            "source_file": raw_call.get("source_file", ""),
-            "source_location": raw_call.get("source_location"),
-            "weight": 1.0,
-        })
+        all_edges.append(
+            {
+                "source": caller,
+                "target": target,
+                "relation": "calls",
+                "context": "call",
+                "confidence": "EXTRACTED" if imported else "INFERRED",
+                "confidence_score": 1.0 if imported else 0.8,
+                "source_file": raw_call.get("source_file", ""),
+                "source_location": raw_call.get("source_location"),
+                "weight": 1.0,
+            }
+        )

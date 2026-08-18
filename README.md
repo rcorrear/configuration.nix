@@ -53,3 +53,4 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 - **Stylix** for consistent theming
 - **1Password** secrets integration via opnix
 - **Tailscale** VPN across all systems
+- **Graphify** package and deterministic AST graph lifecycle for repository navigation

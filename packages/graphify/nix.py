@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib
+import os
 from pathlib import Path
 
 from graphify.extractors.base import _file_stem, _make_id, _read_text
@@ -89,7 +90,11 @@ def _path_text(node, source: bytes) -> str | None:
 def _path_node(path_text: str, base_path: Path, line: int, str_path: str) -> dict:
     if path_text.startswith(("./", "../")):
         target_path = (base_path.parent / path_text).resolve()
-        node_id = _make_id(_file_stem(target_path))
+        # Graphify does not know these are paths because the node records the
+        # importing file as its source. Canonicalize them relative to the scan
+        # working directory before creating the ID.
+        relative_target = Path(os.path.relpath(target_path, Path.cwd()))
+        node_id = _make_id(_file_stem(relative_target))
     else:
         node_id = _make_id(path_text)
     return _node(node_id, path_text, "file", line, str_path)
@@ -152,7 +157,9 @@ def extract_nix(path: Path) -> dict:
 
     stem = _file_stem(path)
     str_path = str(path)
-    file_nid = _make_id(stem)
+    # Keep the extension-bearing path so Graphify's post-pass can canonicalize
+    # this ID relative to the scan root.
+    file_nid = _make_id(str(path))
     nodes = [
         {
             "id": file_nid,
