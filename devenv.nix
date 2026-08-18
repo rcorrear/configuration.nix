@@ -7,7 +7,7 @@
 
   scripts.check.exec = ''
     nix fmt -- --fail-on-change "$@"
-    exec pre-commit run --all-files
+    exec prek run --all-files
   '';
 
   git-hooks.hooks = {
