@@ -23,7 +23,7 @@
           "\nextract --code-only\n"
           (slurp (str (fs/path root ".graphifyignore")))
           (apply str
-                 (for [extractor extractors]
+                 (for [extractor (conj extractors "packages/graphify/default.nix")]
                    (str "\n" extractor "\n" (slurp (str (fs/path root extractor))))))))))
 
 (defn nonempty-file? [path] (and (fs/regular-file? path) (pos? (fs/size path))))

@@ -94,7 +94,7 @@ def _path_node(path_text: str, base_path: Path, line: int, str_path: str) -> dic
         # importing file as its source. Canonicalize them relative to the scan
         # working directory before creating the ID.
         relative_target = Path(os.path.relpath(target_path, Path.cwd()))
-        node_id = _make_id(_file_stem(relative_target))
+        node_id = _make_id(str(relative_target))
     else:
         node_id = _make_id(path_text)
     return _node(node_id, path_text, "file", line, str_path)

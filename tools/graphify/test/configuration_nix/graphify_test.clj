@@ -15,6 +15,7 @@
     (fs/create-dirs (fs/path root "packages/graphify"))
     (doseq [extractor ["clojure.py" "clojure_resolution.py" "nix.py"]]
       (spit (str (fs/path root "packages/graphify" extractor)) extractor))
+    (spit (str (fs/path root "packages/graphify/default.nix")) "graphify-package")
     root))
 
 (defn write-output!
@@ -48,6 +49,13 @@
   (is (= "artifacts" (:artifact-dir (build/parse-args ["--artifact-dir" "artifacts"]))))
   (is (:error (build/parse-args ["--artifact-dir"])))
   (is (:error (build/parse-args ["--unknown"]))))
+
+(deftest graphify-config-hash-includes-package-configuration
+  (let [root (temp-root)
+        before (common/config-hash root "graphify 1.0")]
+    (try (spit (str (fs/path root "packages/graphify/default.nix")) "changed-package")
+         (is (not= before (common/config-hash root "graphify 1.0")))
+         (finally (fs/delete-tree root)))))
 
 (deftest graphify-build-creates-validated-metadata
   (let [root  (temp-root)
@@ -136,6 +144,22 @@
          (is (not-any? #(#{["graphify-build" "--no-bundle"] ["graphify" "update" (str root)]} (:command %)) @calls))
          (finally (fs/delete-tree root)))))
 
+(deftest graphify-sync-rejects-inexact-restored-artifact
+  (let [root   (temp-root)
+        staged (temp-root)]
+    (try (write-output! root (exact-metadata root true))
+         (write-output! staged (exact-metadata staged false))
+         (is (thrown? Exception
+                      (sync/install-restored-output!
+                       (fs/path root "graphify-out")
+                       (fs/path staged "graphify-out")
+                       head-sha
+                       "graphify 1.0"
+                       (common/config-hash root "graphify 1.0"))))
+         (is (true? (:exact (common/read-metadata (fs/path root "graphify-out")))))
+         (finally (fs/delete-tree root)
+                  (fs/delete-tree staged)))))
+
 (deftest graphify-sync-watch-runs-after-initial-sync
   (let [root  (temp-root)
         calls (atom [])]
@@ -151,3 +175,9 @@
   (is (:error (sync/parse-args ["--sha"])))
   (is (:error (sync/parse-args ["--repo"])))
   (is (:error (sync/parse-args ["--wat"]))))
+
+(deftest graphify-sync-normalizes-full-sha
+  (let [requested "ABCDEFABCDEFABCDEFABCDEFABCDEFABCDEFABCD"
+        run-fn    (fn [_ _] {:exit 1 :out "" :err "not a local commit"})]
+    (is (= (clojure.string/lower-case requested)
+           (sync/resolve-target-sha "." requested head-sha run-fn)))))

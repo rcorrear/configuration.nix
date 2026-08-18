@@ -42,6 +42,17 @@ for the checked-out commit.")
   (and (baseline-current? output-dir target-sha version configuration)
        (true? (:exact (common/read-metadata output-dir)))))
 
+(defn install-restored-output!
+  [output-dir staged target-sha version configuration]
+  (let [metadata (common/read-metadata staged)]
+    (when-not (and (common/valid-output? staged)
+                   (true? (:exact metadata))
+                   (= target-sha (:source_sha metadata))
+                   (= version (:graphify_version metadata))
+                   (= configuration (:config_hash metadata)))
+      (throw (ex-info "Downloaded Graphify artifact failed validation." {})))
+    (common/safe-replace-directory! output-dir staged)))
+
 (defn mark-working-copy!
   [output-dir mode now-fn]
   (let [metadata (common/read-metadata output-dir)]
@@ -56,7 +67,7 @@ for the checked-out commit.")
     head-sha
     (let [result (run-fn ["git" "rev-parse" "--verify" (str requested "^{commit}")] {:dir root})]
       (cond (zero? (:exit result)) (str/trim (:out result))
-            (re-matches #"[0-9a-fA-F]{40}" requested) requested
+            (re-matches #"[0-9a-fA-F]{40}" requested) (str/lower-case requested)
             :else (throw (ex-info (str "Requested SHA is neither a local commit nor a full commit ID: " requested)
                                   {}))))))
 
@@ -81,14 +92,8 @@ for the checked-out commit.")
                (when-not (common/nonempty-file? bundle) (throw (ex-info "Downloaded Graphify bundle is missing." {})))
                (common/ensure-success! (run-fn ["tar" "--zstd" "-xf" (str bundle) "-C" (str unpacked)] {:dir root})
                                        ["tar"])
-               (let [staged   (fs/path unpacked "graphify-out")
-                     metadata (common/read-metadata staged)]
-                 (when-not (and (common/valid-output? staged)
-                                (= target-sha (:source_sha metadata))
-                                (= version (:graphify_version metadata))
-                                (= configuration (:config_hash metadata)))
-                   (throw (ex-info "Downloaded Graphify artifact failed validation." {})))
-                 (common/safe-replace-directory! output-dir staged)
+               (let [staged (fs/path unpacked "graphify-out")]
+                 (install-restored-output! output-dir staged target-sha version configuration)
                  (println (str "Restored Graphify artifact for " target-sha))
                  true)
                (catch Exception _ false)
@@ -146,4 +151,3 @@ for the checked-out commit.")
            :else (try (sync! opts effects) 0 (catch Exception e (binding [*out* *err*] (println (ex-message e))) 1))))))
 
 (defn -main [& args] (System/exit (run args)))
-
