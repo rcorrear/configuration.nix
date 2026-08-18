@@ -25,8 +25,8 @@
 
         system.autoUpgrade = {
           enable = lib.mkDefault true;
-          dates = "hourly";
-          randomizedDelaySec = "30m";
+          dates = "*-*-* 00/6:00:00";
+          randomizedDelaySec = "2h";
           flake = "github:rcorrear/configuration.nix#${host.name}";
         };
 
