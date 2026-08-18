@@ -3,6 +3,6 @@
   "extends": ["config:recommended"],
   "enabledManagers": ["deps-edn", "github-actions", "nix"],
   "nix": { "enabled": true },
-  "timezone": "America/New_York"
+  "timezone": "America/New_York",
   "schedule": ["before 6am every weekday"]
 }
