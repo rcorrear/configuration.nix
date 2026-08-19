@@ -5,3 +5,5 @@ inputs:
     inputs:
       nixpkgs:
         follows: nixpkgs
+  graphify:
+    url: github:rcorrear/graphify/bfc6547c583d8d5a2f58798310f759368a56ece4
