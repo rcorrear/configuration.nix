@@ -1,4 +1,4 @@
-{ ... }:
+_:
 let
   cacheSettings = {
     substituters = [

@@ -111,7 +111,7 @@ in
     users.users = lib.mkIf cfg.createUser {
       "${cfg.user}" = {
         isSystemUser = true;
-        group = cfg.group;
+        inherit (cfg) group;
         home = cfg.stateDir;
         createHome = true;
         shell = pkgs.bashInteractive;

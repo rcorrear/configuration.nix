@@ -1,7 +1,7 @@
 ### custom ###
-.code/
 .codex/
 .pre-commit-config.yaml
+.tokensave
 graphify-out/
 
 ### aider ###
@@ -164,5 +164,3 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/direnv,emacs,linux,macos,vim,windows
-/.agent-shell/
-.tokensave

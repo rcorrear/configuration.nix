@@ -6,7 +6,6 @@ from typing import Any
 
 from graphify.extractors.base import _file_stem, _make_id, _read_text
 
-
 _DEF_FORMS = {
     "def": "symbol",
     "defonce": "symbol",
@@ -112,7 +111,7 @@ def _definition_name(node, source: bytes) -> str | None:
 
 def _module_node(module: str, line: int, str_path: str) -> dict:
     return {
-        "id": _make_id(module.replace(".", "/")),
+        "id": _make_id(_file_stem(Path(str_path)), module),
         "label": module,
         "type": "module",
         "file_type": "code",
@@ -194,13 +193,15 @@ def _require_specs(require_node, source: bytes) -> list[dict[str, Any]]:
         elif child.type == "sym_lit":
             module = _sym_text(child, source)
             if module:
-                specs.append({
-                    "module": module,
-                    "alias": None,
-                    "refer": [],
-                    "refer_all": False,
-                    "line": child.start_point[0] + 1,
-                })
+                specs.append(
+                    {
+                        "module": module,
+                        "alias": None,
+                        "refer": [],
+                        "refer_all": False,
+                        "line": child.start_point[0] + 1,
+                    }
+                )
         elif child.type == "list_lit":
             specs.extend(_require_specs(child, source))
     return specs
@@ -279,7 +280,9 @@ def extract_clojure(path: Path) -> dict:
 
     stem = _file_stem(path)
     str_path = str(path)
-    file_nid = _make_id(stem)
+    # Match upstream extractors: the extension-bearing path lets Graphify's
+    # post-pass canonicalize this ID relative to the scan root.
+    file_nid = _make_id(str(path))
     nodes = [
         {
             "id": file_nid,
@@ -298,6 +301,8 @@ def extract_clojure(path: Path) -> dict:
     aliases: dict[str, str] = {}
     refers: dict[str, str] = {}
     refer_all: list[str] = []
+    requires: list[dict[str, Any]] = []
+    module_nid: str | None = None
 
     def add_node(node: dict) -> None:
         if node["id"] in seen_nodes:
@@ -316,14 +321,12 @@ def extract_clojure(path: Path) -> dict:
             if name:
                 namespace = name
                 module = _module_node(name, line, str_path)
+                module_nid = module["id"]
                 add_node(module)
                 edges.append(_edge(file_nid, module["id"], "declares", line, str_path, "namespace"))
             for spec in _ns_require_specs(form, source):
                 module_name = spec["module"]
-                module_line = spec["line"]
-                module = _module_node(module_name, module_line, str_path)
-                add_node(module)
-                edges.append(_edge(file_nid, module["id"], "imports", module_line, str_path, "require"))
+                requires.append({"namespace": module_name, "line": spec["line"]})
                 if spec.get("alias"):
                     aliases[str(spec["alias"])] = module_name
                 for symbol in spec.get("refer", []):
@@ -339,14 +342,16 @@ def extract_clojure(path: Path) -> dict:
                 continue
             nid = _make_id(stem, name)
             label = f"{name}()" if kind == "function" else name
-            add_node({
-                "id": nid,
-                "label": label,
-                "type": kind,
-                "file_type": "code",
-                "source_file": str_path,
-                "source_location": f"L{line}",
-            })
+            add_node(
+                {
+                    "id": nid,
+                    "label": label,
+                    "type": kind,
+                    "file_type": "code",
+                    "source_file": str_path,
+                    "source_location": f"L{line}",
+                }
+            )
             definitions[name] = nid
             edges.append(_edge(file_nid, nid, "contains", line, str_path))
             if kind == "function":
@@ -358,14 +363,16 @@ def extract_clojure(path: Path) -> dict:
             if not name:
                 continue
             nid = _make_id(stem, name)
-            add_node({
-                "id": nid,
-                "label": name,
-                "type": "class",
-                "file_type": "code",
-                "source_file": str_path,
-                "source_location": f"L{line}",
-            })
+            add_node(
+                {
+                    "id": nid,
+                    "label": name,
+                    "type": "class",
+                    "file_type": "code",
+                    "source_file": str_path,
+                    "source_location": f"L{line}",
+                }
+            )
             definitions[name] = nid
             edges.append(_edge(file_nid, nid, "contains", line, str_path))
 
@@ -394,7 +401,9 @@ def extract_clojure(path: Path) -> dict:
                 target_namespace = refer_all[0]
                 import_kind = "refer-all"
 
-            target_nid = definitions.get(call_name) if target_namespace in (None, namespace) else None
+            target_nid = (
+                definitions.get(call_name) if target_namespace in (None, namespace) else None
+            )
             if target_nid:
                 key = (caller_nid, target_nid, line)
                 if key not in seen_calls:
@@ -419,6 +428,10 @@ def extract_clojure(path: Path) -> dict:
         "edges": edges,
         "raw_calls": raw_calls,
         "clojure_namespace": namespace,
+        "clojure_namespace_node": module_nid,
+        "clojure_file_node": file_nid,
+        "clojure_requires": requires,
+        "clojure_source_file": str_path,
         "clojure_aliases": aliases,
         "clojure_refers": refers,
         "clojure_refer_all": refer_all,

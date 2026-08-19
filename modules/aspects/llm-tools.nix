@@ -43,7 +43,7 @@
 
             pkgs.rcorrear.codex-multi-auth
             # pkgs.rcorrear.headroom
-            # pkgs.rcorrear.graphify
+            pkgs.rcorrear.graphify
             pkgs.rcorrear.rtk
             # pkgs.python3Packages.huggingface-hub
           ]
