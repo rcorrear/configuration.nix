@@ -1,4 +1,9 @@
-{ config, inputs, pkgs, ... }:
+{
+  config,
+  inputs,
+  pkgs,
+  ...
+}:
 let
   graphify = inputs.graphify.packages.${pkgs.system}.graphify;
   lifecycle = pkgs.callPackage ./packages/graphify/lifecycle.nix { inherit graphify; };

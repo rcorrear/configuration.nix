@@ -27,6 +27,7 @@ jobs:
       - name: Build and validate deterministic graph
         env:
           GRAPHIFY_SOURCE_SHA: ${{ github.sha }}
+        # yamllint disable-line rule:line-length
         run: nix run nixpkgs#devenv -- shell -- graphify-build --artifact-dir "$RUNNER_TEMP"
       - name: Publish exact-SHA graph
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
