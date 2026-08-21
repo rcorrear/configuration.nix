@@ -1,10 +1,15 @@
 { inputs, lib, ... }:
 {
-  flake-file.inputs.llm-agents = {
-    url = "github:numtide/llm-agents.nix";
-  };
-  flake-file.inputs.herdr = {
-    url = "github:ogulcancelik/herdr";
+  flake-file.inputs = {
+    graphify = {
+      url = "github:rcorrear/graphify";
+    };
+    llm-agents = {
+      url = "github:numtide/llm-agents.nix";
+    };
+    herdr = {
+      url = "github:ogulcancelik/herdr";
+    };
   };
 
   den.aspects.llm-tools = {
@@ -19,16 +24,11 @@
       let
         codexMultiHomeDir = "${config.xdg.stateHome}/codex-multi-home";
         huggingFaceDir = "${config.xdg.cacheHome}/huggingface";
-
-        herdrPkgs = inputs.herdr.packages.${pkgs.stdenv.hostPlatform.system};
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
       in
       {
-        imports = [ ../../homes/modules/herdr.nix ];
-
         home = {
           packages = [
-            llmPkgs.agent-deck
             llmPkgs.beads
             llmPkgs.beads-viewer
             llmPkgs.coderabbit-cli
@@ -38,13 +38,11 @@
             llmPkgs.opencode
             llmPkgs.openspec
             llmPkgs."open-code-review"
-
-            pkgs.tmux # agent-deck requires tmux
+            llmPkgs."paseo-desktop"
+            llmPkgs.rtk
 
             pkgs.rcorrear.codex-multi-auth
             # pkgs.rcorrear.headroom
-            # pkgs.rcorrear.graphify
-            pkgs.rcorrear.rtk
             # pkgs.python3Packages.huggingface-hub
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [
@@ -57,15 +55,6 @@
             HUGGINGFACE_HUB_CACHE = "${config.home.sessionVariables.HF_HOME}/hub";
             TRANSFORMERS_CACHE = "${config.home.sessionVariables.HF_HOME}/transformers";
           };
-        };
-
-        programs.herdr = {
-          enable = true;
-          package = herdrPkgs.default;
-          plugins = with pkgs.rcorrear.herdrPlugins; [
-            jj-workspace
-            worktree-setup
-          ];
         };
 
         systemd.user.services = lib.optionalAttrs pkgs.stdenv.isLinux {
