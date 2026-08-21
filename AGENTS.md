@@ -16,7 +16,7 @@ rtk read <file>
 rtk grep <pattern>
 rtk git status
 rtk git diff
-rtk nix develop -c check
+rtk devenv shell check
 ```
 
 Prefix each command in a chain. Use a raw command for debugging when RTK would
@@ -29,7 +29,7 @@ command while tracking usage.
 Run:
 
 ```bash
-rtk nix develop -c check
+rtk devenv shell check
 ```
 
 The check script runs formatting with `--fail-on-change` and the repository's

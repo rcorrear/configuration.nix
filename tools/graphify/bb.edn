@@ -1,0 +1,4 @@
+{:paths ["src" "test"]
+ :tasks {test {:doc "Run Graphify lifecycle tests"
+               :requires ([configuration-nix.graphify-test-runner :as tests])
+               :task (tests/run)}}}

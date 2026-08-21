@@ -1,0 +1,40 @@
+name: Graphify
+"on":
+  pull_request:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  graphify:
+    # yamllint disable rule:line-length
+    if: >-
+      github.event_name != 'pull_request' || !contains(github.event.pull_request.labels.*.name, 'graphify-skip')
+    # yamllint enable rule:line-length
+    runs-on: ubuntu-latest
+    steps:
+      # yamllint disable-line rule:line-length
+      - uses: wimpysworld/nothing-but-nix@687c797a730352432950c707ab493fcc951818d7
+      # yamllint disable-line rule:line-length
+      - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25
+      # yamllint disable-line rule:line-length
+      - uses: DeterminateSystems/magic-nix-cache-action@55718cd9ebf1737a061487d5ada21abf31e99a98
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with:
+          persist-credentials: false
+      - name: Build and validate deterministic graph
+        env:
+          GRAPHIFY_SOURCE_SHA: ${{ github.sha }}
+        # yamllint disable-line rule:line-length
+        run: nix run nixpkgs#devenv -- shell -- graphify-build --artifact-dir "$RUNNER_TEMP"
+      - name: Publish exact-SHA graph
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a
+        with:
+          name: graphify-${{ github.sha }}
+          path: ${{ runner.temp }}/graphify-${{ github.sha }}.tar.zst
+          compression-level: 0
+          if-no-files-found: error
+          retention-days: 90

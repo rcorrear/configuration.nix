@@ -1,0 +1,6 @@
+.devenv/
+.direnv/
+.git/
+.jj/
+graphify-out/
+result

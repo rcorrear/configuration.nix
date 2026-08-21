@@ -6,15 +6,13 @@
       den.aspects.tailscale-client
     ];
 
-    nixos =
-      { ... }:
-      {
-        networking = {
-          interfaces.net30.useDHCP = true;
-          search = [
-            "media.home.arpa"
-          ];
-        };
+    nixos = _: {
+      networking = {
+        interfaces.net30.useDHCP = true;
+        search = [
+          "media.home.arpa"
+        ];
       };
+    };
   };
 }

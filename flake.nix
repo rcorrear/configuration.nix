@@ -18,6 +18,7 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
+    graphify.url = "github:rcorrear/graphify";
     herdr.url = "github:ogulcancelik/herdr";
     home-manager = {
       url = "github:nix-community/home-manager";
