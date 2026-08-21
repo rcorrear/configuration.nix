@@ -70,7 +70,7 @@ in
           den.aspects.cachix
           den.aspects.hermes-agent
           den.aspects.nix-caches
-          den.aspects.opnix
+          den.aspects.secretspec
           den.aspects.stylix
         ];
 
