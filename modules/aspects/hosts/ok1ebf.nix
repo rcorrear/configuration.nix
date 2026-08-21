@@ -68,7 +68,7 @@ in
       OK1EBF = {
         includes = [
           den.aspects.cachix
-          # den.aspects.hermes-agent
+          den.aspects.hermes-agent
           den.aspects.nix-caches
           den.aspects.opnix
           den.aspects.stylix

@@ -14,7 +14,9 @@ let
     merge = _loc: defs: lib.foldl' lib.recursiveUpdate { } (map (d: d.value) defs);
   };
 
-  generatedConfigFile = (pkgs.formats.yaml { }).generate "hermes-config.yaml" cfg.settings;
+  generatedConfigFile = (pkgs.formats.yaml { }).generate "hermes-config.yaml" (
+    lib.recursiveUpdate { terminal.cwd = cfg.workingDirectory; } cfg.settings
+  );
   envFile = "${cfg.stateDir}/.hermes/.env";
   envFileContent = lib.concatStringsSep "\n" (lib.mapAttrsToList (k: v: "${k}=${v}") cfg.environment);
 in
@@ -144,7 +146,6 @@ in
         HOME = cfg.stateDir;
         HERMES_HOME = "${cfg.stateDir}/.hermes";
         HERMES_MANAGED = "true";
-        MESSAGING_CWD = cfg.workingDirectory;
       };
       path = [
         cfg.package

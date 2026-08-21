@@ -1,16 +1,24 @@
-{ den, ... }:
+{ den, inputs, ... }:
 {
+  flake-file.inputs.llm-agents = {
+    url = "github:numtide/llm-agents.nix";
+  };
+
   den.aspects.hermes-agent = {
     includes = [ den.aspects.opnix ];
 
     nixos =
       {
         config,
+        lib,
         pkgs,
         ...
       }:
       let
-        package = pkgs.callPackage ../../../packages/hermes-agent { };
+        llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
+        package = pkgs.callPackage ../../../packages/hermes-agent {
+          inherit (llmPkgs) hermes-agent;
+        };
       in
       {
         imports = [ ../../../packages/hermes-agent/module.nix ];
@@ -25,6 +33,13 @@
           secrets = {
             matrixBotEnv = {
               reference = "op://Infrastructure/matrix-bot/hermes";
+              owner = config.services.hermes-agent.user;
+              group = config.services.hermes-agent.group;
+              mode = "0600";
+              services = [ "hermes-agent" ];
+            };
+            matrixRecoveryKey = {
+              reference = "op://Infrastructure/matrix-bot/security-key";
               owner = config.services.hermes-agent.user;
               group = config.services.hermes-agent.group;
               mode = "0600";
@@ -60,13 +75,16 @@
           };
           environmentFiles = [
             config.services.onepassword-secrets.secretPaths.matrixBotEnv
-            config.services.onepassword-secrets.secretPaths.openrouterAgentEnv
           ];
         };
 
         systemd.services.hermes-agent = {
           after = [ "opnix-secrets.service" ];
           requires = [ "opnix-secrets.service" ];
+          preStart = lib.mkAfter ''
+            printf '\nMATRIX_RECOVERY_KEY=%s\n' "$(${pkgs.coreutils}/bin/cat ${config.services.onepassword-secrets.secretPaths.matrixRecoveryKey})" >> ${config.services.hermes-agent.stateDir}/.hermes/.env
+            printf 'OPENROUTER_API_KEY=%s\n' "$(${pkgs.coreutils}/bin/cat ${config.services.onepassword-secrets.secretPaths.openrouterAgentEnv})" >> ${config.services.hermes-agent.stateDir}/.hermes/.env
+          '';
         };
       };
   };
