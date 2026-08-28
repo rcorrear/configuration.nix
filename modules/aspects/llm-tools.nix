@@ -35,10 +35,13 @@
             llmPkgs.codex
             llmPkgs.codex-acp
             llmPkgs.crit
+            llmPkgs.omp
             llmPkgs.opencode
+            llmPkgs.opencode2
             llmPkgs.openspec
             llmPkgs."open-code-review"
             llmPkgs."paseo-desktop"
+            llmPkgs.pi
             llmPkgs.rtk
 
             pkgs.rcorrear.codex-multi-auth
