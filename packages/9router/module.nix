@@ -20,7 +20,7 @@ in
 
     address = mkOption {
       type = types.str;
-      default = "0.0.0.0";
+      default = "127.0.0.1";
       description = "Address on which 9Router listens.";
     };
 
@@ -32,7 +32,7 @@ in
 
     openFirewall = mkOption {
       type = types.bool;
-      default = true;
+      default = false;
       description = "Open the 9Router TCP port in the firewall.";
     };
 
