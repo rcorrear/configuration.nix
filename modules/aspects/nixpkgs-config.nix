@@ -93,6 +93,7 @@ let
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
         orca = final.callPackage ../../packages/orca { };
         rtk = final.callPackage ../../packages/rtk { };
+        "9router" = final.callPackage ../../packages/9router { };
         zmx = final.callPackage ../../packages/zmx { };
       };
 
