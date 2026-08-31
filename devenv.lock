@@ -59,17 +59,17 @@
         "nixpkgs": "nixpkgs"
       },
       "locked": {
-        "lastModified": 1787107463,
-        "narHash": "sha256-UYPC3lfBGc5XF5XpjBPicSY7GIGHDlXJAW7Qi/BbjYQ=",
+        "lastModified": 1787180953,
+        "narHash": "sha256-VG08wptmOyITja8l0ChWaSfsfA2yvRHiPRTnELcncgI=",
         "owner": "rcorrear",
         "repo": "graphify",
-        "rev": "bfc6547c583d8d5a2f58798310f759368a56ece4",
+        "rev": "6ca726abd38e54f5ee308fc37d541ec13ebd418d",
         "type": "github"
       },
       "original": {
         "owner": "rcorrear",
         "repo": "graphify",
-        "rev": "bfc6547c583d8d5a2f58798310f759368a56ece4",
+        "rev": "6ca726abd38e54f5ee308fc37d541ec13ebd418d",
         "type": "github"
       }
     },

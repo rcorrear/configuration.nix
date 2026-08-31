@@ -55,7 +55,7 @@
               }
             ];
             repositories = [
-              "rcorrear/omni"
+              "deskkeep/omni"
               "rcorrear/configuration.nix"
             ];
           };
@@ -110,32 +110,35 @@
               ${pkgs.coreutils}/bin/base64 --wrap=0 | ${pkgs.coreutils}/bin/tr '+/' '-_' | ${pkgs.coreutils}/bin/tr -d '='
             }
 
-            now="$(${pkgs.coreutils}/bin/date +%s)"
-            header="$(printf '%s' '{"alg":"RS256","typ":"JWT"}' | base64url)"
-            payload="$(${pkgs.jq}/bin/jq --compact-output --null-input \
-              --argjson issued_at "$((now - 60))" \
-              --argjson expires_at "$((now + 540))" \
-              --arg client_id "$client_id" \
-              '{ iat: $issued_at, exp: $expires_at, iss: $client_id }' | base64url)"
-            signature="$(printf '%s' "$header.$payload" | ${pkgs.openssl}/bin/openssl dgst -binary -sha256 -sign "$private_key" | base64url)"
-            jwt="$header.$payload.$signature"
+            for repository in ${lib.escapeShellArgs config.services.renovate.settings.repositories}; do
+              now="$(${pkgs.coreutils}/bin/date +%s)"
+              header="$(printf '%s' '{"alg":"RS256","typ":"JWT"}' | base64url)"
+              payload="$(${pkgs.jq}/bin/jq --compact-output --null-input \
+                --argjson issued_at "$((now - 60))" \
+                --argjson expires_at "$((now + 540))" \
+                --arg client_id "$client_id" \
+                '{ iat: $issued_at, exp: $expires_at, iss: $client_id }' | base64url)"
+              signature="$(printf '%s' "$header.$payload" | ${pkgs.openssl}/bin/openssl dgst -binary -sha256 -sign "$private_key" | base64url)"
+              jwt="$header.$payload.$signature"
 
-            installation_id="$(${pkgs.curl}/bin/curl --fail --silent --show-error \
-              --header "Accept: application/vnd.github+json" \
-              --header "Authorization: Bearer $jwt" \
-              --header "X-GitHub-Api-Version: 2022-11-28" \
-              "https://api.github.com/users/rcorrear/installation" \
-              | ${pkgs.jq}/bin/jq --exit-status --raw-output '.id')"
+              installation_id="$(${pkgs.curl}/bin/curl --fail --silent --show-error \
+                --header "Accept: application/vnd.github+json" \
+                --header "Authorization: Bearer $jwt" \
+                --header "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/repos/$repository/installation" \
+                | ${pkgs.jq}/bin/jq --exit-status --raw-output '.id')"
 
-            export RENOVATE_TOKEN="$(${pkgs.curl}/bin/curl --fail --silent --show-error \
-              --request POST \
-              --header "Accept: application/vnd.github+json" \
-              --header "Authorization: Bearer $jwt" \
-              --header "X-GitHub-Api-Version: 2022-11-28" \
-              "https://api.github.com/app/installations/$installation_id/access_tokens" \
-              | ${pkgs.jq}/bin/jq --exit-status --raw-output '.token')"
+              RENOVATE_TOKEN="$(${pkgs.curl}/bin/curl --fail --silent --show-error \
+                --request POST \
+                --header "Accept: application/vnd.github+json" \
+                --header "Authorization: Bearer $jwt" \
+                --header "X-GitHub-Api-Version: 2022-11-28" \
+                "https://api.github.com/app/installations/$installation_id/access_tokens" \
+                | ${pkgs.jq}/bin/jq --exit-status --raw-output '.token')"
+              export RENOVATE_TOKEN
 
-            exec ${lib.getExe config.services.renovate.package}
+              ${lib.getExe config.services.renovate.package} "$repository"
+            done
           '';
         };
 

@@ -18,7 +18,7 @@ in
   den = {
     aspects = {
       ok1ebf-pc = {
-        includes = [ ];
+        includes = [ den.aspects.oathkeeper ];
 
         homeManager =
           { pkgs, ... }:
@@ -187,7 +187,14 @@ in
 
               displayManager.gdm.enable = true;
 
-              fwupd.enable = true;
+              fwupd = {
+                enable = true;
+                # fwupd 2.1.6 history test expects no InstallDuration, but current
+                # libfwupd records it. Keep runtime package; skip broken package test.
+                package = pkgs.fwupd.overrideAttrs (_: {
+                  doCheck = false;
+                });
+              };
 
               gnome = {
                 games.enable = true;
