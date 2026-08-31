@@ -46,7 +46,7 @@
 
             pkgs.rcorrear.codex-multi-auth
             # pkgs.rcorrear.headroom
-            # pkgs.python3Packages.huggingface-hub
+            pkgs.python3Packages.huggingface-hub
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [
             pkgs.bubblewrap
