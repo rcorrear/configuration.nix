@@ -55,7 +55,7 @@
               }
             ];
             repositories = [
-              "rcorrear/omni"
+              "deskkeep/omni"
               "rcorrear/configuration.nix"
             ];
           };
