@@ -45,6 +45,7 @@
             llmPkgs.rtk
 
             pkgs.rcorrear.codex-multi-auth
+            pkgs.rcorrear.delta
             # pkgs.rcorrear.headroom
             pkgs.python3Packages.huggingface-hub
           ]
