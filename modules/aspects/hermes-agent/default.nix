@@ -5,12 +5,11 @@
   };
 
   den.aspects.hermes-agent = {
-    includes = [ den.aspects.opnix ];
+    includes = [ den.aspects.secretspec ];
 
     nixos =
       {
         config,
-        lib,
         pkgs,
         ...
       }:
@@ -18,6 +17,13 @@
         llmPkgs = inputs.llm-agents.packages.${pkgs.stdenv.hostPlatform.system};
         package = pkgs.callPackage ../../../packages/hermes-agent {
           inherit (llmPkgs) hermes-agent;
+        };
+        hermesSecret = description: ref: {
+          inherit description ref;
+          delivery = "envvar";
+          owner = config.services.hermes-agent.user;
+          group = config.services.hermes-agent.group;
+          services = [ "hermes-agent" ];
         };
       in
       {
@@ -28,29 +34,30 @@
           "olm-3.2.16"
         ];
 
-        services.onepassword-secrets = {
+        services.secretspec = {
           enable = true;
-          secrets = {
-            matrixBotEnv = {
-              reference = "op://Infrastructure/matrix-bot/hermes";
-              owner = config.services.hermes-agent.user;
-              group = config.services.hermes-agent.group;
-              mode = "0600";
-              services = [ "hermes-agent" ];
-            };
-            matrixRecoveryKey = {
-              reference = "op://Infrastructure/matrix-bot/security-key";
-              owner = config.services.hermes-agent.user;
-              group = config.services.hermes-agent.group;
-              mode = "0600";
-              services = [ "hermes-agent" ];
-            };
-            openrouterAgentEnv = {
-              reference = "op://Infrastructure/openrouter-agent/hermes";
-              owner = config.services.hermes-agent.user;
-              group = config.services.hermes-agent.group;
-              mode = "0400";
-              services = [ "hermes-agent" ];
+          providers.op = {
+            type = "onepassword";
+            uri = "onepassword+token://Infrastructure";
+            credentialFiles.OP_SERVICE_ACCOUNT_TOKEN = "/etc/opnix-token";
+            packages = [ pkgs._1password-cli ];
+            secrets = {
+              MATRIX_ACCESS_TOKEN = hermesSecret "Matrix bot access token" {
+                item = "matrix-bot";
+                field = "hermes";
+              };
+              MATRIX_ALLOWED_USERS = hermesSecret "Matrix users allowed to message the bot" {
+                item = "matrix-bot";
+                field = "allowed-users";
+              };
+              MATRIX_RECOVERY_KEY = hermesSecret "Matrix recovery key" {
+                item = "matrix-bot";
+                field = "security-key";
+              };
+              OPENROUTER_API_KEY = hermesSecret "OpenRouter agent API key" {
+                item = "openrouter-agent";
+                field = "hermes";
+              };
             };
           };
         };
@@ -69,22 +76,15 @@
             model.default = "inception/mercury-2";
           };
           environment = {
-            MATRIX_ALLOWED_USERS = "@rcorrear:matrix.org";
             MATRIX_ENCRYPTION = "true";
             MATRIX_HOMESERVER = "https://matrix.org";
           };
-          environmentFiles = [
-            config.services.onepassword-secrets.secretPaths.matrixBotEnv
-          ];
+          environmentFiles = [ config.services.secretspec.scopeExportPath.hermes-agent ];
         };
 
         systemd.services.hermes-agent = {
-          after = [ "opnix-secrets.service" ];
-          requires = [ "opnix-secrets.service" ];
-          preStart = lib.mkAfter ''
-            printf '\nMATRIX_RECOVERY_KEY=%s\n' "$(${pkgs.coreutils}/bin/cat ${config.services.onepassword-secrets.secretPaths.matrixRecoveryKey})" >> ${config.services.hermes-agent.stateDir}/.hermes/.env
-            printf 'OPENROUTER_API_KEY=%s\n' "$(${pkgs.coreutils}/bin/cat ${config.services.onepassword-secrets.secretPaths.openrouterAgentEnv})" >> ${config.services.hermes-agent.stateDir}/.hermes/.env
-          '';
+          after = [ "secretspec-secrets.service" ];
+          requires = [ "secretspec-secrets.service" ];
         };
       };
   };

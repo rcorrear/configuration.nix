@@ -6,16 +6,18 @@
 }:
 let
   graphify = inputs.graphify.packages.${pkgs.system}.graphify;
-  lifecycle = pkgs.callPackage ./packages/graphify/lifecycle.nix { inherit graphify; };
+  graphify-lifecycle = pkgs.callPackage ./packages/graphify/lifecycle.nix { inherit graphify; };
 in
 {
   packages = [
+    graphify
+
     pkgs.devenv
     pkgs.treefmt
     pkgs.babashka
-    graphify
-    lifecycle.build
-    lifecycle.sync
+
+    graphify-lifecycle.build
+    graphify-lifecycle.sync
   ];
 
   enterShell = ''

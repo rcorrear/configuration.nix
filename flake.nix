@@ -29,7 +29,11 @@
     llm-agents.url = "github:numtide/llm-agents.nix";
     niri-flake.url = "github:sodiboo/niri-flake";
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.xz";
-    opnix.url = "github:brizzbuzz/opnix";
+    omni.url = "git+file:///home/rcorrear/orca/workspaces/omni/principal-authentication";
+    secretspec = {
+      url = "github:cachix/secretspec";
+      flake = false;
+    };
     stylix.url = "github:danth/stylix";
     treefmt-nix.url = "github:numtide/treefmt-nix";
   };
