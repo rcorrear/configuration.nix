@@ -10,6 +10,7 @@ _: {
         home.packages = [
           pkgs.devcontainer
           pkgs.devenv
+          pkgs.rcorrear.delta
           pkgs.editorconfig-checker
           pkgs.gg-jj
           pkgs.gh
