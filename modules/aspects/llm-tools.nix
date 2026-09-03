@@ -1,6 +1,9 @@
 { inputs, lib, ... }:
 {
   flake-file.inputs = {
+    delta = {
+      url = "github:zed-industries/delta-nix";
+    };
     graphify = {
       url = "github:rcorrear/graphify";
     };
@@ -47,6 +50,9 @@
             pkgs.rcorrear.codex-multi-auth
             # pkgs.rcorrear.headroom
             pkgs.python3Packages.huggingface-hub
+          ]
+          ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-linux") [
+            inputs.delta.packages.${pkgs.stdenv.hostPlatform.system}.default
           ]
           ++ lib.optionals pkgs.stdenv.isLinux [
             pkgs.bubblewrap

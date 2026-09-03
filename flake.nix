@@ -8,6 +8,7 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    delta.url = "github:zed-industries/delta-nix";
     den.url = "github:denful/den";
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
