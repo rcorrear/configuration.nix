@@ -115,6 +115,7 @@ in
               firewall = {
                 allowedTCPPorts = [
                   25565
+                  38413
                 ];
                 allowedUDPPortRanges = [
                   {
