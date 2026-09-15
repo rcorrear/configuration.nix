@@ -43,7 +43,6 @@
             llmPkgs.opencode2
             llmPkgs.openspec
             llmPkgs."open-code-review"
-            llmPkgs."paseo-desktop"
             llmPkgs.pi
             llmPkgs.rtk
 
