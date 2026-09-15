@@ -6,7 +6,7 @@ let
 in
 {
   flake-file.inputs = {
-    omni.url = "github:rcorrear/omni";
+    omni.url = "github:deskkeep/omni";
   };
 
   den.aspects.oathkeeper = {
@@ -59,7 +59,12 @@ in
             upstreamUrl = upstreamUrlMarker;
             extraModules = [
               (
-                { config, lib, pkgs, ... }:
+                {
+                  config,
+                  lib,
+                  pkgs,
+                  ...
+                }:
                 let
                   oathkeeper = config.services.omni.oathkeeper;
                   prepareConfig = pkgs.writeShellScript "prepare-oathkeeper-config" ''

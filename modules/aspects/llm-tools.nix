@@ -40,15 +40,15 @@
             llmPkgs.opencode2
             llmPkgs.openspec
             llmPkgs."open-code-review"
-            llmPkgs."paseo-desktop"
             llmPkgs.pi
             llmPkgs.rtk
 
             pkgs.rcorrear.codex-multi-auth
-            pkgs.rcorrear.delta
             # pkgs.rcorrear.headroom
             pkgs.python3Packages.huggingface-hub
           ]
+          ++ lib.optionals (pkgs.stdenv.hostPlatform.system == "x86_64-linux") [ pkgs.rcorrear.delta ]
+          ++ lib.optionals pkgs.stdenv.isLinux [ llmPkgs."paseo-desktop" ]
           ++ lib.optionals pkgs.stdenv.isLinux [
             pkgs.bubblewrap
           ];
