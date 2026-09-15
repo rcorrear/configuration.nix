@@ -10,11 +10,9 @@ _: {
         home.packages = [
           pkgs.devcontainer
           pkgs.devenv
-          pkgs.rcorrear.delta
           pkgs.editorconfig-checker
           pkgs.gg-jj
           pkgs.gh
-          pkgs.rcorrear.jj-waltz
           pkgs.multimarkdown
           pkgs.nerd-fonts.blex-mono
           pkgs.nerd-fonts.caskaydia-cove
@@ -23,10 +21,11 @@ _: {
           pkgs.nixfmt
           pkgs.pipenv
           pkgs.pre-commit
+          pkgs.rcorrear.jj-waltz
           pkgs.shellcheck
           pkgs.shfmt
+          pkgs.super
           pkgs.watchman
-          pkgs.zed
         ]
         ++ lib.optionals pkgs.stdenv.isLinux [ pkgs.rcorrear.orca ];
 
