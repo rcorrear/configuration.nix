@@ -85,6 +85,7 @@ let
       rcorrear = {
         cider-3 = final.callPackage ../../packages/cider-3 { };
         codex-multi-auth = final.callPackage ../../packages/codex-multi-auth { };
+        delta = final.callPackage ../../packages/delta { };
         exiled-exchange2 = final.callPackage ../../packages/exiled-exchange2 { };
         finzytrack = final.callPackage ../../packages/finzytrack { };
         graphify = inputs.graphify.packages.${final.stdenv.hostPlatform.system}.graphify;
@@ -93,6 +94,7 @@ let
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
         orca = final.callPackage ../../packages/orca { };
         rtk = final.callPackage ../../packages/rtk { };
+        "9router" = final.callPackage ../../packages/9router { };
         zmx = final.callPackage ../../packages/zmx { };
       };
 

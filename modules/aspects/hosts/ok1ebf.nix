@@ -18,7 +18,7 @@ in
   den = {
     aspects = {
       ok1ebf-pc = {
-        includes = [ ];
+        includes = [ den.aspects.oathkeeper ];
 
         homeManager =
           { pkgs, ... }:
@@ -70,7 +70,8 @@ in
           den.aspects.cachix
           den.aspects.hermes-agent
           den.aspects.nix-caches
-          den.aspects.opnix
+          den.aspects."9router"
+          den.aspects.secretspec
           den.aspects.stylix
         ];
 
@@ -114,6 +115,7 @@ in
               firewall = {
                 allowedTCPPorts = [
                   25565
+                  38413
                 ];
                 allowedUDPPortRanges = [
                   {
@@ -186,7 +188,14 @@ in
 
               displayManager.gdm.enable = true;
 
-              fwupd.enable = true;
+              fwupd = {
+                enable = true;
+                # fwupd 2.1.6 history test expects no InstallDuration, but current
+                # libfwupd records it. Keep runtime package; skip broken package test.
+                package = pkgs.fwupd.overrideAttrs (_: {
+                  doCheck = false;
+                });
+              };
 
               gnome = {
                 games.enable = true;

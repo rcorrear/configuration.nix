@@ -51,5 +51,5 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 - **Home Manager** for declarative user environments
 - **Secureboot** via Lanzaboote
 - **Stylix** for consistent theming
-- **1Password** secrets integration via opnix
+- **1Password** secrets integration via secretspec
 - **Tailscale** VPN across all systems
