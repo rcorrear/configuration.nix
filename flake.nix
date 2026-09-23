@@ -28,7 +28,10 @@
     import-tree.url = "github:denful/import-tree";
     lanzaboote.url = "github:nix-community/lanzaboote";
     llm-agents.url = "github:numtide/llm-agents.nix";
-    niri-flake.url = "github:sodiboo/niri-flake";
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
     omni.url = "github:deskkeep/omni";
     opnix.url = "github:brizzbuzz/opnix";

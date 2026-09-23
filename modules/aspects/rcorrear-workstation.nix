@@ -64,7 +64,6 @@ _: {
           packages = [
             (pkgs.aspellWithDicts (dicts: [
               dicts.en
-              dicts.en-computers
             ]))
 
             pkgs.font-awesome
