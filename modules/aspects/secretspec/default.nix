@@ -30,7 +30,9 @@
       {
         imports = [ ../../../packages/secretspec/module.nix ];
 
-        services.secretspec.package = lib.mkDefault self.packages.${pkgs.system}.secretspec;
+        services.secretspec.package =
+          lib.mkDefault
+            self.packages.${pkgs.stdenv.hostPlatform.system}.secretspec;
       };
   };
 }

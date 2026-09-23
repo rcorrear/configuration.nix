@@ -32,7 +32,10 @@
       url = "github:microvm-nix/microvm.nix/174e28de151e069a95d03c86dd174c3b71bdfba7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    niri-flake.url = "github:sodiboo/niri-flake";
+    niri-flake = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     nixpkgs.url = "https://channels.nixos.org/nixpkgs-unstable/nixexprs.tar.zst";
     opnix.url = "github:brizzbuzz/opnix";
     secretspec = {

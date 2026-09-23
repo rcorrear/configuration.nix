@@ -152,7 +152,10 @@ in
 
               nh.flake = "/etc/nixos";
 
-              niri.enable = true;
+              niri = {
+                enable = true;
+                package = pkgs.niri;
+              };
 
               nix-ld = {
                 enable = true;

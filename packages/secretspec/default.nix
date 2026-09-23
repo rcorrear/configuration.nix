@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage (_finalAttrs: {
 
   buildAndTestSubdir = "secretspec";
 
-  cargoHash = "sha256-yqBAhnHBwKbSyH8sEDo6y0xGUdKJgHd3Gsr1sTS/bRc=";
+  cargoHash = "sha256-8nYh1m2x/RrumiX/F2F2dRJc5YLArlBXGyTKmWGvY/w=";
 
   doCheck = false;
 
