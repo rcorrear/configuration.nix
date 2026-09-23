@@ -76,7 +76,6 @@ _: {
             pkgs.obsidian
             pkgs.podman-compose
             pkgs.podman-desktop
-            pkgs.symbola
             pkgs.yt-dlp
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages
