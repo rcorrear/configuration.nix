@@ -64,7 +64,6 @@ _: {
           packages = [
             (pkgs.aspellWithDicts (dicts: [
               dicts.en
-              dicts.en-computers
             ]))
 
             pkgs.font-awesome
@@ -77,7 +76,6 @@ _: {
             pkgs.obsidian
             pkgs.podman-compose
             pkgs.podman-desktop
-            pkgs.symbola
             pkgs.yt-dlp
           ]
           ++ lib.optionals pkgs.stdenv.isLinux linuxDesktopPackages

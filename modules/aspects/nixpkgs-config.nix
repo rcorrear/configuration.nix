@@ -1,6 +1,5 @@
 {
   inputs,
-  lib,
   config,
   ...
 }:
@@ -93,22 +92,12 @@ let
         jj-waltz = final.callPackage ../../packages/jj-waltz { };
         orca = final.callPackage ../../packages/orca { };
         rtk = final.callPackage ../../packages/rtk { };
+        "9router" = final.callPackage ../../packages/9router { };
         zmx = final.callPackage ../../packages/zmx { };
       };
-
-      # Work around an upstream OpenLDAP 2.6.13 syncrepl test failure that
-      # currently blocks Lutris through its transitive dependency chain.
-      openldap = prev.openldap.overrideAttrs (_: {
-        doCheck = false;
-      });
     };
 
-  overlaysFor =
-    system:
-    [ rcorrearOverlay ]
-    ++ lib.optionals (lib.hasInfix "linux" system) [
-      inputs.niri-flake.overlays.niri
-    ];
+  overlaysFor = _system: [ rcorrearOverlay ];
 
   nixpkgsConfigUnfree = {
     allowUnfree = true;
@@ -118,6 +107,7 @@ in
   flake-file.inputs = {
     niri-flake = {
       url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
