@@ -12,7 +12,6 @@ in
   packages = [
     graphify
 
-    pkgs.devenv
     pkgs.treefmt
     pkgs.babashka
 
