@@ -5,7 +5,7 @@
 }:
 let
   rcorrearOverlay =
-    final: prev:
+    final: _prev:
     let
       herdrPluginMeta = {
         homepage = "https://herdr.dev/plugins/";
