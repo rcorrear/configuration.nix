@@ -10,7 +10,8 @@ _: {
         ...
       }:
       let
-        baseEmacsPackage = if pkgs.stdenv.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
+        baseEmacsPackage =
+          if pkgs.stdenv.hostPlatform.isDarwin then pkgs.emacs-macport else pkgs.emacs-pgtk;
         emacsPackage = wrapEmacsRuntime baseEmacsPackage;
         emacsRuntimePath = lib.makeBinPath [
           pkgs.nodejs
@@ -32,7 +33,7 @@ _: {
             pkgs,
             ...
           }:
-          lib.mkIf pkgs.stdenv.isDarwin {
+          lib.mkIf pkgs.stdenv.hostPlatform.isDarwin {
             launchd.agents.emacs-daemon = {
               enable = true;
               config = {

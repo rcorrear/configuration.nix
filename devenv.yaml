@@ -6,4 +6,4 @@ inputs:
       nixpkgs:
         follows: nixpkgs
   graphify:
-    url: github:rcorrear/graphify/bfc6547c583d8d5a2f58798310f759368a56ece4
+    url: github:rcorrear/graphify/6ca726abd38e54f5ee308fc37d541ec13ebd418d

@@ -6,7 +6,7 @@ in
 {
   perSystem =
     { pkgs, ... }:
-    lib.mkIf (pkgs.stdenv.isDarwin && !isNativeDarwinHost) {
+    lib.mkIf (pkgs.stdenv.hostPlatform.isDarwin && !isNativeDarwinHost) {
       # Suppress only known failing checks for Darwin when evaluated from non-Darwin hosts.
       checks = {
         check-flake-file = lib.mkForce pkgs.emptyFile;
