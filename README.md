@@ -51,5 +51,16 @@ NixOS and Home Manager configurations for multiple Linux and macOS systems using
 - **Home Manager** for declarative user environments
 - **Secureboot** via Lanzaboote
 - **Stylix** for consistent theming
-- **1Password** secrets integration via opnix
+- **1Password** secrets integration via secretspec
 - **Tailscale** VPN across all systems
+
+## Oathkeeper gateway
+
+The [Oathkeeper aspect](modules/aspects/oathkeeper.nix) runs the authentication gateway
+in a MicroVM on OK1EBF. Its reusable service, NixOS module, and guest helpers live in
+[packages/oathkeeper](packages/oathkeeper/README.md); they no longer require the private
+Omni flake. MicroVM is a direct, pinned public input.
+
+The existing `services.omni.oathkeeper` options and `X-Omni-*` headers are retained for
+compatibility. Runtime URLs still come from 1Password through secretspec rather than
+being embedded in the Nix store.

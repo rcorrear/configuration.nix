@@ -14,6 +14,7 @@
         networking = {
           firewall = {
             allowedTCPPorts = [
+              8123 # Home Assistant frontend
               21063 # HASS HomeKit
               21064 # HASS HomeKit
             ];
@@ -57,7 +58,6 @@
               "ipp"
               "zeroconf"
             ];
-            openFirewall = true;
           };
           matter-server.enable = true;
         };

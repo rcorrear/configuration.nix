@@ -5,17 +5,18 @@
   ...
 }:
 let
-  graphify = inputs.graphify.packages.${pkgs.system}.graphify;
-  lifecycle = pkgs.callPackage ./packages/graphify/lifecycle.nix { inherit graphify; };
+  graphify = inputs.graphify.packages.${pkgs.stdenv.hostPlatform.system}.graphify;
+  graphify-lifecycle = pkgs.callPackage ./packages/graphify/lifecycle.nix { inherit graphify; };
 in
 {
   packages = [
-    pkgs.devenv
+    graphify
+
     pkgs.treefmt
     pkgs.babashka
-    graphify
-    lifecycle.build
-    lifecycle.sync
+
+    graphify-lifecycle.build
+    graphify-lifecycle.sync
   ];
 
   enterShell = ''
