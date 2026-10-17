@@ -1,0 +1,2 @@
+# Unified Go patch context intentionally has a space before tabs and empty lines.
+packages/9router/relative-layer-paths.patch whitespace=-blank-at-eol,-space-before-tab

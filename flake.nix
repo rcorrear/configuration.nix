@@ -32,6 +32,10 @@
       url = "github:microvm-nix/microvm.nix/174e28de151e069a95d03c86dd174c3b71bdfba7";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    nimi = {
+      url = "github:weyl-ai/nimi/99312337b455329adc94105a4a1f371edf6d6aa0";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     niri-flake = {
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
