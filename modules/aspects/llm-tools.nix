@@ -3,15 +3,14 @@
   flake-file.inputs = {
     delta = {
       url = "github:zed-industries/delta-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     graphify = {
       url = "github:rcorrear/graphify";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
     llm-agents = {
       url = "github:numtide/llm-agents.nix";
-    };
-    herdr = {
-      url = "github:ogulcancelik/herdr";
     };
   };
 
