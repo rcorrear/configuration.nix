@@ -29,7 +29,7 @@
     lanzaboote.url = "github:nix-community/lanzaboote";
     llm-agents.url = "github:numtide/llm-agents.nix";
     microvm = {
-      url = "github:microvm-nix/microvm.nix/174e28de151e069a95d03c86dd174c3b71bdfba7";
+      url = "github:microvm-nix/microvm.nix/4876e2ae2de6ce225f4ccf664ae441128aa3f03a";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri-flake = {
