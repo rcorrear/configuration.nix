@@ -152,8 +152,18 @@ scope, authentication, signing, verification, review, or safety blockers.
    results. If the base changes in a way not covered by the successful test
    merge, update the feature branch and obtain fresh checks rather than
    assuming an old green result still applies.
-7. Once all checks and policies pass, merge with a merge commit and guard the
-   reviewed head:
+7. Before merging, confirm that the destination has an enforced merge queue or
+   strict required-check protection requiring the PR to be up to date with the
+   destination branch. `--match-head-commit` guards only the PR head, not the
+   destination SHA. Without a verified server-side guard, stop and report the
+   blocker; this skill must not enable or change repository protections itself.
+   Immediately before the merge command, re-read the destination SHA and compare
+   it with the destination covered by the verified checks. If it changed, stop
+   the merge attempt, refresh the base, and repeat the applicable verification.
+   This recheck alone cannot eliminate a race with another merge.
+
+   Once all checks and policies pass, use a merge commit with the reviewed head
+   guard only when strict protection is enforced and no merge queue applies:
 
    ```sh
    rtk proxy gh pr merge PR_NUMBER --repo rcorrear/configuration.nix \
@@ -161,8 +171,9 @@ scope, authentication, signing, verification, review, or safety blockers.
    ```
 
    Replace the arguments with the verified values. Use this only while merge
-   commits are still permitted. If the repository adopts a merge queue, follow
-   the live queue requirements and continue verifying through actual merge;
+   commits are still permitted. When an enforced merge queue applies, follow
+   its live requirements instead of the direct merge command, recheck the
+   destination before submission, and continue verifying through actual merge;
    enabling auto-merge or entering the queue is not completion.
 
 ## Confirm the result
