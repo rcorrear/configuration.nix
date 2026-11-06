@@ -69,7 +69,8 @@ the local organization rules.
 
 ## Graphify
 
-When `/graphify` is requested, follow the installed graphify instructions.
+When `/graphify` is requested, follow the repository's
+[Graphify operations guide](docs/operations/graphify.md).
 For codebase questions, query `graphify-out/graph.json` first when it exists;
 use path/explain queries for focused relationships. After modifying code, run
 `rtk graphify update .` when the command is available. Use
