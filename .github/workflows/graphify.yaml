@@ -16,7 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # yamllint disable-line rule:line-length
-      - uses: wimpysworld/nothing-but-nix@687c797a730352432950c707ab493fcc951818d7
+      - uses: wimpysworld/nothing-but-nix@59a79ef03bc486f0acca5480b7edf426ae7e7b0c
       # yamllint disable-line rule:line-length
       - uses: DeterminateSystems/nix-installer-action@ef8a148080ab6020fd15196c2084a2eea5ff2d25
       # yamllint disable-line rule:line-length
