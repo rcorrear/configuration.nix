@@ -1,6 +1,6 @@
 # 9Router
 
-The pilot packages 9Router as an application image, with Nimi supervising
+9Router is packaged as an application image, with Nimi supervising
 a Nix modular service. A separate, tagged Tailscale gateway exposes
 `svc:9router-web` over HTTPS. The application image has no Tailscale identity,
 NixOS, systemd, SSH daemon, or Home Manager environment.
@@ -29,7 +29,7 @@ rtk nix build --no-link \
 
 `9router-image` is a nix2container image descriptor plus its layer references,
 not an LXC rootfs tarball. Run the following **locally**, in the checkout
-containing this pilot. These commands work in fish as well as Bash and write
+containing this configuration. These commands work in fish as well as Bash and write
 the archive to your home directory; no placeholder directory needs replacing:
 
 ```sh
@@ -284,12 +284,12 @@ must also be able to make an authenticated model request before cutover.
 Test a non-gateway machine cannot reach port 20128 directly.
 
 Then configure the named Service as below and test access through HTTPS.
-Keep `onboot: 0` during the pilot; after verification, enable automatic start
+Keep `onboot: 0` during initial validation; afterward, enable automatic start
 only if desired with `sudo pct set "$CTID" --onboot 1`.
 
 ### Extraction fails at `unlink("/etc/group")`
 
-An earlier pilot archive contained absolute layer member names such as
+An earlier archive contained absolute layer member names such as
 `/etc/group`. The older Proxmox importer joined that name to the extraction
 directory before removing existing paths; an absolute name discarded the
 directory prefix. The resulting unprivileged attempt to unlink the host's
@@ -487,7 +487,7 @@ The gateway-to-backend hop is HTTP unless separately configured for TLS.
 
 ## Cutover and updates
 
-Keep the original gateway running until the pilot passes local and PVE checks.
+Keep the original gateway running until the replacement passes local and PVE checks.
 For final state migration, stop its writer and back up the complete
 `/var/lib/9router` directory (possibly backed by `/var/lib/private/9router`
 under DynamicUser). Copy it securely to the new data volume and adjust ownership
@@ -506,7 +506,7 @@ versioned images if a registry is used; changing a tag or replacing the template
 archive does **not** update an existing LXC. There is no `pct` equivalent of
 `docker compose pull && docker compose up` in this guide.
 
-For the pilot, prefer a reviewed replacement guest rather than an in-place
+Prefer a reviewed replacement guest rather than an in-place
 destructive rootfs replacement:
 
 1. Build/export the new image and verify its checksum after transfer.

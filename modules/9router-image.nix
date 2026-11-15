@@ -13,7 +13,7 @@
         inherit pkgs;
         source = inputs.nimi.inputs.nix2container;
       };
-      pilot = import ../packages/9router/image.nix {
+      fileImage = import ../packages/9router/image.nix {
         inherit pkgs;
         inherit (nimiPkgs) nimi;
         inherit (imageTools) nix2container;
@@ -27,7 +27,7 @@
         inherit pkgs secretspec;
         onepasswordCli = opPkgs._1password-cli;
       };
-      vaultPilot = import ../packages/9router/image.nix {
+      secretspecImage = import ../packages/9router/image.nix {
         inherit pkgs secretRuntime;
         inherit (nimiPkgs) nimi;
         inherit (imageTools) nix2container;
@@ -35,7 +35,7 @@
       secretTests = import ../tests/9router/secretspec.nix {
         inherit pkgs secretspec;
       };
-      testPilot = import ../packages/9router/image.nix {
+      testImage = import ../packages/9router/image.nix {
         inherit pkgs;
         inherit (nimiPkgs) nimi;
         inherit (imageTools) nix2container;
@@ -46,15 +46,15 @@
       };
       privilegeTest = import ../tests/9router/privileges.nix {
         inherit pkgs secretTests;
-        runner = testPilot.runner;
+        inherit (testImage) runner;
       };
     in
     {
       packages = lib.optionalAttrs (system == "x86_64-linux") {
-        "9router-image" = pilot.image;
-        "9router-nimi" = pilot.runner;
-        "9router-secretspec-image" = vaultPilot.image;
-        "9router-secretspec-nimi" = vaultPilot.runner;
+        "9router-image" = fileImage.image;
+        "9router-nimi" = fileImage.runner;
+        "9router-secretspec-image" = secretspecImage.image;
+        "9router-secretspec-nimi" = secretspecImage.runner;
         # A VM supplies real root and UID 1000 without host privileges.
         "9router-secretspec-smoke" = privilegeTest.driver;
         "9router-smoke" = pkgs.writeShellApplication {
@@ -66,7 +66,7 @@
             pkgs.bash
           ];
           text = ''
-            export NINE_ROUTER_RUNNER=${lib.getExe pilot.runner}
+            export NINE_ROUTER_RUNNER=${lib.getExe fileImage.runner}
             ${builtins.readFile ../tests/9router/smoke.sh}
           '';
         };
@@ -76,7 +76,7 @@
         "9router-secretspec-oci-archive" =
           pkgs.runCommand "9router-secretspec-oci-archive" { nativeBuildInputs = [ pkgs.python3 ]; }
             ''
-              ${lib.getExe vaultPilot.image.copyTo} --tmpdir "$TMPDIR" \
+              ${lib.getExe secretspecImage.image.copyTo} --tmpdir "$TMPDIR" \
                 "oci-archive:$TMPDIR/9router.oci.tar:9router-secretspec"
               python3 ${../tests/9router/check-oci-archive.py} "$TMPDIR/9router.oci.tar" 0:0
               touch "$out"
@@ -92,7 +92,7 @@
               nativeBuildInputs = [ pkgs.python3 ];
             }
             ''
-              python3 - ${pilot.image} <<'PY'
+              python3 - ${fileImage.image} <<'PY'
               import json, sys
               image = json.load(open(sys.argv[1]))
               cfg = image["image-config"]
@@ -110,7 +110,7 @@
               nativeBuildInputs = [ pkgs.python3 ];
             }
             ''
-              ${lib.getExe pilot.image.copyTo} --tmpdir "$TMPDIR" \
+              ${lib.getExe fileImage.image.copyTo} --tmpdir "$TMPDIR" \
                 "oci-archive:$TMPDIR/9router.oci.tar:9router"
               python3 ${../tests/9router/check-oci-archive.py} "$TMPDIR/9router.oci.tar"
               touch "$out"
