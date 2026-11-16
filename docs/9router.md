@@ -19,13 +19,14 @@ The commands below target PVE 9.2; check `pct help create` on older installation
 ## Build and local validation
 
 ```sh
-rtk nix build --no-link .#9router-image .#9router-nimi
-rtk nix run .#9router-smoke
-rtk nix build --no-link \
-  .#checks.x86_64-linux.9router-image-contract \
-  .#checks.x86_64-linux.9router-oci-archive \
-  .#checks.x86_64-linux.9router-gateway
+rtk nix run .#build-image -- 9router
+rtk nix run .#check-image -- 9router
 ```
+
+The shared [container image interface](container-images.md) selects the current
+system automatically. `check-image` builds the aggregate flake check, including
+HTTP smoke, gateway, metadata, and OCI archive checks; `nix flake check` runs
+these too. Building the image already builds its Nimi runner.
 
 `9router-image` is a nix2container image descriptor plus its layer references,
 not an LXC rootfs tarball. Run the following **locally**, in the checkout
@@ -33,12 +34,12 @@ containing this configuration. These commands work in fish as well as Bash and w
 the archive to your home directory; no placeholder directory needs replacing:
 
 ```sh
-rtk nix run .#9router-image.copyTo -- \
+rtk nix run .#copy-image -- 9router \
   "oci-archive:$HOME/9router.oci.tar:9router"
 rtk ls -lh "$HOME/9router.oci.tar"
 rtk proxy tar -tf "$HOME/9router.oci.tar" oci-layout index.json
 rtk proxy sha256sum "$HOME/9router.oci.tar"
-rtk proxy python3 tests/9router/check-oci-archive.py "$HOME/9router.oci.tar"
+rtk nix run .#check-image -- --archive "$HOME/9router.oci.tar" 9router
 ```
 
 The archive check reads every image layer without extracting it. It rejects
@@ -52,8 +53,8 @@ which is for container backups. Use `pct create` as shown below.
 
 A registry is optional for this local-archive workflow.
 Publishing requires a separately selected registry and explicit authorization.
-Use the image's `copyToRegistry` helper with an explicit destination, or `copyTo`
-with a `docker://` destination. Authenticate using an external credential store;
+Use `copy-image` with an explicitly selected `docker://` destination.
+Authenticate using an external credential store;
 never put registry credentials into Nix files or command arguments.
 
 The image uses Nimi's pinned runner and nix2container directly: the pinned
@@ -404,13 +405,11 @@ includes the unfree 1Password CLI with a package-specific license allowance.
 ### Build, test, and deploy a candidate
 
 ```sh
-rtk nix build --no-link .#9router-secretspec-image .#9router-secretspec-nimi \
-  .#checks.x86_64-linux.9router-secretspec \
-  .#checks.x86_64-linux.9router-secretspec-oci-archive
-rtk nix run .#9router-secretspec-smoke
-rtk nix run .#9router-secretspec-image.copyTo -- \
+rtk nix run .#build-image -- 9router-secretspec
+rtk nix run .#check-image -- 9router-secretspec
+rtk nix run .#copy-image -- 9router-secretspec \
   "oci-archive:$HOME/9router-secretspec.oci.tar:9router-secretspec"
-rtk proxy python3 tests/9router/check-oci-archive.py "$HOME/9router-secretspec.oci.tar" 0:0
+rtk nix run .#check-image -- --archive "$HOME/9router-secretspec.oci.tar" 9router-secretspec
 ```
 
 Use the reviewed **replacement-guest** procedure below, substituting this
@@ -420,7 +419,7 @@ rollback; the new variant ignores that environment file. Never run both
 guests against the same writable data volume.
 
 Allow DNS, time synchronization, and outbound HTTPS to 1Password through the
-deployment's network policy. The SecretSpec smoke command now boots a NixOS
+deployment's network policy. The smoke check boots a NixOS
 test VM (KVM recommended) rather than a single-UID Bubblewrap namespace, so it
 can test real root-to-1000 privilege transitions without host sudo. Tests use
 the real pinned SecretSpec with a fake `op` provider and dummy credentials.

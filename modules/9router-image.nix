@@ -6,7 +6,12 @@
   };
 
   perSystem =
-    { pkgs, system, ... }:
+    {
+      config,
+      pkgs,
+      system,
+      ...
+    }:
     let
       nimiPkgs = pkgs.extend inputs.nimi.overlays.default;
       imageTools = import ../packages/9router/nix2container.nix {
@@ -47,74 +52,68 @@
       privilegeTest = import ../tests/9router/privileges.nix {
         inherit pkgs secretTests;
         inherit (testImage) runner;
+        fileRunner = fileImage.runner;
+      };
+      gatewayTest = import ../tests/9router/gateway-eval.nix {
+        inherit pkgs;
+        inherit (inputs.nixpkgs.lib) nixosSystem;
+        gatewayModule = ../packages/tailscale-service-gateway/module.nix;
+      };
+      commonContract = {
+        ports = [ "20128/tcp" ];
+        volumes = [ "/var/lib/9router" ];
+        forbiddenEnvironment = [
+          "INITIAL_PASSWORD"
+          "JWT_SECRET"
+          "API_KEY_SECRET"
+          "MACHINE_ID_SALT"
+          "OP_SERVICE_ACCOUNT_TOKEN"
+        ];
+        requiredMembers = [
+          "etc/passwd"
+          "etc/group"
+        ];
       };
     in
     {
-      packages = lib.optionalAttrs (system == "x86_64-linux") {
-        "9router-image" = fileImage.image;
-        "9router-nimi" = fileImage.runner;
-        "9router-secretspec-image" = secretspecImage.image;
-        "9router-secretspec-nimi" = secretspecImage.runner;
-        # A VM supplies real root and UID 1000 without host privileges.
-        "9router-secretspec-smoke" = privilegeTest.driver;
-        "9router-smoke" = pkgs.writeShellApplication {
-          name = "9router-smoke";
-          runtimeInputs = [
-            pkgs.bubblewrap
-            pkgs.curl
-            pkgs.coreutils
-            pkgs.bash
-          ];
-          text = ''
-            export NINE_ROUTER_RUNNER=${lib.getExe fileImage.runner}
-            ${builtins.readFile ../tests/9router/smoke.sh}
-          '';
+      proxmoxImages = lib.optionalAttrs (system == "x86_64-linux") {
+        "9router" = {
+          inherit (fileImage) image;
+          contract = commonContract // {
+            user = "1000:1000";
+            entrypoint = [ (lib.getExe fileImage.runner) ];
+          };
+          tests = {
+            smoke = privilegeTest;
+            gateway = gatewayTest;
+          };
+        };
+        "9router-secretspec" = {
+          inherit (secretspecImage) image;
+          contract = commonContract // {
+            user = "0:0";
+            entrypoint = [ (lib.getExe secretspecImage.runner) ];
+          };
+          tests = {
+            smoke = privilegeTest;
+            gateway = gatewayTest;
+          };
         };
       };
+      packages = lib.optionalAttrs (system == "x86_64-linux") {
+        "9router-nimi" = fileImage.runner;
+        "9router-secretspec-nimi" = secretspecImage.runner;
+        # Compatibility entrypoints; normal validation uses flake checks.
+        "9router-secretspec-smoke" = privilegeTest.driver;
+        "9router-smoke" = privilegeTest.driver;
+      };
       checks = lib.optionalAttrs (system == "x86_64-linux") {
+        # Retain existing check names for callers of the original interface.
         "9router-secretspec" = privilegeTest;
-        "9router-secretspec-oci-archive" =
-          pkgs.runCommand "9router-secretspec-oci-archive" { nativeBuildInputs = [ pkgs.python3 ]; }
-            ''
-              ${lib.getExe secretspecImage.image.copyTo} --tmpdir "$TMPDIR" \
-                "oci-archive:$TMPDIR/9router.oci.tar:9router-secretspec"
-              python3 ${../tests/9router/check-oci-archive.py} "$TMPDIR/9router.oci.tar" 0:0
-              touch "$out"
-            '';
-        "9router-gateway" = import ../tests/9router/gateway-eval.nix {
-          inherit pkgs;
-          inherit (inputs.nixpkgs.lib) nixosSystem;
-          gatewayModule = ../packages/tailscale-service-gateway/module.nix;
-        };
-        "9router-image-contract" =
-          pkgs.runCommand "9router-image-contract"
-            {
-              nativeBuildInputs = [ pkgs.python3 ];
-            }
-            ''
-              python3 - ${fileImage.image} <<'PY'
-              import json, sys
-              image = json.load(open(sys.argv[1]))
-              cfg = image["image-config"]
-              assert cfg["User"] == "1000:1000"
-              assert cfg["Entrypoint"][0].endswith("/bin/9router-nimi")
-              assert "/var/lib/9router" in cfg["Volumes"]
-              assert "20128/tcp" in cfg["ExposedPorts"]
-              assert not any("SECRET=" in e or "PASSWORD=" in e for e in cfg["Env"])
-              PY
-              touch "$out"
-            '';
-        "9router-oci-archive" =
-          pkgs.runCommand "9router-oci-archive"
-            {
-              nativeBuildInputs = [ pkgs.python3 ];
-            }
-            ''
-              ${lib.getExe fileImage.image.copyTo} --tmpdir "$TMPDIR" \
-                "oci-archive:$TMPDIR/9router.oci.tar:9router"
-              python3 ${../tests/9router/check-oci-archive.py} "$TMPDIR/9router.oci.tar"
-              touch "$out"
-            '';
+        "9router-secretspec-oci-archive" = config.checks.image-9router-secretspec-archive;
+        "9router-gateway" = gatewayTest;
+        "9router-image-contract" = config.checks.image-9router-metadata;
+        "9router-oci-archive" = config.checks.image-9router-archive;
       };
     };
 }
