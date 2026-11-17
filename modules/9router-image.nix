@@ -59,6 +59,10 @@
         inherit (inputs.nixpkgs.lib) nixosSystem;
         gatewayModule = ../packages/tailscale-service-gateway/module.nix;
       };
+      gatewayLifecycleTest = import ../tests/9router/gateway-lifecycle.nix {
+        inherit pkgs;
+        gatewayModule = ../packages/tailscale-service-gateway/module.nix;
+      };
       commonContract = {
         ports = [ "20128/tcp" ];
         volumes = [ "/var/lib/9router" ];
@@ -86,6 +90,7 @@
           tests = {
             smoke = privilegeTest;
             gateway = gatewayTest;
+            gateway-lifecycle = gatewayLifecycleTest;
           };
         };
         "9router-secretspec" = {
@@ -97,6 +102,7 @@
           tests = {
             smoke = privilegeTest;
             gateway = gatewayTest;
+            gateway-lifecycle = gatewayLifecycleTest;
           };
         };
       };
@@ -112,6 +118,7 @@
         "9router-secretspec" = privilegeTest;
         "9router-secretspec-oci-archive" = config.checks.image-9router-secretspec-archive;
         "9router-gateway" = gatewayTest;
+        "9router-gateway-lifecycle" = gatewayLifecycleTest;
         "9router-image-contract" = config.checks.image-9router-metadata;
         "9router-oci-archive" = config.checks.image-9router-archive;
       };

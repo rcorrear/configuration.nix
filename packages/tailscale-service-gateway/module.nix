@@ -1,11 +1,15 @@
 {
   config,
   lib,
+  pkgs,
   ...
 }:
 let
   cfg = config.services.tailscaleServiceGateway;
-  tailscale = lib.getExe config.services.tailscale.package;
+  tailscale = import ./command.nix {
+    inherit pkgs;
+    package = config.services.tailscale.package;
+  };
 in
 {
   options.services.tailscaleServiceGateway = {
@@ -46,7 +50,10 @@ in
       name: service:
       lib.nameValuePair "tailscale-svc-${name}" {
         description = "Tailscale Service svc:${name}";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [
+          "multi-user.target"
+          "tailscaled.service"
+        ];
         wants = [ "network-online.target" ];
         after = [
           "network-online.target"

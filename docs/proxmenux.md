@@ -1,14 +1,17 @@
 # ProxMenux on pve01
 
+ProxMenux is optional: the [9Router setup](9router.md) uses native Proxmox OCI
+import without it. This guide covers a separately chosen management layer.
+
 The user runs privileged host commands in their own SSH terminal. No sudo
 policy change is required, and no installer is executed by this repository.
 
 ## Channel decision
 
-At implementation time, the latest stable release was v1.2.6. The native
-**OCI manager Apps** described in the video exists under `oci/` on `develop`,
-but not on `main`. Therefore the pilot requires explicit acceptance of the
-beta channel, or waiting for a stable release that includes it.
+Stable ProxMenux [v1.2.7](https://github.com/MacRimi/ProxMenux/releases/tag/v1.2.7)
+introduced **OCI manager Apps** (Technology Preview), so v1.2.7 or later on
+the stable channel is a valid option. Beta remains an alternative only after
+explicit acceptance of the beta channel; it is not required for OCI support.
 
 The documented beta entrypoint is
 [`install_proxmenux_beta.sh`](https://github.com/MacRimi/ProxMenux/blob/develop/install_proxmenux_beta.sh).
@@ -17,15 +20,15 @@ Do not silently install beta in place of stable. The stable installer is
 
 ## Operator-run installation
 
-After choosing beta, use an interactive SSH session on `pve01.home.arpa`.
+For the stable channel, use an interactive SSH session on `pve01.home.arpa`.
 Download the installer as the normal user before running anything as root:
 
 ```sh
 curl --fail --location --proto '=https' --tlsv1.2 \
-  https://raw.githubusercontent.com/MacRimi/ProxMenux/develop/install_proxmenux_beta.sh \
-  --output install_proxmenux_beta.sh
-less install_proxmenux_beta.sh
-sudo bash ./install_proxmenux_beta.sh
+  https://raw.githubusercontent.com/MacRimi/ProxMenux/main/install_proxmenux.sh \
+  --output install_proxmenux.sh
+less install_proxmenux.sh
+sudo bash ./install_proxmenux.sh
 ```
 
 This follows the upstream installation channel, not a fully pinned/offline
@@ -49,7 +52,7 @@ sudo systemctl status proxmenux-monitor.service
 Confirm **OCI manager Apps** is present and record the installed version/channel
 before creating or updating any guest. Existing guests must remain unchanged.
 
-## Pilot deployment gates
+## Deployment gates
 
 Before deploying 9Router:
 

@@ -6,12 +6,14 @@
     nixos =
       {
         config,
-        lib,
         pkgs,
         ...
       }:
       let
-        tailscale = lib.getExe config.services.tailscale.package;
+        tailscale = import ../../../packages/tailscale-service-gateway/command.nix {
+          inherit pkgs;
+          package = config.services.tailscale.package;
+        };
         secret = description: field: {
           inherit description;
           delivery = "envvar";
@@ -58,7 +60,11 @@
         # See docs/9router.md for upstream PRs to revisit before replacing this unit.
         systemd.services."9router-tailscale" = {
           description = "Tailscale Serve for 9Router";
-          wantedBy = [ "multi-user.target" ];
+          wantedBy = [
+            "multi-user.target"
+            "tailscaled.service"
+            "9router.service"
+          ];
           after = [
             "tailscaled.service"
             "tailscaled-autoconnect.service"

@@ -44,8 +44,8 @@ pkgs.testers.runNixOSTest {
   testScript = ''
     start_all()
     machine.wait_for_unit("multi-user.target")
-    machine.succeed("timeout 60 ${secretTests.testScript}")
     machine.wait_until_succeeds("curl -fsS http://127.0.0.1:20128/login > /dev/null")
+    machine.succeed("timeout 60 ${secretTests.testScript}")
     machine.succeed("test \"$(curl -s -o /dev/null -w '%{http_code}' -H 'Content-Type: application/json' --data '{}' http://127.0.0.1:20128/v1/chat/completions)\" = 401")
     machine.succeed("curl -s -L -o /dev/null -w '%{url_effective}' http://127.0.0.1:20128/dashboard | grep '/login'")
     # Verify the real Node process, not only the fixture command, is unprivileged.
