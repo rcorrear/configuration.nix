@@ -8,7 +8,7 @@ let
     if os.environ.get("MOCK_FAILURE") == "auth":
         sys.exit(1)
     if sys.argv[1:3] == ["vault", "list"]:
-        print('[{"id":"test","name":"9Router Production"}]')
+        print('[{"id":"test","name":"Infrastructure"}]')
     elif sys.argv[1] == "inject":
         values = {
             "initial-password": "dummy password ' $ punctuation",
@@ -19,7 +19,9 @@ let
         if os.environ.get("MOCK_FAILURE") == "field":
             sys.exit(1)
         def replace(match):
-            field = match.group(1).strip().split("/")[-1]
+            reference = match.group(1).strip()
+            assert reference.startswith("Infrastructure/9router/"), reference
+            field = reference.split("/")[-1]
             return values[field]
         print(re.sub(r"\{\{\s*op://(.*?)\s*\}\}", replace, sys.stdin.read()), end="")
     else:

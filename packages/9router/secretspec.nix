@@ -2,7 +2,7 @@
   pkgs,
   secretspec,
   onepasswordCli,
-  vault ? "9Router Production",
+  vault ? "Infrastructure",
   item ? "9router",
   secretsDir ? "/run/secrets",
 }:

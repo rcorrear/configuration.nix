@@ -337,8 +337,8 @@ Container root is not host root. A custom ID map requires recalculating both.
 
 ### Prepare 1Password
 
-1. Create a dedicated vault named **`9Router Production`** and an item named
-   **`9router`** in the account used for this deployment.
+1. Use the existing **`9router`** item in the **`Infrastructure`** vault
+   in the account used for this deployment.
 2. Add these custom fields, copying the **existing migrated values** from the
    currently working deployment, not generating replacements:
 
@@ -352,10 +352,10 @@ Container root is not host root. A custom ID map requires recalculating both.
    Changing signing/key/identity secrets can invalidate existing sessions, keys,
    or identity. The dashboard password may already be persisted in the database.
    These are application deployment secrets, not upstream provider API keys.
-3. Create a **service account with read-only access to this dedicated vault**.
-   Do not grant write, sharing, vault-creation, or access to the broader
-   Infrastructure vault. Standard service-account access is vault-scoped, not
-   item-scoped: any other item placed in this vault is also exposed to this token.
+3. Create a **service account with read-only access to the Infrastructure vault**.
+   Do not grant write, sharing, or vault-creation permissions. Standard
+   service-account access is vault-scoped, not item-scoped: every item in
+   Infrastructure is exposed to this token.
 
 Vault and item names are non-secret build parameters in
 `packages/9router/secretspec.nix`. No vault is created automatically.
