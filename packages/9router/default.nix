@@ -7,11 +7,11 @@
 }:
 stdenv.mkDerivation rec {
   pname = "9router";
-  version = "0.5.86";
+  version = "0.5.104";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/9router/-/9router-${version}.tgz";
-    hash = "sha256-z0qSVFpaWtrAHxBIMEFFWA2nEcr9Y67LA3VBgUbdAGQ=";
+    hash = "sha256-96CLtldJk9zxVySZhYutnojJNUJiWNh1Hs47/XDzKKc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     cp -R app/.next-cli-build app/node_modules app/public app/src app/package.json app/server.js app/custom-server.js $out/lib/9router/app/
     substituteInPlace $out/lib/9router/app/server.js \
       --replace-fail 'process.chdir(__dirname)' 'process.chdir(process.env.DATA_DIR || __dirname)'
-    substituteInPlace $out/lib/9router/app/.next-cli-build/server/chunks/4884.js \
+    substituteInPlace $out/lib/9router/app/.next-cli-build/server/chunks/9100.js \
       --replace-fail 'requireLogin:!0,requireApiKey:!0,tunnelDashboardAccess' \
       'requireLogin:!0,requireApiKey:"true"===process.env.REQUIRE_API_KEY,tunnelDashboardAccess'
     makeWrapper ${nodejs_24}/bin/node $out/bin/9router \
