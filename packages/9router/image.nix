@@ -2,11 +2,10 @@
   pkgs,
   nimi,
   nix2container,
-  secretRuntime ? null,
+  secretRuntime,
 }:
 let
   package = pkgs.callPackage ./. { };
-  name = if secretRuntime == null then "9router" else "9router-secretspec";
   root = pkgs.runCommand "9router-image-root" { } ''
     mkdir -p $out/tmp $out/run/secrets $out/var/lib/9router $out/etc
     cat > $out/etc/passwd <<'EOF'
@@ -23,19 +22,19 @@ let
       (pkgs.lib.modules.importApply ./service.nix { inherit package pkgs secretRuntime; })
     ];
     settings = {
-      binName = "${name}-nimi";
+      binName = "9router-nimi";
       restart = {
         mode = "always";
         time = 10000;
       };
       container = {
-        inherit name;
+        name = "9router";
         tag = package.version;
         copyToRoot = [ root ];
         imageConfig = {
           # Container root resolves secrets; application code still runs as 1000.
-          User = if secretRuntime == null then "1000:1000" else "0:0";
-          WorkingDir = if secretRuntime == null then "/var/lib/9router" else "/";
+          User = "0:0";
+          WorkingDir = "/";
           Env = [
             "HOME=/var/lib/9router"
             "SSL_CERT_FILE=${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt"

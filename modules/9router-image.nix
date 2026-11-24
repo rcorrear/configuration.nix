@@ -18,11 +18,6 @@
         inherit pkgs;
         source = inputs.nimi.inputs.nix2container;
       };
-      fileImage = import ../packages/9router/image.nix {
-        inherit pkgs;
-        inherit (nimiPkgs) nimi;
-        inherit (imageTools) nix2container;
-      };
       opPkgs = import inputs.nixpkgs {
         inherit system;
         config.allowUnfreePredicate = p: lib.getName p == "1password-cli";
@@ -32,7 +27,7 @@
         inherit pkgs secretspec;
         onepasswordCli = opPkgs._1password-cli;
       };
-      secretspecImage = import ../packages/9router/image.nix {
+      image = import ../packages/9router/image.nix {
         inherit pkgs secretRuntime;
         inherit (nimiPkgs) nimi;
         inherit (imageTools) nix2container;
@@ -52,7 +47,6 @@
       privilegeTest = import ../tests/9router/privileges.nix {
         inherit pkgs secretTests;
         inherit (testImage) runner;
-        fileRunner = fileImage.runner;
       };
       gatewayTest = import ../tests/9router/gateway-eval.nix {
         inherit pkgs;
@@ -82,22 +76,10 @@
     {
       proxmoxImages = lib.optionalAttrs (system == "x86_64-linux") {
         "9router" = {
-          inherit (fileImage) image;
-          contract = commonContract // {
-            user = "1000:1000";
-            entrypoint = [ (lib.getExe fileImage.runner) ];
-          };
-          tests = {
-            smoke = privilegeTest;
-            gateway = gatewayTest;
-            gateway-lifecycle = gatewayLifecycleTest;
-          };
-        };
-        "9router-secretspec" = {
-          inherit (secretspecImage) image;
+          inherit (image) image;
           contract = commonContract // {
             user = "0:0";
-            entrypoint = [ (lib.getExe secretspecImage.runner) ];
+            entrypoint = [ (lib.getExe image.runner) ];
           };
           tests = {
             smoke = privilegeTest;
@@ -107,16 +89,13 @@
         };
       };
       packages = lib.optionalAttrs (system == "x86_64-linux") {
-        "9router-nimi" = fileImage.runner;
-        "9router-secretspec-nimi" = secretspecImage.runner;
+        "9router-nimi" = image.runner;
         # Compatibility entrypoints; normal validation uses flake checks.
-        "9router-secretspec-smoke" = privilegeTest.driver;
         "9router-smoke" = privilegeTest.driver;
       };
       checks = lib.optionalAttrs (system == "x86_64-linux") {
         # Retain existing check names for callers of the original interface.
         "9router-secretspec" = privilegeTest;
-        "9router-secretspec-oci-archive" = config.checks.image-9router-secretspec-archive;
         "9router-gateway" = gatewayTest;
         "9router-gateway-lifecycle" = gatewayLifecycleTest;
         "9router-image-contract" = config.checks.image-9router-metadata;

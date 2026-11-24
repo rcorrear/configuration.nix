@@ -1,4 +1,4 @@
-# ProxMenux on pve01
+# ProxMenux on Proxmox
 
 ProxMenux is optional: the [9Router setup](9router.md) uses native Proxmox OCI
 import without it. This guide covers a separately chosen management layer.
@@ -20,7 +20,7 @@ Do not silently install beta in place of stable. The stable installer is
 
 ## Operator-run installation
 
-For the stable channel, use an interactive SSH session on `pve01.home.arpa`.
+For the stable channel, use an interactive SSH session on your Proxmox host.
 Download the installer as the normal user before running anything as root:
 
 ```sh

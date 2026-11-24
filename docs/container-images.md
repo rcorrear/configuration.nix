@@ -13,7 +13,7 @@ rtk nix run .#check-image -- --archive "$HOME/9router.oci.tar" 9router
 
 `nix build-image` is not a built-in Nix subcommand; `nix run .#build-image`
 is the portable equivalent. Use `--help` to list registered image names.
-Currently these are `9router` and `9router-secretspec`. This interface does not
+Currently `9router` is registered. This interface does not
 yet migrate Radarr, Sonarr, or any other deployed service.
 
 - **Build:** builds `<name>-image` without creating a `result` link. Its closure
@@ -84,7 +84,5 @@ requirements. Each new service still needs a real HTTP/functional smoke test,
 persistent-state ownership, secret provisioning, network policy, and a reviewed
 Proxmox deployment/migration procedure.
 
-9Router's file-based and SecretSpec variants share one VM smoke derivation,
-which exercises both launch modes, HTTP authentication behavior, shutdown, and
-restart. Nix builds that derivation once even though both image aggregates
-reference it. The SecretSpec tests additionally verify the privilege boundary.
+9Router's VM smoke check exercises SecretSpec startup, HTTP authentication
+behavior, shutdown, restart, and the privilege boundary.
