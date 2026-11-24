@@ -1,0 +1,113 @@
+diff --git a/nix/tar.go b/nix/tar.go
+--- a/nix/tar.go
++++ b/nix/tar.go
+@@ -6,6 +6,7 @@ import (
+ 	"os"
+ 	"path/filepath"
+ 	"regexp"
++	"strings"
+ 	"time"
+ 
+ 	"github.com/nlewo/nix2container/types"
+@@ -52,10 +53,20 @@ func TarPathsSum(paths types.Paths) (digest.Digest, int64, error) {
+ 	return digester.Digest(), size, nil
+ }
+ 
++// Layer member names are relative to the container root. Symlink targets
++// deliberately remain unchanged, including absolute /nix/store targets.
++func layerMemberName(path string) string {
++	name := strings.TrimLeft(path, "/")
++	if name == "" {
++		return "."
++	}
++	return name
++}
++
+ func createDirectory(tw *tar.Writer, path string) error {
+ 	epoch := time.Date(1970, 01, 01, 0, 0, 0, 0, time.UTC)
+ 	hdr := &tar.Header{
+-		Name:     path,
++		Name:     layerMemberName(path),
+ 		Typeflag: tar.TypeDir,
+ 		Uid:      0, Gid: 0,
+ 		Uname: "root", Gname: "root",
+@@ -86,7 +97,7 @@ func appendFileToTar(tw *tar.Writer, srcPath, dstPath string, info os.FileInfo, opts *types.PathOptions) error {
+ 		return err
+ 	}
+ 
+-	hdr.Name = dstPath
++	hdr.Name = layerMemberName(dstPath)
+ 
+ 	hdr.Uid = 0
+ 	hdr.Gid = 0
+diff --git a/nix/relative_paths_test.go b/nix/relative_paths_test.go
+new file mode 100644
+--- /dev/null
++++ b/nix/relative_paths_test.go
+@@ -0,0 +1,66 @@
++package nix
++
++import (
++	"archive/tar"
++	"bytes"
++	"io"
++	"os"
++	"path/filepath"
++	"strings"
++	"testing"
++
++	"github.com/nlewo/nix2container/types"
++)
++
++func TestLayerMemberName(t *testing.T) {
++	for input, want := range map[string]string{
++		"/": ".",
++		"/etc/group": "etc/group",
++		"//etc/group": "etc/group",
++		"etc/group": "etc/group",
++	} {
++		if got := layerMemberName(input); got != want {
++			t.Fatalf("layerMemberName(%q) = %q, want %q", input, got, want)
++		}
++	}
++}
++
++func TestLayerTarRelativeNamesPreserveSymlinkTargets(t *testing.T) {
++	dir := t.TempDir()
++	target := "/nix/store/example/bin/node"
++	if err := os.WriteFile(filepath.Join(dir, "file"), []byte("fixture"), 0644); err != nil {
++		t.Fatal(err)
++	}
++	if err := os.Symlink(target, filepath.Join(dir, "link")); err != nil {
++		t.Fatal(err)
++	}
++	stream := TarPaths(types.Paths{{Path: dir}})
++	defer stream.Close()
++	var data bytes.Buffer
++	if _, err := io.Copy(&data, stream); err != nil {
++		t.Fatal(err)
++	}
++	reader := tar.NewReader(&data)
++	foundLink := false
++	for {
++		header, err := reader.Next()
++		if err == io.EOF {
++			break
++		}
++		if err != nil {
++			t.Fatal(err)
++		}
++		if strings.HasPrefix(header.Name, "/") {
++			t.Fatalf("absolute layer member: %q", header.Name)
++		}
++		if header.Typeflag == tar.TypeSymlink {
++			foundLink = true
++			if header.Linkname != target {
++				t.Fatalf("symlink target changed: %q", header.Linkname)
++			}
++		}
++	}
++	if !foundLink {
++		t.Fatal("symlink fixture missing from tar")
++	}
++}
