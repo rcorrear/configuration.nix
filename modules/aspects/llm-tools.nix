@@ -37,6 +37,8 @@
             llmPkgs.codex
             llmPkgs.codex-acp
             llmPkgs.crit
+            llmPkgs.hermes-desktop
+            llmPkgs.hermes-one
             llmPkgs.omp
             llmPkgs.opencode
             llmPkgs.opencode2
