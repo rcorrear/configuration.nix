@@ -6,7 +6,7 @@ _: {
       { lib, pkgs, ... }:
       {
         home.packages = lib.optionals pkgs.stdenv.isLinux [
-          pkgs.rcorrear.cider-3
+          pkgs.rcorrear.cider-4
           pkgs.rcorrear.exiled-exchange2
 
           pkgs.atlauncher

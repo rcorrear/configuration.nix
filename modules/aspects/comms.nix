@@ -17,6 +17,10 @@ _: {
         ];
       in
       {
+        nixpkgs.config.permittedInsecurePackages = [
+          "keybase-gui-6.6.3"
+        ];
+
         home.packages = builtins.filter (p: p != null) (builtins.map pkgOrNull commsPkgNames);
 
         services = {

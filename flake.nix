@@ -8,7 +8,10 @@
       url = "github:LnL7/nix-darwin";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    delta.url = "github:zed-industries/delta-nix";
+    delta = {
+      url = "github:zed-industries/delta-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     den.url = "github:denful/den";
     determinate = {
       url = "https://flakehub.com/f/DeterminateSystems/determinate/3";
@@ -19,8 +22,10 @@
       url = "github:hercules-ci/flake-parts";
       inputs.nixpkgs-lib.follows = "nixpkgs";
     };
-    graphify.url = "github:rcorrear/graphify";
-    herdr.url = "github:ogulcancelik/herdr";
+    graphify = {
+      url = "github:rcorrear/graphify";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     home-manager = {
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";

@@ -1,5 +1,6 @@
 {
   appimageTools,
+  coreutils,
   fetchurl,
   fuse,
   gobject-introspection,
@@ -7,9 +8,11 @@
   lib,
   libffi,
   libsoup_3,
+  makeWrapper,
   runCommand,
   sqlite,
   webkitgtk_4_1,
+  writeShellScript,
 }:
 let
   pname = "finzytrack";
@@ -22,6 +25,23 @@ let
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 
+  # copy2/copytree preserve source modes. Store-backed seed files would make
+  # config and ledgers read-only, including before currency substitution.
+  launcher = writeShellScript "finzytrack-launcher" ''
+    set -euo pipefail
+    wrapped="$1"
+    shift
+    export FINZYTRACK_SEED_DIR
+    FINZYTRACK_SEED_DIR="$(${coreutils}/bin/mktemp -d -t finzytrack-seeds.XXXXXXXX)"
+    trap '${coreutils}/bin/rm -rf -- "$FINZYTRACK_SEED_DIR"' EXIT
+    ${coreutils}/bin/cp -R \
+      ${appimageContents}/usr/bin/_internal/backend/seed_config \
+      ${appimageContents}/usr/bin/_internal/backend/seed_data \
+      "$FINZYTRACK_SEED_DIR/"
+    ${coreutils}/bin/chmod -R u+w "$FINZYTRACK_SEED_DIR"
+    "$wrapped" "$@"
+  '';
+
   giTypelibs = runCommand "finzytrack-gi-typelibs" { } ''
     mkdir -p $out
     cp -L ${appimageContents}/usr/bin/_internal/gi_typelibs/* $out/
@@ -33,8 +53,8 @@ in
 appimageTools.wrapType2 {
   inherit pname version src;
 
-  # The AppImage bundles neither its Python runtime dependencies nor the
-  # WebKit/FUSE libraries required by its Tauri UI.
+  # Supply the system libraries required by the bundled Python runtime and
+  # its PyWebView UI.
   extraPkgs = _: [
     fuse
     gobject-introspection
@@ -49,6 +69,9 @@ appimageTools.wrapType2 {
   # it with WebKit's typelib by overlaying a merged, read-only directory.
   extraBwrapArgs = [
     "--ro-bind"
+    ''"$FINZYTRACK_SEED_DIR"''
+    "${appimageContents}/usr/bin/_internal/backend"
+    "--ro-bind"
     "${giTypelibs}"
     "${appimageContents}/usr/bin/_internal/gi_typelibs"
     "--setenv"
@@ -56,9 +79,17 @@ appimageTools.wrapType2 {
     "/usr/lib64/girepository-1.0"
   ];
 
+  nativeBuildInputs = [ makeWrapper ];
+
   extraInstallCommands = ''
+    mkdir -p $out/libexec
+    mv $out/bin/finzytrack $out/libexec/finzytrack
+    makeWrapper ${launcher} $out/bin/finzytrack \
+      --add-flags "$out/libexec/finzytrack"
     install -Dm444 ${appimageContents}/finzytrack.desktop \
       $out/share/applications/finzytrack.desktop
+    substituteInPlace $out/share/applications/finzytrack.desktop \
+      --replace-fail "Exec=Finzytrack" "Exec=finzytrack"
     install -Dm444 ${appimageContents}/finzytrack.png \
       $out/share/icons/hicolor/512x512/apps/finzytrack.png
   '';

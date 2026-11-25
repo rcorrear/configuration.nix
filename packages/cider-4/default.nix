@@ -6,13 +6,13 @@
 }:
 
 appimageTools.wrapType2 rec {
-  pname = "cider-3";
-  version = "3.1.1";
+  pname = "cider-4";
+  version = "4.0.17";
 
   src = requireFile {
-    name = "cider-v3.1.2-linux-x64.AppImage";
+    name = "cider-v4.0.17-linux-x64.AppImage";
     url = "https://cidercollective.itch.io/cider";
-    sha256 = "sha256-1syFQAvx4OdM2y03nP31r+YapH69ijd8XhEp4WxNxOo=";
+    sha256 = "sha256-P7E5iSqur9socAPQ+lVXQ7cOVi7knPGGlYDzdLbbq5E=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -21,7 +21,7 @@ appimageTools.wrapType2 rec {
     let
       contents = appimageTools.extract {
         inherit version src;
-        # HACK: this looks for a ${pname}.desktop, where `cider-2.desktop` doesn't exist
+        # The AppImage uses Cider.desktop rather than ${pname}.desktop.
         pname = "Cider";
       };
     in
@@ -33,7 +33,7 @@ appimageTools.wrapType2 rec {
       install -m 444 -D ${contents}/Cider.desktop $out/share/applications/${pname}.desktop
       substituteInPlace $out/share/applications/${pname}.desktop \
         --replace-warn 'Exec=Cider' 'Exec=${pname}'
-      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/Cider.png \
+      install -Dm444 ${contents}/usr/share/icons/hicolor/256x256/apps/Cider.png \
                      $out/share/icons/hicolor/256x256/apps/cider.png
     '';
 
@@ -41,7 +41,7 @@ appimageTools.wrapType2 rec {
     description = "Powerful music player that allows you listen to your favorite tracks with style";
     homepage = "https://cider.sh";
     license = lib.licenses.unfree;
-    mainProgram = "cider-3";
+    mainProgram = "cider-4";
     maintainers = with lib.maintainers; [ itsvic-dev ];
     platforms = [ "x86_64-linux" ];
   };

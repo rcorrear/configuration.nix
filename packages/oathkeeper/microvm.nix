@@ -23,8 +23,10 @@ let
       };
 
       services.omni.oathkeeper = {
-        enable = true;
+
         inherit environmentFile sessionCheckUrl upstreamUrl;
+
+        enable = true;
         api.host = "127.0.0.1";
         metrics.host = "127.0.0.1";
         openFirewall = true;
