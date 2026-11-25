@@ -614,13 +614,13 @@
       "locked": {
         "lastModified": 1786562544,
         "narHash": "sha256-VTQPnV2GztX322oOfpbR8Jjr54RjN3bX9ek6YcDYwNI=",
-        "owner": "weyl-ai",
+        "owner": "rcorrear",
         "repo": "nimi",
         "rev": "99312337b455329adc94105a4a1f371edf6d6aa0",
         "type": "github"
       },
       "original": {
-        "owner": "weyl-ai",
+        "owner": "rcorrear",
         "repo": "nimi",
         "rev": "99312337b455329adc94105a4a1f371edf6d6aa0",
         "type": "github"
