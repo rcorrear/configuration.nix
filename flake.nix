@@ -33,7 +33,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     nimi = {
-      url = "github:weyl-ai/nimi/99312337b455329adc94105a4a1f371edf6d6aa0";
+      url = "github:rcorrear/nimi/99312337b455329adc94105a4a1f371edf6d6aa0";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     niri-flake = {
